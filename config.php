@@ -22,7 +22,7 @@ define('DIR_LOGS',			$applicationPath . '/system/logs/');
 // DB
 define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
-define('DB_USERNAME', 'dev');
-define('DB_PASSWORD', 'dev');
-define('DB_DATABASE', 'opencart');
+define('DB_USERNAME', 'petrivsky');
+define('DB_PASSWORD', 'lkd54gfGK33-44s');
+define('DB_DATABASE', 'shoes');
 define('DB_PREFIX', '');
