@@ -20,9 +20,9 @@ define('DIR_MODIFICATION',	$applicationPath . '/system/modification/');
 define('DIR_LOGS',			$applicationPath . '/system/logs/');
 
 // DB
-define('DB_DRIVER', 'mysqli');
-define('DB_HOSTNAME', 'localhost');
-define('DB_USERNAME', 'petrivsky');
-define('DB_PASSWORD', 'lkd54gfGK33-44s');
-define('DB_DATABASE', 'shoes');
-define('DB_PREFIX', '');
+define('DB_DRIVER',		'mysqli');
+define('DB_HOSTNAME',	'localhost');
+define('DB_USERNAME',	'petrivsky');
+define('DB_PASSWORD',	'lkd54gfGK33-44s');
+define('DB_DATABASE',	'shoes');
+define('DB_PREFIX',		'');
