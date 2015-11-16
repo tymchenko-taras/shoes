@@ -1,6 +1,6 @@
 <?php
 
-$applicationPath = realpath('');
+$applicationPath = realpath('..');
 // HTTP
 define('HTTP_SERVER',	'http://' . $_SERVER['HTTP_HOST'] . '/admin/');
 define('HTTPS_SERVER',	'https://' . $_SERVER['HTTP_HOST'] . '/admin/');
