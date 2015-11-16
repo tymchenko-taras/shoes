@@ -3,8 +3,8 @@
 $applicationPath = realpath('');
 
 // HTTP
-define('HTTP_SERVER',	'http://' . $_SERVER['HTTP_HOST']);
-define('HTTPS_SERVER',	'https://' . $_SERVER['HTTP_HOST']);
+define('HTTP_SERVER',	'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('HTTPS_SERVER',	'https://' . $_SERVER['HTTP_HOST'] . '/');
 
 // DIR
 define('DIR_APPLICATION',	$applicationPath . '/catalog/');

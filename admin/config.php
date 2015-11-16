@@ -1,30 +1,30 @@
 <?php
-// HTTP
-define('HTTP_SERVER', 'http://local.opencart/admin/');
-define('HTTP_CATALOG', 'http://local.opencart/');
 
-// HTTPS
-define('HTTPS_SERVER', 'http://local.opencart/admin/');
-define('HTTPS_CATALOG', 'http://local.opencart/');
+$applicationPath = realpath('');
+// HTTP
+define('HTTP_SERVER',	'http://' . $_SERVER['HTTP_HOST'] . '/admin/');
+define('HTTPS_SERVER',	'https://' . $_SERVER['HTTP_HOST'] . '/admin/');
+define('HTTP_CATALOG',	'http://' . $_SERVER['HTTP_HOST'] . '/');
+define('HTTPS_CATALOG',	'https://' . $_SERVER['HTTP_HOST'] . '/');
 
 // DIR
-define('DIR_APPLICATION', 'D:\www\opencart/admin/');
-define('DIR_SYSTEM', 'D:\www\opencart/system/');
-define('DIR_LANGUAGE', 'D:\www\opencart/admin/language/');
-define('DIR_TEMPLATE', 'D:\www\opencart/admin/view/template/');
-define('DIR_CONFIG', 'D:\www\opencart/system/config/');
-define('DIR_IMAGE', 'D:\www\opencart/image/');
-define('DIR_CACHE', 'D:\www\opencart/system/cache/');
-define('DIR_DOWNLOAD', 'D:\www\opencart/system/download/');
-define('DIR_UPLOAD', 'D:\www\opencart/system/upload/');
-define('DIR_LOGS', 'D:\www\opencart/system/logs/');
-define('DIR_MODIFICATION', 'D:\www\opencart/system/modification/');
-define('DIR_CATALOG', 'D:\www\opencart/catalog/');
+define('DIR_APPLICATION', $applicationPath . '/admin/');
+define('DIR_SYSTEM', $applicationPath . '/system/');
+define('DIR_LANGUAGE', $applicationPath . '/admin/language/');
+define('DIR_TEMPLATE', $applicationPath . '/admin/view/template/');
+define('DIR_CONFIG', $applicationPath . '/system/config/');
+define('DIR_IMAGE', $applicationPath . '/image/');
+define('DIR_CACHE', $applicationPath . '/system/cache/');
+define('DIR_DOWNLOAD', $applicationPath . '/system/download/');
+define('DIR_UPLOAD', $applicationPath . '/system/upload/');
+define('DIR_LOGS', $applicationPath . '/system/logs/');
+define('DIR_MODIFICATION', $applicationPath . '/system/modification/');
+define('DIR_CATALOG', $applicationPath . '/catalog/');
 
 // DB
-define('DB_DRIVER', 'mysqli');
-define('DB_HOSTNAME', 'localhost');
-define('DB_USERNAME', 'dev');
-define('DB_PASSWORD', 'dev');
-define('DB_DATABASE', 'opencart');
-define('DB_PREFIX', '');
+define('DB_DRIVER',		'mysqli');
+define('DB_HOSTNAME',	'localhost');
+define('DB_USERNAME',	'petrivsky');
+define('DB_PASSWORD',	'lkd54gfGK33-44s');
+define('DB_DATABASE',	'shoes');
+define('DB_PREFIX',		'');
