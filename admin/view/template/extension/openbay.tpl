@@ -17,11 +17,14 @@
     </div>
     <?php } ?>
     <?php if (!empty($error)) { ?>
-    <?php foreach($error as $error_message) { ?>
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_message; ?></div>
-    <?php } ?>
+      <?php foreach($error as $error_message) { ?>
+        <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_message; ?></div>
+      <?php } ?>
     <?php } ?>
     <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-puzzle-piece"></i> <?php echo $text_dashboard; ?></h3>
+      </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-md-6">
@@ -40,13 +43,12 @@
                     <tr>
                       <td class="text-left"><?php echo $extension['name']; ?></td>
                       <td class="text-center"><?php echo $extension['status']; ?></td>
-                      <td class="text-right"><?php if ($extension['installed']) { ?>
-                        <a href="<?php echo $extension['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary" id="button-edit-<?php echo $extension['code']; ?>"><i class="fa fa-pencil"></i></a>
-                        <?php } ?>
+                      <td class="text-right">
                         <?php if (!$extension['installed']) { ?>
-                        <a href="<?php echo $extension['install']; ?>" data-toggle="tooltip" title="<?php echo $button_install; ?>" class="btn btn-success" id="button-install-<?php echo $extension['code']; ?>"><i class="fa fa-plus-circle"></i></a>
+                          <a href="<?php echo $extension['install']; ?>" data-toggle="tooltip" title="<?php echo $button_install; ?>" class="btn btn-success" id="button-install-<?php echo $extension['code']; ?>"><i class="fa fa-plus-circle"></i></a>
                         <?php } else { ?>
-                        <a href="<?php echo $extension['uninstall']; ?>" data-toggle="tooltip" title="<?php echo $button_uninstall; ?>" class="btn btn-danger" id="button-uninstall-<?php echo $extension['code']; ?>"><i class="fa fa-minus-circle"></i></a>
+                          <a href="<?php echo $extension['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary" id="button-edit-<?php echo $extension['code']; ?>"><i class="fa fa-pencil"></i></a>
+                          <a onclick="confirm('<?php echo $text_confirm; ?>') ? location.href='<?php echo $extension['uninstall']; ?>' : false;" data-toggle="tooltip" title="<?php echo $button_uninstall; ?>" class="btn btn-danger" id="button-uninstall-<?php echo $extension['code']; ?>"><i class="fa fa-minus-circle"></i></a>
                         <?php } ?></td>
                     </tr>
                     <?php } ?>
@@ -104,7 +106,7 @@
     </div>
   </div>
   <script type="text/javascript"><!--
-  function getVersion() {
+  function version() {
     var version = '<?php echo $openbay_version; ?>';
 
     $('#openbay-version').empty().html('<div id="openbay-version-loading"><i class="fa fa-cog fa-lg fa-spin"></i> <?php echo $text_version_check; ?></div>');
@@ -117,14 +119,18 @@
         success: function (json) {
           $('#openbay-version-loading').hide();
 
-          if (version < json.version) {
-            $('#openbay-version').removeClass('attention').addClass('alert-warning').append('<i class="fa fa-warning"></i> <?php echo $text_version_current; ?> v.' + version + ', <?php echo $text_version_available; ?> v.' + json.version);
+          if (json.error) {
+            $('#openbay-version').removeClass('attention').addClass('alert-warning').append(json.msg);
           } else {
-            $('#openbay-version').removeClass('attention').addClass('alert-success').append('<i class="fa fa-check"></i> <?php echo $text_version_latest; ?> (v.' + version + ')');
+            if (version < json.version) {
+              $('#openbay-version').removeClass('attention').addClass('alert-warning').append('<i class="fa fa-warning"></i> <?php echo $text_version_current; ?> v.' + version + ', <?php echo $text_version_available; ?> v.' + json.version);
+            } else {
+              $('#openbay-version').removeClass('attention').addClass('alert-success').append('<i class="fa fa-check"></i> <?php echo $text_version_latest; ?> (v.' + version + ')');
+            }
           }
         },
         failure: function () {
-          $('#openbay-version').html('<?php echo $error_failed; ?><strong><span onclick="getVersion();"><?php echo $button_retry; ?></span></strong>');
+          $('#openbay-version').html('<?php echo $error_failed; ?><strong><span onclick="version();"><?php echo $button_retry; ?></span></strong>');
         },
         error: function (xhr, ajaxOptions, thrownError) {
           if (xhr.status != 0) {
@@ -163,7 +169,7 @@
   }
 
   $(document).ready(function () {
-    getVersion();
+    version();
     getNotifications();
   });
 //--></script></div>

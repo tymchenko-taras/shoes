@@ -1,28 +1,27 @@
 <?php
 namespace DB;
 final class mPDO {
-	private $pdo = null;
+	private $connection = null;
 	private $statement = null;
 
-	public function __construct($hostname, $username, $password, $database, $port = "3306") {
+	public function __construct($hostname, $username, $password, $database, $port = '3306') {
 		try {
-			$this->pdo = new \PDO("mysql:host=" . $hostname . ";port=" . $port . ";dbname=" . $database, $username, $password, array(\PDO::ATTR_PERSISTENT => true));
+			$this->connection = new \PDO("mysql:host=" . $hostname . ";port=" . $port . ";dbname=" . $database, $username, $password, array(\PDO::ATTR_PERSISTENT => true));
 		} catch(\PDOException $e) {
-			trigger_error('Error: Could not make a database link ( ' . $e->getMessage() . '). Error Code : ' . $e->getCode() . ' <br />');
+			throw new \Exception('Failed to connect to database. Reason: \'' . $e->getMessage() . '\'');
 		}
 
-		$this->pdo->exec("SET NAMES 'utf8'");
-		$this->pdo->exec("SET CHARACTER SET utf8");
-		$this->pdo->exec("SET CHARACTER_SET_CONNECTION=utf8");
-		$this->pdo->exec("SET SQL_MODE = ''");
-
+		$this->connection->exec("SET NAMES 'utf8'");
+		$this->connection->exec("SET CHARACTER SET utf8");
+		$this->connection->exec("SET CHARACTER_SET_CONNECTION=utf8");
+		$this->connection->exec("SET SQL_MODE = ''");
 	}
 
 	public function prepare($sql) {
-		$this->statement = $this->pdo->prepare($sql);
+		$this->statement = $this->connection->prepare($sql);
 	}
 
-	public function bindParam($parameter, $variable, $data_type = PDO::PARAM_STR, $length = 0) {
+	public function bindParam($parameter, $variable, $data_type = \PDO::PARAM_STR, $length = 0) {
 		if ($length) {
 			$this->statement->bindParam($parameter, $variable, $data_type, $length);
 		} else {
@@ -35,22 +34,23 @@ final class mPDO {
 			if ($this->statement && $this->statement->execute()) {
 				$data = array();
 
-				while ($row = $this->statement->fetch(PDO::FETCH_ASSOC)) {
+				while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
 					$data[] = $row;
 				}
 
-				$result = new stdClass();
+				$result = new \stdClass();
 				$result->row = (isset($data[0])) ? $data[0] : array();
 				$result->rows = $data;
 				$result->num_rows = $this->statement->rowCount();
 			}
-		} catch(PDOException $e) {
-			trigger_error('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode());
+		} catch(\PDOException $e) {
+			throw new \Exception('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode());
 		}
 	}
 
 	public function query($sql, $params = array()) {
-		$this->statement = $this->pdo->prepare($sql);
+		$this->statement = $this->connection->prepare($sql);
+		
 		$result = false;
 
 		try {
@@ -66,15 +66,14 @@ final class mPDO {
 				$result->rows = $data;
 				$result->num_rows = $this->statement->rowCount();
 			}
-		} catch (PDOException $e) {
-			trigger_error('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode() . ' <br />' . $sql);
-			exit();
+		} catch (\PDOException $e) {
+			throw new \Exception('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode() . ' <br />' . $sql);
 		}
 
 		if ($result) {
 			return $result;
 		} else {
-			$result = new stdClass();
+			$result = new \stdClass();
 			$result->row = array();
 			$result->rows = array();
 			$result->num_rows = 0;
@@ -83,9 +82,7 @@ final class mPDO {
 	}
 
 	public function escape($value) {
-		$search = array("\\", "\0", "\n", "\r", "\x1a", "'", '"');
-		$replace = array("\\\\", "\\0", "\\n", "\\r", "\Z", "\'", '\"');
-		return str_replace($search, $replace, $value);
+		return str_replace(array("\\", "\0", "\n", "\r", "\x1a", "'", '"'), array("\\\\", "\\0", "\\n", "\\r", "\Z", "\'", '\"'), $value);
 	}
 
 	public function countAffected() {
@@ -97,10 +94,18 @@ final class mPDO {
 	}
 
 	public function getLastId() {
-		return $this->pdo->lastInsertId();
+		return $this->connection->lastInsertId();
 	}
-
+	
+	public function isConnected() {
+		if ($this->connection) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public function __destruct() {
-		$this->pdo = null;
+		$this->connection = null;
 	}
 }

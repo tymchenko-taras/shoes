@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="pull-right">
         <button type="button" id="button-send" data-toggle="tooltip" title="<?php echo $button_send; ?>" class="btn btn-primary"><i class="fa fa-envelope"></i></button>
-        <a href="<?php echo $insert; ?>" data-toggle="tooltip" title="<?php echo $button_insert; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <a href="<?php echo $add; ?>" data-toggle="tooltip" title="<?php echo $button_add; ?>" class="btn btn-primary"><i class="fa fa-plus"></i></a>
         <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" class="btn btn-danger" onclick="confirm('<?php echo $text_confirm; ?>') ? $('#form-voucher').submit() : false;"><i class="fa fa-trash-o"></i></button>
       </div>
       <h1><?php echo $heading_title; ?></h1>
@@ -91,7 +91,11 @@
                   <td class="text-left"><?php echo $voucher['theme']; ?></td>
                   <td class="text-left"><?php echo $voucher['status']; ?></td>
                   <td class="text-left"><?php echo $voucher['date_added']; ?></td>
-                  <td class="text-right"><a href="<?php echo $voucher['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                  <td class="text-right">
+                  <?php if ($voucher['order']) { ?>
+                  <a href="<?php echo $voucher['order']; ?>" data-toggle="tooltip" title="<?php echo $button_order; ?>" class="btn btn-info"><i class="fa fa fa-eye"></i></a>
+                  <?php } ?>
+                  <a href="<?php echo $voucher['edit']; ?>" data-toggle="tooltip" title="<?php echo $button_edit; ?>" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
                 </tr>
                 <?php } ?>
                 <?php } else { ?>
@@ -116,7 +120,7 @@ $('#button-send').on('click', function() {
 		url: 'index.php?route=sale/voucher/send&token=<?php echo $token; ?>',
 		type: 'post',
 		dataType: 'json',
-		data: $('input[name^=\'selected\']'),
+		data: $('input[name^=\'selected\']:checked'),
 		beforeSend: function() {
 			$('#button-send i').replaceWith('<i class="fa fa-circle-o-notch fa-spin"></i>');
 			$('#button-send').prop('disabled', true);

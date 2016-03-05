@@ -7,11 +7,13 @@
 -- --------------------------------------------------------
 
 SET sql_mode = '';
+
 --
--- Table structure for table `oc_address`
+-- Table structure for table `address`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_address` (
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE `address` (
   `address_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `firstname` varchar(32) NOT NULL,
@@ -26,15 +28,16 @@ CREATE TABLE IF NOT EXISTS `oc_address` (
   `custom_field` text NOT NULL,
   PRIMARY KEY (`address_id`),
   KEY `customer_id` (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_affiliate`
+-- Table structure for table `affiliate`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_affiliate` (
+DROP TABLE IF EXISTS `affiliate`;
+CREATE TABLE `affiliate` (
   `affiliate_id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(32) NOT NULL,
   `lastname` varchar(32) NOT NULL,
@@ -67,31 +70,52 @@ CREATE TABLE IF NOT EXISTS `oc_affiliate` (
   `approved` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`affiliate_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_affiliate_activity`
+-- Table structure for table `affiliate_activity`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_affiliate_activity` (
-  `activity_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `affiliate_activity`;
+CREATE TABLE `affiliate_activity` (
+  `affiliate_activity_id` int(11) NOT NULL AUTO_INCREMENT,
   `affiliate_id` int(11) NOT NULL,
   `key` varchar(64) NOT NULL,
   `data` text NOT NULL,
   `ip` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
-  PRIMARY KEY (`activity_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`affiliate_activity_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_affiliate_transaction`
+-- Table structure for table `affiliate_login`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_affiliate_transaction` (
+DROP TABLE IF EXISTS `affiliate_login`;
+CREATE TABLE `affiliate_login` (
+  `affiliate_login_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(96) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `total` int(4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`affiliate_login_id`),
+  KEY `email` (`email`),
+  KEY `ip` (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `affiliate_transaction`
+--
+
+DROP TABLE IF EXISTS `affiliate_transaction`;
+CREATE TABLE `affiliate_transaction` (
   `affiliate_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `affiliate_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -99,42 +123,77 @@ CREATE TABLE IF NOT EXISTS `oc_affiliate_transaction` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`affiliate_transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_api`
+-- Table structure for table `api`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_api` (
+DROP TABLE IF EXISTS `api`;
+CREATE TABLE `api` (
   `api_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) NOT NULL,
-  `firstname` varchar(64) NOT NULL,
-  `lastname` varchar(64) NOT NULL,
-  `password` text NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `key` text NOT NULL,
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`api_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `oc_attribute`
+-- Table structure for table `api_ip`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_attribute` (
+DROP TABLE IF EXISTS `api_ip`;
+CREATE TABLE `api_ip` (
+  `api_ip_id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  PRIMARY KEY (`api_ip_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `api_session`
+--
+
+DROP TABLE IF EXISTS `api_session`;
+CREATE TABLE `api_session` (
+  `api_session_id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_id` int(11) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  `session_id` varchar(32) NOT NULL,
+  `session_name` varchar(32) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`api_session_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attribute`
+--
+
+DROP TABLE IF EXISTS `attribute`;
+CREATE TABLE `attribute` (
   `attribute_id` int(11) NOT NULL AUTO_INCREMENT,
   `attribute_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`attribute_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_attribute`
+-- Dumping data for table `attribute`
 --
 
-INSERT INTO `oc_attribute` (`attribute_id`, `attribute_group_id`, `sort_order`) VALUES
+INSERT INTO `attribute` (`attribute_id`, `attribute_group_id`, `sort_order`) VALUES
 (1, 6, 1),
 (2, 6, 5),
 (3, 6, 3),
@@ -150,21 +209,22 @@ INSERT INTO `oc_attribute` (`attribute_id`, `attribute_group_id`, `sort_order`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_attribute_description`
+-- Table structure for table `attribute_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_attribute_description` (
+DROP TABLE IF EXISTS `attribute_description`;
+CREATE TABLE `attribute_description` (
   `attribute_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`attribute_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_attribute_description`
+-- Dumping data for table `attribute_description`
 --
 
-INSERT INTO `oc_attribute_description` (`attribute_id`, `language_id`, `name`) VALUES
+INSERT INTO `attribute_description` (`attribute_id`, `language_id`, `name`) VALUES
 (1, 1, 'Description'),
 (2, 1, 'No. of Cores'),
 (4, 1, 'test 1'),
@@ -180,20 +240,21 @@ INSERT INTO `oc_attribute_description` (`attribute_id`, `language_id`, `name`) V
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_attribute_group`
+-- Table structure for table `attribute_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_attribute_group` (
+DROP TABLE IF EXISTS `attribute_group`;
+CREATE TABLE `attribute_group` (
   `attribute_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`attribute_group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_attribute_group`
+-- Dumping data for table `attribute_group`
 --
 
-INSERT INTO `oc_attribute_group` (`attribute_group_id`, `sort_order`) VALUES
+INSERT INTO `attribute_group` (`attribute_group_id`, `sort_order`) VALUES
 (3, 2),
 (4, 1),
 (5, 3),
@@ -202,21 +263,22 @@ INSERT INTO `oc_attribute_group` (`attribute_group_id`, `sort_order`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_attribute_group_description`
+-- Table structure for table `attribute_group_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_attribute_group_description` (
+DROP TABLE IF EXISTS `attribute_group_description`;
+CREATE TABLE `attribute_group_description` (
   `attribute_group_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`attribute_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_attribute_group_description`
+-- Dumping data for table `attribute_group_description`
 --
 
-INSERT INTO `oc_attribute_group_description` (`attribute_group_id`, `language_id`, `name`) VALUES
+INSERT INTO `attribute_group_description` (`attribute_group_id`, `language_id`, `name`) VALUES
 (3, 1, 'Memory'),
 (4, 1, 'Technical'),
 (5, 1, 'Motherboard'),
@@ -225,21 +287,22 @@ INSERT INTO `oc_attribute_group_description` (`attribute_group_id`, `language_id
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_banner`
+-- Table structure for table `banner`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_banner` (
+DROP TABLE IF EXISTS `banner`;
+CREATE TABLE `banner` (
   `banner_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`banner_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_banner`
+-- Dumping data for table `banner`
 --
 
-INSERT INTO `oc_banner` (`banner_id`, `name`, `status`) VALUES
+INSERT INTO `banner` (`banner_id`, `name`, `status`) VALUES
 (6, 'HP Products', 1),
 (7, 'Home Page Slideshow', 1),
 (8, 'Manufacturers', 1);
@@ -247,23 +310,24 @@ INSERT INTO `oc_banner` (`banner_id`, `name`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_banner_image`
+-- Table structure for table `banner_image`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_banner_image` (
+DROP TABLE IF EXISTS `banner_image`;
+CREATE TABLE `banner_image` (
   `banner_image_id` int(11) NOT NULL AUTO_INCREMENT,
   `banner_id` int(11) NOT NULL,
   `link` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`banner_image_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_banner_image`
+-- Dumping data for table `banner_image`
 --
 
-INSERT INTO `oc_banner_image` (`banner_image_id`, `banner_id`, `link`, `image`, `sort_order`) VALUES
+INSERT INTO `banner_image` (`banner_image_id`, `banner_id`, `link`, `image`, `sort_order`) VALUES
 (79, 7, 'index.php?route=product/product&amp;path=57&amp;product_id=49', 'catalog/demo/banners/iPhone6.jpg', 0),
 (87, 6, 'index.php?route=product/manufacturer/info&amp;manufacturer_id=7', 'catalog/demo/compaq_presario.jpg', 0),
 (94, 8, '', 'catalog/demo/manufacturer/nfl.png', 0),
@@ -282,22 +346,23 @@ INSERT INTO `oc_banner_image` (`banner_image_id`, `banner_id`, `link`, `image`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_banner_image_description`
+-- Table structure for table `banner_image_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_banner_image_description` (
+DROP TABLE IF EXISTS `banner_image_description`;
+CREATE TABLE `banner_image_description` (
   `banner_image_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `banner_id` int(11) NOT NULL,
   `title` varchar(64) NOT NULL,
   PRIMARY KEY (`banner_image_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_banner_image_description`
+-- Dumping data for table `banner_image_description`
 --
 
-INSERT INTO `oc_banner_image_description` (`banner_image_id`, `language_id`, `banner_id`, `title`) VALUES
+INSERT INTO `banner_image_description` (`banner_image_id`, `language_id`, `banner_id`, `title`) VALUES
 (79, 1, 7, 'iPhone 6'),
 (87, 1, 6, 'HP Banner'),
 (93, 1, 8, 'Canon'),
@@ -316,10 +381,31 @@ INSERT INTO `oc_banner_image_description` (`banner_image_id`, `language_id`, `ba
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category`
+-- Table structure for table `cart`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category` (
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
+  `cart_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `session_id` varchar(32) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `recurring_id` int(11) NOT NULL,
+  `option` text NOT NULL,
+  `quantity` int(5) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`cart_id`),
+  KEY `cart_id` (`customer_id`,`session_id`,`product_id`,`recurring_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(255) DEFAULT NULL,
   `parent_id` int(11) NOT NULL DEFAULT '0',
@@ -331,13 +417,13 @@ CREATE TABLE IF NOT EXISTS `oc_category` (
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`category_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_category`
+-- Dumping data for table `category`
 --
 
-INSERT INTO `oc_category` (`category_id`, `image`, `parent_id`, `top`, `column`, `sort_order`, `status`, `date_added`, `date_modified`) VALUES
+INSERT INTO `category` (`category_id`, `image`, `parent_id`, `top`, `column`, `sort_order`, `status`, `date_added`, `date_modified`) VALUES
 (25, '', 0, 1, 1, 3, 1, '2009-01-31 01:04:25', '2011-05-30 12:14:55'),
 (27, '', 20, 0, 0, 2, 1, '2009-01-31 01:55:34', '2010-08-22 06:32:15'),
 (20, 'catalog/demo/compaq_presario.jpg', 0, 1, 1, 1, 1, '2009-01-05 21:49:43', '2011-07-16 02:14:42'),
@@ -380,10 +466,11 @@ INSERT INTO `oc_category` (`category_id`, `image`, `parent_id`, `top`, `column`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category_description`
+-- Table structure for table `category_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category_description` (
+DROP TABLE IF EXISTS `category_description`;
+CREATE TABLE `category_description` (
   `category_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -393,82 +480,84 @@ CREATE TABLE IF NOT EXISTS `oc_category_description` (
   `meta_keyword` varchar(255) NOT NULL,
   PRIMARY KEY (`category_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_category_description`
+-- Dumping data for table `category_description`
 --
 
-INSERT INTO `oc_category_description` (`category_id`, `language_id`, `name`, `description`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
-(28, 1, 'Monitors', '', '', '', ''),
-(33, 1, 'Cameras', '', '', '', ''),
-(32, 1, 'Web Cameras', '', '', '', ''),
-(31, 1, 'Scanners', '', '', '', ''),
-(30, 1, 'Printers', '', '', '', ''),
-(29, 1, 'Mice and Trackballs', '', '', '', ''),
-(27, 1, 'Mac', '', '', '', ''),
-(26, 1, 'PC', '', '', '', ''),
-(17, 1, 'Software', '', '', '', ''),
-(25, 1, 'Components', '', '', '', ''),
-(24, 1, 'Phones &amp; PDAs', '', '', '', ''),
-(20, 1, 'Desktops', '&lt;p&gt;\r\n	Example of category description text&lt;/p&gt;\r\n', '', 'Example of category description', ''),
-(35, 1, 'test 1', '', '', '', ''),
-(36, 1, 'test 2', '', '', '', ''),
-(37, 1, 'test 5', '', '', '', ''),
-(38, 1, 'test 4', '', '', '', ''),
-(39, 1, 'test 6', '', '', '', ''),
-(40, 1, 'test 7', '', '', '', ''),
-(41, 1, 'test 8', '', '', '', ''),
-(42, 1, 'test 9', '', '', '', ''),
-(43, 1, 'test 11', '', '', '', ''),
-(34, 1, 'MP3 Players', '&lt;p&gt;\r\n	Shop Laptop feature only the best laptop deals on the market. By comparing laptop deals from the likes of PC World, Comet, Dixons, The Link and Carphone Warehouse, Shop Laptop has the most comprehensive selection of laptops on the internet. At Shop Laptop, we pride ourselves on offering customers the very best laptop deals. From refurbished laptops to netbooks, Shop Laptop ensures that every laptop - in every colour, style, size and technical spec - is featured on the site at the lowest possible price.&lt;/p&gt;\r\n', '', '', ''),
-(18, 1, 'Laptops &amp; Notebooks', '&lt;p&gt;\r\n	Shop Laptop feature only the best laptop deals on the market. By comparing laptop deals from the likes of PC World, Comet, Dixons, The Link and Carphone Warehouse, Shop Laptop has the most comprehensive selection of laptops on the internet. At Shop Laptop, we pride ourselves on offering customers the very best laptop deals. From refurbished laptops to netbooks, Shop Laptop ensures that every laptop - in every colour, style, size and technical spec - is featured on the site at the lowest possible price.&lt;/p&gt;\r\n', '', '', ''),
-(44, 1, 'test 12', '', '', '', ''),
-(45, 1, 'Windows', '', '', '', ''),
-(46, 1, 'Macs', '', '', '', ''),
-(47, 1, 'test 15', '', '', '', ''),
-(48, 1, 'test 16', '', '', '', ''),
-(49, 1, 'test 17', '', '', '', ''),
-(50, 1, 'test 18', '', '', '', ''),
-(51, 1, 'test 19', '', '', '', ''),
-(52, 1, 'test 20', '', '', '', ''),
-(53, 1, 'test 21', '', '', '', ''),
-(54, 1, 'test 22', '', '', '', ''),
-(55, 1, 'test 23', '', '', '', ''),
-(56, 1, 'test 24', '', '', '', ''),
-(57, 1, 'Tablets', '', '', '', ''),
-(58, 1, 'test 25', '', '', '', '');
+INSERT INTO `category_description` (`category_id`, `language_id`, `name`, `description`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
+(28, 1, 'Monitors', '', 'Monitors', '', ''),
+(33, 1, 'Cameras', '', 'Cameras', '', ''),
+(32, 1, 'Web Cameras', '', 'Web Cameras', '', ''),
+(31, 1, 'Scanners', '', 'Scanners', '', ''),
+(30, 1, 'Printers', '', 'Printers', '', ''),
+(29, 1, 'Mice and Trackballs', '', 'Mice and Trackballs', '', ''),
+(27, 1, 'Mac', '', 'Mac', '', ''),
+(26, 1, 'PC', '', 'PC', '', ''),
+(17, 1, 'Software', '', 'Software', '', ''),
+(25, 1, 'Components', '', 'Components', '', ''),
+(24, 1, 'Phones &amp; PDAs', '', 'Phones &amp; PDAs', '', ''),
+(20, 1, 'Desktops', '&lt;p&gt;\r\n	Example of category description text&lt;/p&gt;\r\n', 'Desktops', 'Example of category description', ''),
+(35, 1, 'test 1', '', 'test 1', '', ''),
+(36, 1, 'test 2', '', 'test 2', '', ''),
+(37, 1, 'test 5', '', 'test 5', '', ''),
+(38, 1, 'test 4', '', 'test 4', '', ''),
+(39, 1, 'test 6', '', 'test 6', '', ''),
+(40, 1, 'test 7', '', 'test 7', '', ''),
+(41, 1, 'test 8', '', 'test 8', '', ''),
+(42, 1, 'test 9', '', 'test 9', '', ''),
+(43, 1, 'test 11', '', 'test 11', '', ''),
+(34, 1, 'MP3 Players', '&lt;p&gt;\r\n	Shop Laptop feature only the best laptop deals on the market. By comparing laptop deals from the likes of PC World, Comet, Dixons, The Link and Carphone Warehouse, Shop Laptop has the most comprehensive selection of laptops on the internet. At Shop Laptop, we pride ourselves on offering customers the very best laptop deals. From refurbished laptops to netbooks, Shop Laptop ensures that every laptop - in every colour, style, size and technical spec - is featured on the site at the lowest possible price.&lt;/p&gt;\r\n', 'MP3 Players', '', ''),
+(18, 1, 'Laptops &amp; Notebooks', '&lt;p&gt;\r\n	Shop Laptop feature only the best laptop deals on the market. By comparing laptop deals from the likes of PC World, Comet, Dixons, The Link and Carphone Warehouse, Shop Laptop has the most comprehensive selection of laptops on the internet. At Shop Laptop, we pride ourselves on offering customers the very best laptop deals. From refurbished laptops to netbooks, Shop Laptop ensures that every laptop - in every colour, style, size and technical spec - is featured on the site at the lowest possible price.&lt;/p&gt;\r\n', 'Laptops &amp; Notebooks', '', ''),
+(44, 1, 'test 12', '', 'test 12', '', ''),
+(45, 1, 'Windows', '', 'Windows', '', ''),
+(46, 1, 'Macs', '', 'Macs', '', ''),
+(47, 1, 'test 15', '', 'test 15', '', ''),
+(48, 1, 'test 16', '', 'test 16', '', ''),
+(49, 1, 'test 17', '', 'test 17', '', ''),
+(50, 1, 'test 18', '', 'test 18', '', ''),
+(51, 1, 'test 19', '', 'test 19', '', ''),
+(52, 1, 'test 20', '', 'test 20', '', ''),
+(53, 1, 'test 21', '', 'test 21', '', ''),
+(54, 1, 'test 22', '', 'test 22', '', ''),
+(55, 1, 'test 23', '', 'test 23', '', ''),
+(56, 1, 'test 24', '', 'test 24', '', ''),
+(57, 1, 'Tablets', '', 'Tablets', '', ''),
+(58, 1, 'test 25', '', 'test 25', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category_filter`
+-- Table structure for table `category_filter`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category_filter` (
+DROP TABLE IF EXISTS `category_filter`;
+CREATE TABLE `category_filter` (
   `category_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category_path`
+-- Table structure for table `category_path`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category_path` (
+DROP TABLE IF EXISTS `category_path`;
+CREATE TABLE `category_path` (
   `category_id` int(11) NOT NULL,
   `path_id` int(11) NOT NULL,
   `level` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`path_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_category_path`
+-- Dumping data for table `category_path`
 --
 
-INSERT INTO `oc_category_path` (`category_id`, `path_id`, `level`) VALUES
+INSERT INTO `category_path` (`category_id`, `path_id`, `level`) VALUES
 (25, 25, 0),
 (28, 25, 0),
 (28, 28, 1),
@@ -544,33 +633,35 @@ INSERT INTO `oc_category_path` (`category_id`, `path_id`, `level`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category_to_layout`
+-- Table structure for table `category_to_layout`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category_to_layout` (
+DROP TABLE IF EXISTS `category_to_layout`;
+CREATE TABLE `category_to_layout` (
   `category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_category_to_store`
+-- Table structure for table `category_to_store`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_category_to_store` (
+DROP TABLE IF EXISTS `category_to_store`;
+CREATE TABLE `category_to_store` (
   `category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`category_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_category_to_store`
+-- Dumping data for table `category_to_store`
 --
 
-INSERT INTO `oc_category_to_store` (`category_id`, `store_id`) VALUES
+INSERT INTO `category_to_store` (`category_id`, `store_id`) VALUES
 (17, 0),
 (18, 0),
 (20, 0),
@@ -613,10 +704,11 @@ INSERT INTO `oc_category_to_store` (`category_id`, `store_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_country`
+-- Table structure for table `country`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_country` (
+DROP TABLE IF EXISTS `country`;
+CREATE TABLE `country` (
   `country_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   `iso_code_2` varchar(2) NOT NULL,
@@ -625,13 +717,13 @@ CREATE TABLE IF NOT EXISTS `oc_country` (
   `postcode_required` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`country_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=258 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_country`
+-- Dumping data for table `country`
 --
 
-INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format`, `postcode_required`, `status`) VALUES
+INSERT INTO `country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format`, `postcode_required`, `status`) VALUES
 (1, 'Afghanistan', 'AF', 'AFG', '', 0, 1),
 (2, 'Albania', 'AL', 'ALB', '', 0, 1),
 (3, 'Algeria', 'DZ', 'DZA', '', 0, 1),
@@ -743,7 +835,7 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (110, 'Kenya', 'KE', 'KEN', '', 0, 1),
 (111, 'Kiribati', 'KI', 'KIR', '', 0, 1),
 (112, 'North Korea', 'KP', 'PRK', '', 0, 1),
-(113, 'Korea, Republic of', 'KR', 'KOR', '', 0, 1),
+(113, 'South Korea', 'KR', 'KOR', '', 0, 1),
 (114, 'Kuwait', 'KW', 'KWT', '', 0, 1),
 (115, 'Kyrgyzstan', 'KG', 'KGZ', '', 0, 1),
 (116, 'Lao People''s Democratic Republic', 'LA', 'LAO', '', 0, 1),
@@ -889,10 +981,11 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_coupon`
+-- Table structure for table `coupon`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_coupon` (
+DROP TABLE IF EXISTS `coupon`;
+CREATE TABLE `coupon` (
   `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -908,13 +1001,13 @@ CREATE TABLE IF NOT EXISTS `oc_coupon` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`coupon_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_coupon`
+-- Dumping data for table `coupon`
 --
 
-INSERT INTO `oc_coupon` (`coupon_id`, `name`, `code`, `type`, `discount`, `logged`, `shipping`, `total`, `date_start`, `date_end`, `uses_total`, `uses_customer`, `status`, `date_added`) VALUES
+INSERT INTO `coupon` (`coupon_id`, `name`, `code`, `type`, `discount`, `logged`, `shipping`, `total`, `date_start`, `date_end`, `uses_total`, `uses_customer`, `status`, `date_added`) VALUES
 (4, '-10% Discount', '2222', 'P', '10.0000', 0, 0, '0.0000', '2014-01-01', '2020-01-01', 10, '10', 0, '2009-01-27 13:55:03'),
 (5, 'Free Shipping', '3333', 'P', '0.0000', 0, 1, '100.0000', '2014-01-01', '2014-02-01', 10, '10', 0, '2009-03-14 21:13:53'),
 (6, '-10.00 Discount', '1111', 'F', '10.0000', 0, 0, '10.0000', '2014-01-01', '2020-01-01', 100000, '10000', 0, '2009-03-14 21:15:18');
@@ -922,22 +1015,24 @@ INSERT INTO `oc_coupon` (`coupon_id`, `name`, `code`, `type`, `discount`, `logge
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_coupon_category`
+-- Table structure for table `coupon_category`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_coupon_category` (
+DROP TABLE IF EXISTS `coupon_category`;
+CREATE TABLE `coupon_category` (
   `coupon_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`coupon_id`,`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_coupon_history`
+-- Table structure for table `coupon_history`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_coupon_history` (
+DROP TABLE IF EXISTS `coupon_history`;
+CREATE TABLE `coupon_history` (
   `coupon_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `coupon_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -945,28 +1040,30 @@ CREATE TABLE IF NOT EXISTS `oc_coupon_history` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`coupon_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_coupon_product`
+-- Table structure for table `coupon_product`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_coupon_product` (
+DROP TABLE IF EXISTS `coupon_product`;
+CREATE TABLE `coupon_product` (
   `coupon_product_id` int(11) NOT NULL AUTO_INCREMENT,
   `coupon_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   PRIMARY KEY (`coupon_product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_currency`
+-- Table structure for table `currency`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_currency` (
+DROP TABLE IF EXISTS `currency`;
+CREATE TABLE `currency` (
   `currency_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(32) NOT NULL,
   `code` varchar(3) NOT NULL,
@@ -977,24 +1074,25 @@ CREATE TABLE IF NOT EXISTS `oc_currency` (
   `status` tinyint(1) NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`currency_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_currency`
+-- Dumping data for table `currency`
 --
 
-INSERT INTO `oc_currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbol_right`, `decimal_place`, `value`, `status`, `date_modified`) VALUES
-(1, 'Pound Sterling', 'GBP', '£', '', '2', 0.61250001, 1, '2014-09-25 14:40:00'),
+INSERT INTO `currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbol_right`, `decimal_place`, `value`, `status`, `date_modified`) VALUES
+(1, 'Pound Sterling', 'GBP', '?', '', '2', 0.61250001, 1, '2014-09-25 14:40:00'),
 (2, 'US Dollar', 'USD', '$', '', '2', 1.00000000, 1, '2014-09-25 14:40:00'),
 (3, 'Euro', 'EUR', '', '€', '2', 0.78460002, 1, '2014-09-25 14:40:00');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer`
+-- Table structure for table `customer`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer` (
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_group_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
@@ -1014,132 +1112,146 @@ CREATE TABLE IF NOT EXISTS `oc_customer` (
   `status` tinyint(1) NOT NULL,
   `approved` tinyint(1) NOT NULL,
   `safe` tinyint(1) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `token` text NOT NULL,
+  `code` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_activity`
+-- Table structure for table `customer_activity`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_activity` (
-  `activity_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `customer_activity`;
+CREATE TABLE `customer_activity` (
+  `customer_activity_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `key` varchar(64) NOT NULL,
   `data` text NOT NULL,
   `ip` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
-  PRIMARY KEY (`activity_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`customer_activity_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_ban_ip`
+-- Table structure for table `customer_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_ban_ip` (
-  `customer_ban_ip_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ip` varchar(40) NOT NULL,
-  PRIMARY KEY (`customer_ban_ip_id`),
-  KEY `ip` (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `oc_customer_group`
---
-
-CREATE TABLE IF NOT EXISTS `oc_customer_group` (
+DROP TABLE IF EXISTS `customer_group`;
+CREATE TABLE `customer_group` (
   `customer_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `approval` int(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`customer_group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_customer_group`
+-- Dumping data for table `customer_group`
 --
 
-INSERT INTO `oc_customer_group` (`customer_group_id`, `approval`, `sort_order`) VALUES
+INSERT INTO `customer_group` (`customer_group_id`, `approval`, `sort_order`) VALUES
 (1, 0, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_group_description`
+-- Table structure for table `customer_group_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_group_description` (
+DROP TABLE IF EXISTS `customer_group_description`;
+CREATE TABLE `customer_group_description` (
   `customer_group_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`customer_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_customer_group_description`
+-- Dumping data for table `customer_group_description`
 --
 
-INSERT INTO `oc_customer_group_description` (`customer_group_id`, `language_id`, `name`, `description`) VALUES
+INSERT INTO `customer_group_description` (`customer_group_id`, `language_id`, `name`, `description`) VALUES
 (1, 1, 'Default', 'test');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_history`
+-- Table structure for table `customer_history`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_history` (
+DROP TABLE IF EXISTS `customer_history`;
+CREATE TABLE `customer_history` (
   `customer_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_ip`
+-- Table structure for table `customer_login`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_ip` (
+DROP TABLE IF EXISTS `customer_login`;
+CREATE TABLE `customer_login` (
+  `customer_login_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(96) NOT NULL,
+  `ip` varchar(40) NOT NULL,
+  `total` int(4) NOT NULL,
+  `date_added` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`customer_login_id`),
+  KEY `email` (`email`),
+  KEY `ip` (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_ip`
+--
+
+DROP TABLE IF EXISTS `customer_ip`;
+CREATE TABLE `customer_ip` (
   `customer_ip_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_ip_id`),
   KEY `ip` (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_online`
+-- Table structure for table `customer_online`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_online` (
+DROP TABLE IF EXISTS `customer_online`;
+CREATE TABLE `customer_online` (
   `ip` varchar(40) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `url` text NOT NULL,
   `referer` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_reward`
+-- Table structure for table `customer_reward`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_reward` (
+DROP TABLE IF EXISTS `customer_reward`;
+CREATE TABLE `customer_reward` (
   `customer_reward_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL DEFAULT '0',
   `order_id` int(11) NOT NULL DEFAULT '0',
@@ -1147,15 +1259,16 @@ CREATE TABLE IF NOT EXISTS `oc_customer_reward` (
   `points` int(8) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_reward_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_customer_transaction`
+-- Table structure for table `customer_transaction`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_customer_transaction` (
+DROP TABLE IF EXISTS `customer_transaction`;
+CREATE TABLE `customer_transaction` (
   `customer_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -1163,250 +1276,288 @@ CREATE TABLE IF NOT EXISTS `oc_customer_transaction` (
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`customer_transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_custom_field`
+-- Table structure for table `customer_wishlist`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_custom_field` (
+DROP TABLE IF EXISTS `customer_wishlist`;
+CREATE TABLE `customer_wishlist` (
+  `customer_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`customer_id`,`product_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `custom_field`
+--
+
+DROP TABLE IF EXISTS `custom_field`;
+CREATE TABLE `custom_field` (
   `custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `value` text NOT NULL,
+  `validation` varchar(255) NOT NULL,
   `location` varchar(7) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`custom_field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_custom_field_customer_group`
+-- Table structure for table `custom_field_customer_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_custom_field_customer_group` (
+DROP TABLE IF EXISTS `custom_field_customer_group`;
+CREATE TABLE `custom_field_customer_group` (
   `custom_field_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`custom_field_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_custom_field_description`
+-- Table structure for table `custom_field_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_custom_field_description` (
+DROP TABLE IF EXISTS `custom_field_description`;
+CREATE TABLE `custom_field_description` (
   `custom_field_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`custom_field_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_custom_field_value`
+-- Table structure for table `custom_field_value`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_custom_field_value` (
+DROP TABLE IF EXISTS `custom_field_value`;
+CREATE TABLE `custom_field_value` (
   `custom_field_value_id` int(11) NOT NULL AUTO_INCREMENT,
   `custom_field_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`custom_field_value_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_custom_field_value_description`
+-- Table structure for table `custom_field_value_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_custom_field_value_description` (
+DROP TABLE IF EXISTS `custom_field_value_description`;
+CREATE TABLE `custom_field_value_description` (
   `custom_field_value_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `custom_field_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`custom_field_value_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_download`
+-- Table structure for table `download`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_download` (
+DROP TABLE IF EXISTS `download`;
+CREATE TABLE `download` (
   `download_id` int(11) NOT NULL AUTO_INCREMENT,
-  `filename` varchar(128) NOT NULL,
+  `filename` varchar(160) NOT NULL,
   `mask` varchar(128) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_download_description`
+-- Table structure for table `download_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_download_description` (
+DROP TABLE IF EXISTS `download_description`;
+CREATE TABLE `download_description` (
   `download_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`download_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_event`
+-- Table structure for table `event`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_event` (
+DROP TABLE IF EXISTS `event`;
+CREATE TABLE `event` (
   `event_id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(32) NOT NULL,
   `trigger` text NOT NULL,
   `action` text NOT NULL,
   PRIMARY KEY (`event_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `event`
+--
+
+INSERT INTO `event` (`event_id`, `code`, `trigger`, `action`) VALUES
+(1, 'voucher', 'catalog/model/checkout/order/addHistory/after', 'total/voucher/send');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_extension`
+-- Table structure for table `extension`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_extension` (
+DROP TABLE IF EXISTS `extension`;
+CREATE TABLE `extension` (
   `extension_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `code` varchar(32) NOT NULL,
   PRIMARY KEY (`extension_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=428 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_extension`
+-- Dumping data for table `extension`
 --
 
-INSERT INTO `oc_extension` (`extension_id`, `type`, `code`) VALUES
-(23, 'payment', 'cod'),
-(22, 'total', 'shipping'),
-(57, 'total', 'sub_total'),
-(58, 'total', 'tax'),
-(59, 'total', 'total'),
-(410, 'module', 'banner'),
-(426, 'module', 'carousel'),
-(390, 'total', 'credit'),
-(387, 'shipping', 'flat'),
-(349, 'total', 'handling'),
-(350, 'total', 'low_order_fee'),
-(389, 'total', 'coupon'),
-(413, 'module', 'category'),
-(408, 'module', 'account'),
-(393, 'total', 'reward'),
-(398, 'total', 'voucher'),
-(407, 'payment', 'free_checkout'),
-(427, 'module', 'featured'),
-(419, 'module', 'slideshow');
+INSERT INTO `extension` (`extension_id`, `type`, `code`) VALUES
+(1, 'payment', 'cod'),
+(2, 'total', 'shipping'),
+(3, 'total', 'sub_total'),
+(4, 'total', 'tax'),
+(5, 'total', 'total'),
+(6, 'module', 'banner'),
+(7, 'module', 'carousel'),
+(8, 'total', 'credit'),
+(9, 'shipping', 'flat'),
+(10, 'total', 'handling'),
+(11, 'total', 'low_order_fee'),
+(12, 'total', 'coupon'),
+(13, 'module', 'category'),
+(14, 'module', 'account'),
+(15, 'total', 'reward'),
+(16, 'total', 'voucher'),
+(17, 'payment', 'free_checkout'),
+(18, 'module', 'featured'),
+(19, 'module', 'slideshow'),
+(20, 'theme', 'theme_default');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_filter`
+-- Table structure for table `filter`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_filter` (
+DROP TABLE IF EXISTS `filter`;
+CREATE TABLE `filter` (
   `filter_id` int(11) NOT NULL AUTO_INCREMENT,
   `filter_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_filter_description`
+-- Table structure for table `filter_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_filter_description` (
+DROP TABLE IF EXISTS `filter_description`;
+CREATE TABLE `filter_description` (
   `filter_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `filter_group_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`filter_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_filter_group`
+-- Table structure for table `filter_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_filter_group` (
+DROP TABLE IF EXISTS `filter_group`;
+CREATE TABLE `filter_group` (
   `filter_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`filter_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_filter_group_description`
+-- Table structure for table `filter_group_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_filter_group_description` (
+DROP TABLE IF EXISTS `filter_group_description`;
+CREATE TABLE `filter_group_description` (
   `filter_group_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`filter_group_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_geo_zone`
+-- Table structure for table `geo_zone`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_geo_zone` (
+DROP TABLE IF EXISTS `geo_zone`;
+CREATE TABLE `geo_zone` (
   `geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
   `date_modified` datetime NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`geo_zone_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_geo_zone`
+-- Dumping data for table `geo_zone`
 --
 
-INSERT INTO `oc_geo_zone` (`geo_zone_id`, `name`, `description`, `date_modified`, `date_added`) VALUES
+INSERT INTO `geo_zone` (`geo_zone_id`, `name`, `description`, `date_modified`, `date_added`) VALUES
 (3, 'UK VAT Zone', 'UK VAT', '2010-02-26 22:33:24', '2009-01-06 23:26:25'),
 (4, 'UK Shipping', 'UK Shipping Zones', '2010-12-15 15:18:13', '2009-06-23 01:14:53');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_information`
+-- Table structure for table `information`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_information` (
+DROP TABLE IF EXISTS `information`;
+CREATE TABLE `information` (
   `information_id` int(11) NOT NULL AUTO_INCREMENT,
   `bottom` int(1) NOT NULL DEFAULT '0',
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`information_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_information`
+-- Dumping data for table `information`
 --
 
-INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`) VALUES
+INSERT INTO `information` (`information_id`, `bottom`, `sort_order`, `status`) VALUES
 (3, 1, 3, 1),
 (4, 1, 1, 1),
 (5, 1, 4, 1),
@@ -1415,10 +1566,11 @@ INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_information_description`
+-- Table structure for table `information_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_information_description` (
+DROP TABLE IF EXISTS `information_description`;
+CREATE TABLE `information_description` (
   `information_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `title` varchar(64) NOT NULL,
@@ -1427,48 +1579,50 @@ CREATE TABLE IF NOT EXISTS `oc_information_description` (
   `meta_description` varchar(255) NOT NULL,
   `meta_keyword` varchar(255) NOT NULL,
   PRIMARY KEY (`information_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_information_description`
+-- Dumping data for table `information_description`
 --
 
-INSERT INTO `oc_information_description` (`information_id`, `language_id`, `title`, `description`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
-(4, 1, 'About Us', '&lt;p&gt;\r\n	About Us&lt;/p&gt;\r\n', '', '', ''),
-(5, 1, 'Terms &amp; Conditions', '&lt;p&gt;\r\n	Terms &amp;amp; Conditions&lt;/p&gt;\r\n', '', '', ''),
-(3, 1, 'Privacy Policy', '&lt;p&gt;\r\n	Privacy Policy&lt;/p&gt;\r\n', '', '', ''),
-(6, 1, 'Delivery Information', '&lt;p&gt;\r\n	Delivery Information&lt;/p&gt;\r\n', '', '', '');
+INSERT INTO `information_description` (`information_id`, `language_id`, `title`, `description`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
+(4, 1, 'About Us', '&lt;p&gt;\r\n	About Us&lt;/p&gt;\r\n', 'About Us', '', ''),
+(5, 1, 'Terms &amp; Conditions', '&lt;p&gt;\r\n	Terms &amp;amp; Conditions&lt;/p&gt;\r\n', 'Terms &amp; Conditions', '', ''),
+(3, 1, 'Privacy Policy', '&lt;p&gt;\r\n	Privacy Policy&lt;/p&gt;\r\n', 'Privacy Policy', '', ''),
+(6, 1, 'Delivery Information', '&lt;p&gt;\r\n	Delivery Information&lt;/p&gt;\r\n', 'Delivery Information', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_information_to_layout`
+-- Table structure for table `information_to_layout`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_information_to_layout` (
+DROP TABLE IF EXISTS `information_to_layout`;
+CREATE TABLE `information_to_layout` (
   `information_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`information_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_information_to_store`
+-- Table structure for table `information_to_store`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_information_to_store` (
+DROP TABLE IF EXISTS `information_to_store`;
+CREATE TABLE `information_to_store` (
   `information_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`information_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_information_to_store`
+-- Dumping data for table `information_to_store`
 --
 
-INSERT INTO `oc_information_to_store` (`information_id`, `store_id`) VALUES
+INSERT INTO `information_to_store` (`information_id`, `store_id`) VALUES
 (3, 0),
 (4, 0),
 (5, 0),
@@ -1477,47 +1631,48 @@ INSERT INTO `oc_information_to_store` (`information_id`, `store_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_language`
+-- Table structure for table `language`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_language` (
+DROP TABLE IF EXISTS `language`;
+CREATE TABLE `language` (
   `language_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `code` varchar(5) NOT NULL,
   `locale` varchar(255) NOT NULL,
   `image` varchar(64) NOT NULL,
   `directory` varchar(32) NOT NULL,
-  `filename` varchar(64) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_language`
+-- Dumping data for table `language`
 --
 
-INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `filename`, `sort_order`, `status`) VALUES
-(1, 'English', 'en', 'en_US.UTF-8,en_US,en-gb,english', 'gb.png', 'english', 'english', 1, 1);
+INSERT INTO `language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `sort_order`, `status`) VALUES
+(1, 'English', 'en-gb', 'en_US.UTF-8,en_US,en-gb,english', 'gb.png', 'english', 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_layout`
+-- Table structure for table `layout`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_layout` (
+DROP TABLE IF EXISTS `layout`;
+CREATE TABLE `layout` (
   `layout_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`layout_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_layout`
+-- Dumping data for table `layout`
 --
 
-INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
+INSERT INTO `layout` (`layout_id`, `name`) VALUES
 (1, 'Home'),
 (2, 'Product'),
 (3, 'Category'),
@@ -1528,57 +1683,62 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 (8, 'Contact'),
 (9, 'Sitemap'),
 (10, 'Affiliate'),
-(11, 'Information');
+(11, 'Information'),
+(12, 'Compare'),
+(13, 'Search');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_layout_module`
+-- Table structure for table `layout_module`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_layout_module` (
+DROP TABLE IF EXISTS `layout_module`;
+CREATE TABLE `layout_module` (
   `layout_module_id` int(11) NOT NULL AUTO_INCREMENT,
   `layout_id` int(11) NOT NULL,
   `code` varchar(64) NOT NULL,
   `position` varchar(14) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`layout_module_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_layout_module`
+-- Dumping data for table `layout_module`
 --
 
-INSERT INTO `oc_layout_module` (`layout_module_id`, `layout_id`, `code`, `position`, `sort_order`) VALUES
-(14, 1, 'featured.0', 'content_top', 1),
-(2, 4, 'carousel.0', 'content_top', 0),
-(3, 4, 'banner.0', 'content_top', 1),
-(19, 3, 'slideshow.pol3h8iif8j2lnmi', 'column_left', 1),
-(13, 1, 'slideshow.0', 'content_top', 0),
-(8, 6, 'account', 'column_right', 0),
-(20, 5, 'category', 'column_left', 2),
-(15, 1, 'carousel.0', 'content_bottom', 0),
-(18, 3, 'category', 'column_left', 0);
+INSERT INTO `layout_module` (`layout_module_id`, `layout_id`, `code`, `position`, `sort_order`) VALUES
+(2, 4, '0', 'content_top', 0),
+(3, 4, '0', 'content_top', 1),
+(20, 5, '0', 'column_left', 2),
+(69, 10, 'affiliate', 'column_right', 1),
+(68, 6, 'account', 'column_right', 1),
+(67, 1, 'carousel.29', 'content_top', 3),
+(66, 1, 'slideshow.27', 'content_top', 1),
+(65, 1, 'featured.28', 'content_top', 2),
+(72, 3, 'category', 'column_left', 1),
+(73, 3, 'banner.30', 'column_left', 2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_layout_route`
+-- Table structure for table `layout_route`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_layout_route` (
+DROP TABLE IF EXISTS `layout_route`;
+CREATE TABLE `layout_route` (
   `layout_route_id` int(11) NOT NULL AUTO_INCREMENT,
   `layout_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `route` varchar(255) NOT NULL,
   PRIMARY KEY (`layout_route_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_layout_route`
+-- Dumping data for table `layout_route`
 --
 
-INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `route`) VALUES
+INSERT INTO `layout_route` (`layout_route_id`, `layout_id`, `store_id`, `route`) VALUES
 (38, 6, 0, 'account/%'),
 (17, 10, 0, 'affiliate/%'),
 (44, 3, 0, 'product/category'),
@@ -1588,27 +1748,29 @@ INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `rout
 (23, 7, 0, 'checkout/%'),
 (31, 8, 0, 'information/contact'),
 (32, 9, 0, 'information/sitemap'),
-(34, 4, 0, 'common/home'),
+(34, 4, 0, ''),
 (45, 5, 0, 'product/manufacturer'),
-(46, 5, 0, 'common/home');
+(52, 12, 0, 'product/compare'),
+(53, 13, 0, 'product/search');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_length_class`
+-- Table structure for table `length_class`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_length_class` (
+DROP TABLE IF EXISTS `length_class`;
+CREATE TABLE `length_class` (
   `length_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL,
   PRIMARY KEY (`length_class_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_length_class`
+-- Dumping data for table `length_class`
 --
 
-INSERT INTO `oc_length_class` (`length_class_id`, `value`) VALUES
+INSERT INTO `length_class` (`length_class_id`, `value`) VALUES
 (1, '1.00000000'),
 (2, '10.00000000'),
 (3, '0.39370000');
@@ -1616,22 +1778,23 @@ INSERT INTO `oc_length_class` (`length_class_id`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_length_class_description`
+-- Table structure for table `length_class_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_length_class_description` (
-  `length_class_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `length_class_description`;
+CREATE TABLE `length_class_description` (
+  `length_class_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
   PRIMARY KEY (`length_class_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_length_class_description`
+-- Dumping data for table `length_class_description`
 --
 
-INSERT INTO `oc_length_class_description` (`length_class_id`, `language_id`, `title`, `unit`) VALUES
+INSERT INTO `length_class_description` (`length_class_id`, `language_id`, `title`, `unit`) VALUES
 (1, 1, 'Centimeter', 'cm'),
 (2, 1, 'Millimeter', 'mm'),
 (3, 1, 'Inch', 'in');
@@ -1639,10 +1802,11 @@ INSERT INTO `oc_length_class_description` (`length_class_id`, `language_id`, `ti
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_location`
+-- Table structure for table `location`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_location` (
+DROP TABLE IF EXISTS `location`;
+CREATE TABLE `location` (
   `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `address` text NOT NULL,
@@ -1654,27 +1818,28 @@ CREATE TABLE IF NOT EXISTS `oc_location` (
   `comment` text NOT NULL,
   PRIMARY KEY (`location_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_manufacturer`
+-- Table structure for table `manufacturer`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_manufacturer` (
+DROP TABLE IF EXISTS `manufacturer`;
+CREATE TABLE `manufacturer` (
   `manufacturer_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`manufacturer_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_manufacturer`
+-- Dumping data for table `manufacturer`
 --
 
-INSERT INTO `oc_manufacturer` (`manufacturer_id`, `name`, `image`, `sort_order`) VALUES
+INSERT INTO `manufacturer` (`manufacturer_id`, `name`, `image`, `sort_order`) VALUES
 (5, 'HTC', 'catalog/demo/htc_logo.jpg', 0),
 (6, 'Palm', 'catalog/demo/palm_logo.jpg', 0),
 (7, 'Hewlett-Packard', 'catalog/demo/hp_logo.jpg', 0),
@@ -1685,20 +1850,21 @@ INSERT INTO `oc_manufacturer` (`manufacturer_id`, `name`, `image`, `sort_order`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_manufacturer_to_store`
+-- Table structure for table `manufacturer_to_store`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_manufacturer_to_store` (
+DROP TABLE IF EXISTS `manufacturer_to_store`;
+CREATE TABLE `manufacturer_to_store` (
   `manufacturer_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   PRIMARY KEY (`manufacturer_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_manufacturer_to_store`
+-- Dumping data for table `manufacturer_to_store`
 --
 
-INSERT INTO `oc_manufacturer_to_store` (`manufacturer_id`, `store_id`) VALUES
+INSERT INTO `manufacturer_to_store` (`manufacturer_id`, `store_id`) VALUES
 (5, 0),
 (6, 0),
 (7, 0),
@@ -1709,10 +1875,11 @@ INSERT INTO `oc_manufacturer_to_store` (`manufacturer_id`, `store_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_marketing`
+-- Table structure for table `marketing`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_marketing` (
+DROP TABLE IF EXISTS `marketing`;
+CREATE TABLE `marketing` (
   `marketing_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` text NOT NULL,
@@ -1720,44 +1887,72 @@ CREATE TABLE IF NOT EXISTS `oc_marketing` (
   `clicks` int(5) NOT NULL DEFAULT '0',
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`marketing_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_modification`
+-- Table structure for table `modification`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_modification` (
+DROP TABLE IF EXISTS `modification`;
+CREATE TABLE `modification` (
   `modification_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
+  `code` varchar(64) NOT NULL,
   `author` varchar(64) NOT NULL,
   `version` varchar(32) NOT NULL,
   `link` varchar(255) NOT NULL,
-  `code` text NOT NULL,
+  `xml` mediumtext NOT NULL,
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`modification_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- ----------------------------------------------------------
+
+-- Table structure for table `module`
+--
+
+DROP TABLE IF EXISTS `module`;
+CREATE TABLE `module` (
+  `module_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `setting` text NOT NULL,
+  PRIMARY KEY (`module_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `module`
+--
+
+INSERT INTO `module` (`module_id`, `name`, `code`, `setting`) VALUES
+(30, 'Category', 'banner', '{"name":"Category","banner_id":"6","width":"182","height":"182","status":"1"}'),
+(29, 'Home Page', 'carousel', '{"name":"Home Page","banner_id":"8","width":"130","height":"100","status":"1"}'),
+(28, 'Home Page', 'featured', '{"name":"Home Page","product":["43","40","42","30"],"limit":"4","width":"200","height":"200","status":"1"}'),
+(27, 'Home Page', 'slideshow', '{"name":"Home Page","banner_id":"7","width":"1140","height":"380","status":"1"}'),
+(31, 'Banner 1', 'banner', '{"name":"Banner 1","banner_id":"6","width":"182","height":"182","status":"1"}');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_option`
+-- Table structure for table `option`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_option` (
+DROP TABLE IF EXISTS `option`;
+CREATE TABLE `option` (
   `option_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`option_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_option`
+-- Dumping data for table `option`
 --
 
-INSERT INTO `oc_option` (`option_id`, `type`, `sort_order`) VALUES
+INSERT INTO `option` (`option_id`, `type`, `sort_order`) VALUES
 (1, 'radio', 1),
 (2, 'checkbox', 2),
 (4, 'text', 3),
@@ -1773,21 +1968,22 @@ INSERT INTO `oc_option` (`option_id`, `type`, `sort_order`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_option_description`
+-- Table structure for table `option_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_option_description` (
+DROP TABLE IF EXISTS `option_description`;
+CREATE TABLE `option_description` (
   `option_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`option_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_option_description`
+-- Dumping data for table `option_description`
 --
 
-INSERT INTO `oc_option_description` (`option_id`, `language_id`, `name`) VALUES
+INSERT INTO `option_description` (`option_id`, `language_id`, `name`) VALUES
 (1, 1, 'Radio'),
 (2, 1, 'Checkbox'),
 (4, 1, 'Text'),
@@ -1803,22 +1999,23 @@ INSERT INTO `oc_option_description` (`option_id`, `language_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_option_value`
+-- Table structure for table `option_value`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_option_value` (
+DROP TABLE IF EXISTS `option_value`;
+CREATE TABLE `option_value` (
   `option_value_id` int(11) NOT NULL AUTO_INCREMENT,
   `option_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`option_value_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_option_value`
+-- Dumping data for table `option_value`
 --
 
-INSERT INTO `oc_option_value` (`option_value_id`, `option_id`, `image`, `sort_order`) VALUES
+INSERT INTO `option_value` (`option_value_id`, `option_id`, `image`, `sort_order`) VALUES
 (43, 1, '', 3),
 (32, 1, '', 1),
 (45, 2, '', 4),
@@ -1837,22 +2034,23 @@ INSERT INTO `oc_option_value` (`option_value_id`, `option_id`, `image`, `sort_or
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_option_value_description`
+-- Table structure for table `option_value_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_option_value_description` (
+DROP TABLE IF EXISTS `option_value_description`;
+CREATE TABLE `option_value_description` (
   `option_value_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `option_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`option_value_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_option_value_description`
+-- Dumping data for table `option_value_description`
 --
 
-INSERT INTO `oc_option_value_description` (`option_value_id`, `language_id`, `option_id`, `name`) VALUES
+INSERT INTO `option_value_description` (`option_value_id`, `language_id`, `option_id`, `name`) VALUES
 (43, 1, 1, 'Large'),
 (32, 1, 1, 'Small'),
 (45, 1, 2, 'Checkbox 4'),
@@ -1871,10 +2069,11 @@ INSERT INTO `oc_option_value_description` (`option_value_id`, `language_id`, `op
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order`
+-- Table structure for table `order`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order` (
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_no` int(11) NOT NULL DEFAULT '0',
   `invoice_prefix` varchar(26) NOT NULL,
@@ -1937,15 +2136,16 @@ CREATE TABLE IF NOT EXISTS `oc_order` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_custom_field`
+-- Table structure for table `order_custom_field`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_custom_field` (
+DROP TABLE IF EXISTS `order_custom_field`;
+CREATE TABLE `order_custom_field` (
   `order_custom_field_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `custom_field_id` int(11) NOT NULL,
@@ -1955,94 +2155,33 @@ CREATE TABLE IF NOT EXISTS `oc_order_custom_field` (
   `type` varchar(32) NOT NULL,
   `location` varchar(16) NOT NULL,
   PRIMARY KEY (`order_custom_field_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_fraud`
+-- Table structure for table `order_history`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_fraud` (
-  `order_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `country_match` varchar(3) NOT NULL,
-  `country_code` varchar(2) NOT NULL,
-  `high_risk_country` varchar(3) NOT NULL,
-  `distance` int(11) NOT NULL,
-  `ip_region` varchar(255) NOT NULL,
-  `ip_city` varchar(255) NOT NULL,
-  `ip_latitude` decimal(10,6) NOT NULL,
-  `ip_longitude` decimal(10,6) NOT NULL,
-  `ip_isp` varchar(255) NOT NULL,
-  `ip_org` varchar(255) NOT NULL,
-  `ip_asnum` int(11) NOT NULL,
-  `ip_user_type` varchar(255) NOT NULL,
-  `ip_country_confidence` varchar(3) NOT NULL,
-  `ip_region_confidence` varchar(3) NOT NULL,
-  `ip_city_confidence` varchar(3) NOT NULL,
-  `ip_postal_confidence` varchar(3) NOT NULL,
-  `ip_postal_code` varchar(10) NOT NULL,
-  `ip_accuracy_radius` int(11) NOT NULL,
-  `ip_net_speed_cell` varchar(255) NOT NULL,
-  `ip_metro_code` int(3) NOT NULL,
-  `ip_area_code` int(3) NOT NULL,
-  `ip_time_zone` varchar(255) NOT NULL,
-  `ip_region_name` varchar(255) NOT NULL,
-  `ip_domain` varchar(255) NOT NULL,
-  `ip_country_name` varchar(255) NOT NULL,
-  `ip_continent_code` varchar(2) NOT NULL,
-  `ip_corporate_proxy` varchar(3) NOT NULL,
-  `anonymous_proxy` varchar(3) NOT NULL,
-  `proxy_score` int(3) NOT NULL,
-  `is_trans_proxy` varchar(3) NOT NULL,
-  `free_mail` varchar(3) NOT NULL,
-  `carder_email` varchar(3) NOT NULL,
-  `high_risk_username` varchar(3) NOT NULL,
-  `high_risk_password` varchar(3) NOT NULL,
-  `bin_match` varchar(10) NOT NULL,
-  `bin_country` varchar(2) NOT NULL,
-  `bin_name_match` varchar(3) NOT NULL,
-  `bin_name` varchar(255) NOT NULL,
-  `bin_phone_match` varchar(3) NOT NULL,
-  `bin_phone` varchar(32) NOT NULL,
-  `customer_phone_in_billing_location` varchar(8) NOT NULL,
-  `ship_forward` varchar(3) NOT NULL,
-  `city_postal_match` varchar(3) NOT NULL,
-  `ship_city_postal_match` varchar(3) NOT NULL,
-  `score` decimal(10,5) NOT NULL,
-  `explanation` text NOT NULL,
-  `risk_score` decimal(10,5) NOT NULL,
-  `queries_remaining` int(11) NOT NULL,
-  `maxmind_id` varchar(8) NOT NULL,
-  `error` text NOT NULL,
-  `date_added` datetime NOT NULL,
-  PRIMARY KEY (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `oc_order_history`
---
-
-CREATE TABLE IF NOT EXISTS `oc_order_history` (
+DROP TABLE IF EXISTS `order_history`;
+CREATE TABLE `order_history` (
   `order_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
-  `order_status_id` int(5) NOT NULL,
+  `order_status_id` int(11) NOT NULL,
   `notify` tinyint(1) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_option`
+-- Table structure for table `order_option`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_option` (
+DROP TABLE IF EXISTS `order_option`;
+CREATE TABLE `order_option` (
   `order_option_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `order_product_id` int(11) NOT NULL,
@@ -2052,15 +2191,16 @@ CREATE TABLE IF NOT EXISTS `oc_order_option` (
   `value` text NOT NULL,
   `type` varchar(32) NOT NULL,
   PRIMARY KEY (`order_option_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_product`
+-- Table structure for table `order_product`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_product` (
+DROP TABLE IF EXISTS `order_product`;
+CREATE TABLE `order_product` (
   `order_product_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
@@ -2072,15 +2212,16 @@ CREATE TABLE IF NOT EXISTS `oc_order_product` (
   `tax` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `reward` int(8) NOT NULL,
   PRIMARY KEY (`order_product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_recurring`
+-- Table structure for table `order_recurring`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_recurring` (
+DROP TABLE IF EXISTS `order_recurring`;
+CREATE TABLE `order_recurring` (
   `order_recurring_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `reference` varchar(255) NOT NULL,
@@ -2102,15 +2243,16 @@ CREATE TABLE IF NOT EXISTS `oc_order_recurring` (
   `status` tinyint(4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_recurring_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_recurring_transaction`
+-- Table structure for table `order_recurring_transaction`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_recurring_transaction` (
+DROP TABLE IF EXISTS `order_recurring_transaction`;
+CREATE TABLE `order_recurring_transaction` (
   `order_recurring_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_recurring_id` int(11) NOT NULL,
   `reference` varchar(255) NOT NULL,
@@ -2118,26 +2260,27 @@ CREATE TABLE IF NOT EXISTS `oc_order_recurring_transaction` (
   `amount` decimal(10,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`order_recurring_transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_status`
+-- Table structure for table `order_status`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_status` (
+DROP TABLE IF EXISTS `order_status`;
+CREATE TABLE `order_status` (
   `order_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`order_status_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_order_status`
+-- Dumping data for table `order_status`
 --
 
-INSERT INTO `oc_order_status` (`order_status_id`, `language_id`, `name`) VALUES
+INSERT INTO `order_status` (`order_status_id`, `language_id`, `name`) VALUES
 (2, 1, 'Processing'),
 (3, 1, 'Shipped'),
 (7, 1, 'Canceled'),
@@ -2156,10 +2299,11 @@ INSERT INTO `oc_order_status` (`order_status_id`, `language_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_total`
+-- Table structure for table `order_total`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_total` (
+DROP TABLE IF EXISTS `order_total`;
+CREATE TABLE `order_total` (
   `order_total_id` int(10) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `code` varchar(32) NOT NULL,
@@ -2168,15 +2312,16 @@ CREATE TABLE IF NOT EXISTS `oc_order_total` (
   `sort_order` int(3) NOT NULL,
   PRIMARY KEY (`order_total_id`),
   KEY `order_id` (`order_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_order_voucher`
+-- Table structure for table `order_voucher`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_order_voucher` (
+DROP TABLE IF EXISTS `order_voucher`;
+CREATE TABLE `order_voucher` (
   `order_voucher_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `voucher_id` int(11) NOT NULL,
@@ -2190,15 +2335,16 @@ CREATE TABLE IF NOT EXISTS `oc_order_voucher` (
   `message` text NOT NULL,
   `amount` decimal(15,4) NOT NULL,
   PRIMARY KEY (`order_voucher_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product`
+-- Table structure for table `product`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product` (
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
   `model` varchar(64) NOT NULL,
   `sku` varchar(64) NOT NULL,
@@ -2231,13 +2377,13 @@ CREATE TABLE IF NOT EXISTS `oc_product` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product`
+-- Dumping data for table `product`
 --
 
-INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `isbn`, `mpn`, `location`, `quantity`, `stock_status_id`, `image`, `manufacturer_id`, `shipping`, `price`, `points`, `tax_class_id`, `date_available`, `weight`, `weight_class_id`, `length`, `width`, `height`, `length_class_id`, `subtract`, `minimum`, `sort_order`, `status`, `viewed`, `date_added`, `date_modified`) VALUES
+INSERT INTO `product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `isbn`, `mpn`, `location`, `quantity`, `stock_status_id`, `image`, `manufacturer_id`, `shipping`, `price`, `points`, `tax_class_id`, `date_available`, `weight`, `weight_class_id`, `length`, `width`, `height`, `length_class_id`, `subtract`, `minimum`, `sort_order`, `status`, `viewed`, `date_added`, `date_modified`) VALUES
 (28, 'Product 1', '', '', '', '', '', '', '', 939, 7, 'catalog/demo/htc_touch_hd_1.jpg', 5, 1, '100.0000', 200, 9, '2009-02-03', '146.40000000', 2, '0.00000000', '0.00000000', '0.00000000', 1, 1, 1, 0, 1, 0, '2009-02-03 16:06:50', '2011-09-30 01:05:39'),
 (29, 'Product 2', '', '', '', '', '', '', '', 999, 6, 'catalog/demo/palm_treo_pro_1.jpg', 6, 1, '279.9900', 0, 9, '2009-02-03', '133.00000000', 2, '0.00000000', '0.00000000', '0.00000000', 3, 1, 1, 0, 1, 0, '2009-02-03 16:42:17', '2011-09-30 01:06:08'),
 (30, 'Product 3', '', '', '', '', '', '', '', 7, 6, 'catalog/demo/canon_eos_5d_1.jpg', 9, 1, '100.0000', 0, 9, '2009-02-03', '0.00000000', 1, '0.00000000', '0.00000000', '0.00000000', 1, 1, 1, 0, 1, 0, '2009-02-03 16:59:00', '2011-09-30 01:05:23'),
@@ -2261,22 +2407,23 @@ INSERT INTO `oc_product` (`product_id`, `model`, `sku`, `upc`, `ean`, `jan`, `is
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_attribute`
+-- Table structure for table `product_attribute`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_attribute` (
+DROP TABLE IF EXISTS `product_attribute`;
+CREATE TABLE `product_attribute` (
   `product_id` int(11) NOT NULL,
   `attribute_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`product_id`,`attribute_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_attribute`
+-- Dumping data for table `product_attribute`
 --
 
-INSERT INTO `oc_product_attribute` (`product_id`, `attribute_id`, `language_id`, `text`) VALUES
+INSERT INTO `product_attribute` (`product_id`, `attribute_id`, `language_id`, `text`) VALUES
 (43, 2, 1, '1'),
 (47, 4, 1, '16GB'),
 (43, 4, 1, '8gb'),
@@ -2286,10 +2433,11 @@ INSERT INTO `oc_product_attribute` (`product_id`, `attribute_id`, `language_id`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_description`
+-- Table structure for table `product_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_description` (
+DROP TABLE IF EXISTS `product_description`;
+CREATE TABLE `product_description` (
   `product_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -2300,40 +2448,41 @@ CREATE TABLE IF NOT EXISTS `oc_product_description` (
   `meta_keyword` varchar(255) NOT NULL,
   PRIMARY KEY (`product_id`,`language_id`),
   KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_description`
+-- Dumping data for table `product_description`
 --
 
-INSERT INTO `oc_product_description` (`product_id`, `language_id`, `name`, `description`, `tag`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
-(35, 1, 'Product 8', '&lt;p&gt;\r\n	Product 8&lt;/p&gt;\r\n', '', '', '', ''),
-(48, 1, 'iPod Classic', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;More room to move.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			With 80GB or 160GB of storage and up to 40 hours of battery life, the new iPod classic lets you enjoy up to 40,000 songs or up to 200 hours of video or any combination wherever you go.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Sleeker design.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Beautiful, durable, and sleeker than ever, iPod classic now features an anodized aluminum and polished stainless steel enclosure with rounded edges.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', '', '', ''),
-(40, 1, 'iPhone', '&lt;p class=&quot;intro&quot;&gt;\r\n	iPhone is a revolutionary new mobile phone that allows you to make a call by simply tapping a name or number in your address book, a favorites list, or a call log. It also automatically syncs all your contacts from a PC, Mac, or Internet service. And it lets you select and listen to voicemail messages in whatever order you want just like email.&lt;/p&gt;\r\n', '', '', '', ''),
-(28, 1, 'HTC Touch HD', '&lt;p&gt;\r\n	HTC Touch - in High Definition. Watch music videos and streaming content in awe-inspiring high definition clarity for a mobile experience you never thought possible. Seductively sleek, the HTC Touch HD provides the next generation of mobile functionality, all at a simple touch. Fully integrated with Windows Mobile Professional 6.1, ultrafast 3.5G, GPS, 5MP camera, plus lots more - all delivered on a breathtakingly crisp 3.8&amp;quot; WVGA touchscreen - you can take control of your mobile world with the HTC Touch HD.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Processor Qualcomm&amp;reg; MSM 7201A&amp;trade; 528 MHz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows Mobile&amp;reg; 6.1 Professional Operating System&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Memory: 512 MB ROM, 288 MB RAM&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Dimensions: 115 mm x 62.8 mm x 12 mm / 146.4 grams&lt;/li&gt;\r\n	&lt;li&gt;\r\n		3.8-inch TFT-LCD flat touch-sensitive screen with 480 x 800 WVGA resolution&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HSDPA/WCDMA: Europe/Asia: 900/2100 MHz; Up to 2 Mbps up-link and 7.2 Mbps down-link speeds&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Quad-band GSM/GPRS/EDGE: Europe/Asia: 850/900/1800/1900 MHz (Band frequency, HSUPA availability, and data speed are operator dependent.)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Device Control via HTC TouchFLO&amp;trade; 3D &amp;amp; Touch-sensitive front panel buttons&lt;/li&gt;\r\n	&lt;li&gt;\r\n		GPS and A-GPS ready&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Bluetooth&amp;reg; 2.0 with Enhanced Data Rate and A2DP for wireless stereo headsets&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wi-Fi&amp;reg;: IEEE 802.11 b/g&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HTC ExtUSB&amp;trade; (11-pin mini-USB 2.0)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		5 megapixel color camera with auto focus&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VGA CMOS color camera&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in 3.5 mm audio jack, microphone, speaker, and FM radio&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Ring tone formats: AAC, AAC+, eAAC+, AMR-NB, AMR-WB, QCP, MP3, WMA, WAV&lt;/li&gt;\r\n	&lt;li&gt;\r\n		40 polyphonic and standard MIDI format 0 and 1 (SMF)/SP MIDI&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Rechargeable Lithium-ion or Lithium-ion polymer 1350 mAh battery&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Expansion Slot: microSD&amp;trade; memory card (SD 2.0 compatible)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AC Adapter Voltage range/frequency: 100 ~ 240V AC, 50/60 Hz DC output: 5V and 1A&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Special Features: FM Radio, G-Sensor&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '', '', ''),
-(44, 1, 'MacBook Air', '&lt;div&gt;\r\n	MacBook Air is ultrathin, ultraportable, and ultra unlike anything else. But you don&amp;rsquo;t lose inches and pounds overnight. It&amp;rsquo;s the result of rethinking conventions. Of multiple wireless innovations. And of breakthrough design. With MacBook Air, mobile computing suddenly has a new standard.&lt;/div&gt;\r\n', '', '', '', ''),
-(45, 1, 'MacBook Pro', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Latest Intel mobile architecture&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Powered by the most advanced mobile processors from Intel, the new Core 2 Duo MacBook Pro is over 50% faster than the original Core Duo MacBook Pro and now supports up to 4GB of RAM.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Leading-edge graphics&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			The NVIDIA GeForce 8600M GT delivers exceptional graphics processing power. For the ultimate creative canvas, you can even configure the 17-inch model with a 1920-by-1200 resolution display.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Designed for life on the road&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Innovations such as a magnetic power connection and an illuminated keyboard with ambient light sensor put the MacBook Pro in a class by itself.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Connect. Create. Communicate.&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Quickly set up a video conference with the built-in iSight camera. Control presentations and media from up to 30 feet away with the included Apple Remote. Connect to high-bandwidth peripherals with FireWire 800 and DVI.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Next-generation wireless&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Featuring 802.11n wireless technology, the MacBook Pro delivers up to five times the performance and up to twice the range of previous-generation technologies.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', '', '', ''),
-(29, 1, 'Palm Treo Pro', '&lt;p&gt;\r\n	Redefine your workday with the Palm Treo Pro smartphone. Perfectly balanced, you can respond to business and personal email, stay on top of appointments and contacts, and use Wi-Fi or GPS when you&amp;rsquo;re out and about. Then watch a video on YouTube, catch up with news and sports on the web, or listen to a few songs. Balance your work and play the way you like it, with the Palm Treo Pro.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Windows Mobile&amp;reg; 6.1 Professional Edition&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Qualcomm&amp;reg; MSM7201 400MHz Processor&lt;/li&gt;\r\n	&lt;li&gt;\r\n		320x320 transflective colour TFT touchscreen&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HSDPA/UMTS/EDGE/GPRS/GSM radio&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Tri-band UMTS &amp;mdash; 850MHz, 1900MHz, 2100MHz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Quad-band GSM &amp;mdash; 850/900/1800/1900&lt;/li&gt;\r\n	&lt;li&gt;\r\n		802.11b/g with WPA, WPA2, and 801.1x authentication&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in GPS&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Bluetooth Version: 2.0 + Enhanced Data Rate&lt;/li&gt;\r\n	&lt;li&gt;\r\n		256MB storage (100MB user available), 128MB RAM&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2.0 megapixel camera, up to 8x digital zoom and video capture&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Removable, rechargeable 1500mAh lithium-ion battery&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Up to 5.0 hours talk time and up to 250 hours standby&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MicroSDHC card expansion (up to 32GB supported)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MicroUSB 2.0 for synchronization and charging&lt;/li&gt;\r\n	&lt;li&gt;\r\n		3.5mm stereo headset jack&lt;/li&gt;\r\n	&lt;li&gt;\r\n		60mm (W) x 114mm (L) x 13.5mm (D) / 133g&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '', '', ''),
-(36, 1, 'iPod Nano', '&lt;div&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Video in your pocket.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Its the small iPod with one very big idea: video. The worlds most popular music player now lets you enjoy movies, TV shows, and more on a two-inch display thats 65% brighter than before.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Sleek and colorful.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		With an anodized aluminum and polished stainless steel enclosure and a choice of five colors, iPod nano is dressed to impress.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;iTunes.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Available as a free download, iTunes makes it easy to browse and buy millions of songs, movies, TV shows, audiobooks, and games and download free podcasts all at the iTunes Store. And you can import your own music, manage your whole media library, and sync your iPod or iPhone with ease.&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', '', '', ''),
-(46, 1, 'Sony VAIO', '&lt;div&gt;\r\n	Unprecedented power. The next generation of processing technology has arrived. Built into the newest VAIO notebooks lies Intel&amp;#39;s latest, most powerful innovation yet: Intel&amp;reg; Centrino&amp;reg; 2 processor technology. Boasting incredible speed, expanded wireless connectivity, enhanced multimedia support and greater energy efficiency, all the high-performance essentials are seamlessly combined into a single chip.&lt;/div&gt;\r\n', '', '', '', ''),
-(47, 1, 'HP LP3065', '&lt;p&gt;\r\n	Stop your co-workers in their tracks with the stunning new 30-inch diagonal HP LP3065 Flat Panel Monitor. This flagship monitor features best-in-class performance and presentation features on a huge wide-aspect screen while letting you work as comfortably as possible - you might even forget you&amp;#39;re at the office&lt;/p&gt;\r\n', '', '', '', ''),
-(32, 1, 'iPod Touch', '&lt;p&gt;\r\n	&lt;strong&gt;Revolutionary multi-touch interface.&lt;/strong&gt;&lt;br /&gt;\r\n	iPod touch features the same multi-touch screen technology as iPhone. Pinch to zoom in on a photo. Scroll through your songs and videos with a flick. Flip through your library by album artwork with Cover Flow.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Gorgeous 3.5-inch widescreen display.&lt;/strong&gt;&lt;br /&gt;\r\n	Watch your movies, TV shows, and photos come alive with bright, vivid color on the 320-by-480-pixel display.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Music downloads straight from iTunes.&lt;/strong&gt;&lt;br /&gt;\r\n	Shop the iTunes Wi-Fi Music Store from anywhere with Wi-Fi.1 Browse or search to find the music youre looking for, preview it, and buy it with just a tap.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Surf the web with Wi-Fi.&lt;/strong&gt;&lt;br /&gt;\r\n	Browse the web using Safari and watch YouTube videos on the first iPod with Wi-Fi built in&lt;br /&gt;\r\n	&amp;nbsp;&lt;/p&gt;\r\n', '', '', '', ''),
-(41, 1, 'iMac', '&lt;div&gt;\r\n	Just when you thought iMac had everything, now there&acute;s even more. More powerful Intel Core 2 Duo processors. And more memory standard. Combine this with Mac OS X Leopard and iLife &acute;08, and it&acute;s more all-in-one than ever. iMac packs amazing performance into a stunningly slim space.&lt;/div&gt;\r\n', '', '', '', ''),
-(33, 1, 'Samsung SyncMaster 941BW', '&lt;div&gt;\r\n	Imagine the advantages of going big without slowing down. The big 19&amp;quot; 941BW monitor combines wide aspect ratio with fast pixel response time, for bigger images, more room to work and crisp motion. In addition, the exclusive MagicBright 2, MagicColor and MagicTune technologies help deliver the ideal image in every situation, while sleek, narrow bezels and adjustable stands deliver style just the way you want it. With the Samsung 941BW widescreen analog/digital LCD monitor, it&amp;#39;s not hard to imagine.&lt;/div&gt;\r\n', '', '', '', ''),
-(34, 1, 'iPod Shuffle', '&lt;div&gt;\r\n	&lt;strong&gt;Born to be worn.&lt;/strong&gt;\r\n	&lt;p&gt;\r\n		Clip on the worlds most wearable music player and take up to 240 songs with you anywhere. Choose from five colors including four new hues to make your musical fashion statement.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Random meets rhythm.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		With iTunes autofill, iPod shuffle can deliver a new musical experience every time you sync. For more randomness, you can shuffle songs during playback with the slide of a switch.&lt;/p&gt;\r\n	&lt;strong&gt;Everything is easy.&lt;/strong&gt;\r\n	&lt;p&gt;\r\n		Charge and sync with the included USB dock. Operate the iPod shuffle controls with one hand. Enjoy up to 12 hours straight of skip-free music playback.&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', '', '', ''),
-(43, 1, 'MacBook', '&lt;div&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Intel Core 2 Duo processor&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Powered by an Intel Core 2 Duo processor at speeds up to 2.16GHz, the new MacBook is the fastest ever.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;1GB memory, larger hard drives&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		The new MacBook now comes with 1GB of memory standard and larger hard drives for the entire line perfect for running more of your favorite applications and storing growing media collections.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Sleek, 1.08-inch-thin design&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		MacBook makes it easy to hit the road thanks to its tough polycarbonate case, built-in wireless technologies, and innovative MagSafe Power Adapter that releases automatically if someone accidentally trips on the cord.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Built-in iSight camera&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Right out of the box, you can have a video chat with friends or family,2 record a video at your desk, or take fun pictures with Photo Booth&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', '', '', ''),
-(31, 1, 'Nikon D300', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		Engineered with pro-level features and performance, the 12.3-effective-megapixel D300 combines brand new technologies with advanced features inherited from Nikon&amp;#39;s newly announced D3 professional digital SLR camera to offer serious photographers remarkable performance combined with agility.&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		Similar to the D3, the D300 features Nikon&amp;#39;s exclusive EXPEED Image Processing System that is central to driving the speed and processing power needed for many of the camera&amp;#39;s new features. The D300 features a new 51-point autofocus system with Nikon&amp;#39;s 3D Focus Tracking feature and two new LiveView shooting modes that allow users to frame a photograph using the camera&amp;#39;s high-resolution LCD monitor. The D300 shares a similar Scene Recognition System as is found in the D3; it promises to greatly enhance the accuracy of autofocus, autoexposure, and auto white balance by recognizing the subject or scene being photographed and applying this information to the calculations for the three functions.&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		The D300 reacts with lightning speed, powering up in a mere 0.13 seconds and shooting with an imperceptible 45-millisecond shutter release lag time. The D300 is capable of shooting at a rapid six frames per second and can go as fast as eight frames per second when using the optional MB-D10 multi-power battery pack. In continuous bursts, the D300 can shoot up to 100 shots at full 12.3-megapixel resolution. (NORMAL-LARGE image setting, using a SanDisk Extreme IV 1GB CompactFlash card.)&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		The D300 incorporates a range of innovative technologies and features that will significantly improve the accuracy, control, and performance photographers can get from their equipment. Its new Scene Recognition System advances the use of Nikon&amp;#39;s acclaimed 1,005-segment sensor to recognize colors and light patterns that help the camera determine the subject and the type of scene being photographed before a picture is taken. This information is used to improve the accuracy of autofocus, autoexposure, and auto white balance functions in the D300. For example, the camera can track moving subjects better and by identifying them, it can also automatically select focus points faster and with greater accuracy. It can also analyze highlights and more accurately determine exposure, as well as infer light sources to deliver more accurate white balance detection.&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', '', '', ''),
-(49, 1, 'Samsung Galaxy Tab 10.1', '&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1, is the world&amp;rsquo;s thinnest tablet, measuring 8.6 mm thickness, running with Android 3.0 Honeycomb OS on a 1GHz dual-core Tegra 2 processor, similar to its younger brother Samsung Galaxy Tab 8.9.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 gives pure Android 3.0 experience, adding its new TouchWiz UX or TouchWiz 4.0 &amp;ndash; includes a live panel, which lets you to customize with different content, such as your pictures, bookmarks, and social feeds, sporting a 10.1 inches WXGA capacitive touch screen with 1280 x 800 pixels of resolution, equipped with 3 megapixel rear camera with LED flash and a 2 megapixel front camera, HSPA+ connectivity up to 21Mbps, 720p HD video recording capability, 1080p HD playback, DLNA support, Bluetooth 2.1, USB 2.0, gyroscope, Wi-Fi 802.11 a/b/g/n, micro-SD slot, 3.5mm headphone jack, and SIM slot, including the Samsung Stick &amp;ndash; a Bluetooth microphone that can be carried in a pocket like a pen and sound dock with powered subwoofer.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 will come in 16GB / 32GB / 64GB verities and pre-loaded with Social Hub, Reader&amp;rsquo;s Hub, Music Hub and Samsung Mini Apps Tray &amp;ndash; which gives you access to more commonly used apps to help ease multitasking and it is capable of Adobe Flash Player 10.2, powered by 6860mAh battery that gives you 10hours of video-playback time.&amp;nbsp;&amp;auml;&amp;ouml;&lt;/p&gt;\r\n', '', '', '', ''),
-(42, 1, 'Apple Cinema 30&quot;', '&lt;p&gt;\r\n	&lt;font face=&quot;helvetica,geneva,arial&quot; size=&quot;2&quot;&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The 30-inch Apple Cinema HD Display delivers an amazing 2560 x 1600 pixel resolution. Designed specifically for the creative professional, this display provides more space for easier access to all the tools and palettes needed to edit, format and composite your work. Combine this display with a Mac Pro, MacBook Pro, or PowerMac G5 and there&amp;#39;s no limit to what you can achieve. &lt;br /&gt;\r\n	&lt;br /&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features an active-matrix liquid crystal display that produces flicker-free images that deliver twice the brightness, twice the sharpness and twice the contrast ratio of a typical CRT display. Unlike other flat panels, it&amp;#39;s designed with a pure digital interface to deliver distortion-free images that never need adjusting. With over 4 million digital pixels, the display is uniquely suited for scientific and technical applications such as visualizing molecular structures or analyzing geological data. &lt;br /&gt;\r\n	&lt;br /&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Offering accurate, brilliant color performance, the Cinema HD delivers up to 16.7 million colors across a wide gamut allowing you to see subtle nuances between colors from soft pastels to rich jewel tones. A wide viewing angle ensures uniform color from edge to edge. Apple&amp;#39;s ColorSync technology allows you to create custom profiles to maintain consistent color onscreen and in print. The result: You can confidently use this display in all your color-critical applications. &lt;br /&gt;\r\n	&lt;br /&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Housed in a new aluminum design, the display has a very thin bezel that enhances visual accuracy. Each display features two FireWire 400 ports and two USB 2.0 ports, making attachment of desktop peripherals, such as iSight, iPod, digital and still cameras, hard drives, printers and scanners, even more accessible and convenient. Taking advantage of the much thinner and lighter footprint of an LCD, the new displays support the VESA (Video Electronics Standards Association) mounting interface standard. Customers with the optional Cinema Display VESA Mount Adapter kit gain the flexibility to mount their display in locations most appropriate for their work environment. &lt;br /&gt;\r\n	&lt;br /&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features a single cable design with elegant breakout for the USB 2.0, FireWire 400 and a pure digital connection using the industry standard Digital Video Interface (DVI) interface. The DVI connection allows for a direct pure-digital connection.&lt;br /&gt;\r\n	&lt;/font&gt;&lt;/font&gt;&lt;/p&gt;\r\n&lt;h3&gt;\r\n	Features:&lt;/h3&gt;\r\n&lt;p&gt;\r\n	Unrivaled display performance&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch (viewable) active-matrix liquid crystal display provides breathtaking image quality and vivid, richly saturated color.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 2560-by-1600 pixel resolution for display of high definition still and video imagery.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wide-format design for simultaneous display of two full pages of text and graphics.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Industry standard DVI connector for direct attachment to Mac- and Windows-based desktops and notebooks&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Incredibly wide (170 degree) horizontal and vertical viewing angle for maximum visibility and color performance.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Lightning-fast pixel response for full-motion digital video playback.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 16.7 million saturated colors, for use in all graphics-intensive applications.&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Simple setup and operation&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Single cable with elegant breakout for connection to DVI, USB and FireWire ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in two-port USB 2.0 hub for easy connection of desktop peripheral devices.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports to support iSight and other desktop peripherals&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Sleek, elegant design&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Huge virtual workspace, very small footprint.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Narrow Bezel design to minimize visual impact of using dual displays&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Unique hinge design for effortless adjustment&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for VESA mounting solutions (Apple Cinema Display VESA Mount Adapter sold separately)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;h3&gt;\r\n	Technical specifications&lt;/h3&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen size (diagonal viewable image size)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Apple Cinema HD Display: 30 inches (29.7-inch viewable)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen type&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Thin film transistor (TFT) active-matrix liquid crystal display (AMLCD)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Resolutions&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		2560 x 1600 pixels (optimum resolution)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2048 x 1280&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1920 x 1200&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1280 x 800&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1024 x 640&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Display colors (maximum)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16.7 million&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Viewing angle (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		170&amp;deg; horizontal; 170&amp;deg; vertical&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Brightness (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 400 cd/m2&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Contrast ratio (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		700:1&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Response time (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16 ms&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Pixel pitch&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 0.250 mm&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen treatment&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Antiglare hardcoat&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;User controls (hardware and software)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Display Power,&lt;/li&gt;\r\n	&lt;li&gt;\r\n		System sleep, wake&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Brightness&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Monitor tilt&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Connectors and cables&lt;/b&gt;&lt;br /&gt;\r\n	Cable&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		DVI (Digital Visual Interface)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		FireWire 400&lt;/li&gt;\r\n	&lt;li&gt;\r\n		USB 2.0&lt;/li&gt;\r\n	&lt;li&gt;\r\n		DC power (24 V)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Connectors&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Two-port, self-powered USB 2.0 hub&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Kensington security port&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;VESA mount adapter&lt;/b&gt;&lt;br /&gt;\r\n	Requires optional Cinema Display VESA Mount Adapter (M9649G/A)&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Compatible with VESA FDMI (MIS-D, 100, C) compliant mounting solutions&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Electrical requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Input voltage: 100-240 VAC 50-60Hz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum power when operating: 150W&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Energy saver mode: 3W or less&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Environmental requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Operating temperature: 50&amp;deg; to 95&amp;deg; F (10&amp;deg; to 35&amp;deg; C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Storage temperature: -40&amp;deg; to 116&amp;deg; F (-40&amp;deg; to 47&amp;deg; C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Operating humidity: 20% to 80% noncondensing&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum operating altitude: 10,000 feet&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Agency approvals&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		FCC Part 15 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55022 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55024&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VCCI Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AS/NZS 3548 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CNS 13438 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ICES-003 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ISO 13406 part 2&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MPR II&lt;/li&gt;\r\n	&lt;li&gt;\r\n		IEC 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		UL 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CSA 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ENERGY STAR&lt;/li&gt;\r\n	&lt;li&gt;\r\n		TCO &amp;#39;03&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Size and weight&lt;/b&gt;&lt;br /&gt;\r\n	30-inch Apple Cinema HD Display&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Height: 21.3 inches (54.3 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Width: 27.2 inches (68.8 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Depth: 8.46 inches (21.5 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Weight: 27.5 pounds (12.5 kg)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;System Requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Mac Pro, all graphic options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MacBook Pro&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI-X) with ATI Radeon 9650 or better or NVIDIA GeForce 6800 GT DDL or better&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI Express), all graphics options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		PowerBook G4 with dual-link DVI support&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows PC and graphics card that supports DVI ports with dual-link digital bandwidth and VESA DDC standard for plug-and-play setup&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '', '', ''),
-(30, 1, 'Canon EOS 5D', '&lt;p&gt;\r\n	Canon''s press material for the EOS 5D states that it ''defines (a) new D-SLR category'', while we''re not typically too concerned with marketing talk this particular statement is clearly pretty accurate. The EOS 5D is unlike any previous digital SLR in that it combines a full-frame (35 mm sized) high resolution sensor (12.8 megapixels) with a relatively compact body (slightly larger than the EOS 20D, although in your hand it feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between the EOS 20D and the EOS-1D professional digital SLR''s, an important difference when compared to the latter is that the EOS 5D doesn''t have any environmental seals. While Canon don''t specifically refer to the EOS 5D as a ''professional'' digital SLR it will have obvious appeal to professionals who want a high quality digital SLR in a body lighter than the EOS-1D. It will also no doubt appeal to current EOS 20D owners (although lets hope they''ve not bought too many EF-S lenses...) äë&lt;/p&gt;\r\n', '', '', '', '');
+INSERT INTO `product_description` (`product_id`, `language_id`, `name`, `description`, `tag`, `meta_title`, `meta_description`, `meta_keyword`) VALUES
+(35, 1, 'Product 8', '&lt;p&gt;\r\n	Product 8&lt;/p&gt;\r\n', '', 'Product 8', '', ''),
+(48, 1, 'iPod Classic', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;More room to move.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			With 80GB or 160GB of storage and up to 40 hours of battery life, the new iPod classic lets you enjoy up to 40,000 songs or up to 200 hours of video or any combination wherever you go.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;strong&gt;Sleeker design.&lt;/strong&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Beautiful, durable, and sleeker than ever, iPod classic now features an anodized aluminum and polished stainless steel enclosure with rounded edges.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', 'iPod Classic', '', ''),
+(40, 1, 'iPhone', '&lt;p class=&quot;intro&quot;&gt;\r\n	iPhone is a revolutionary new mobile phone that allows you to make a call by simply tapping a name or number in your address book, a favorites list, or a call log. It also automatically syncs all your contacts from a PC, Mac, or Internet service. And it lets you select and listen to voicemail messages in whatever order you want just like email.&lt;/p&gt;\r\n', '', 'iPhone', '', ''),
+(28, 1, 'HTC Touch HD', '&lt;p&gt;\r\n	HTC Touch - in High Definition. Watch music videos and streaming content in awe-inspiring high definition clarity for a mobile experience you never thought possible. Seductively sleek, the HTC Touch HD provides the next generation of mobile functionality, all at a simple touch. Fully integrated with Windows Mobile Professional 6.1, ultrafast 3.5G, GPS, 5MP camera, plus lots more - all delivered on a breathtakingly crisp 3.8&amp;quot; WVGA touchscreen - you can take control of your mobile world with the HTC Touch HD.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Processor Qualcomm&amp;reg; MSM 7201A&amp;trade; 528 MHz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows Mobile&amp;reg; 6.1 Professional Operating System&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Memory: 512 MB ROM, 288 MB RAM&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Dimensions: 115 mm x 62.8 mm x 12 mm / 146.4 grams&lt;/li&gt;\r\n	&lt;li&gt;\r\n		3.8-inch TFT-LCD flat touch-sensitive screen with 480 x 800 WVGA resolution&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HSDPA/WCDMA: Europe/Asia: 900/2100 MHz; Up to 2 Mbps up-link and 7.2 Mbps down-link speeds&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Quad-band GSM/GPRS/EDGE: Europe/Asia: 850/900/1800/1900 MHz (Band frequency, HSUPA availability, and data speed are operator dependent.)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Device Control via HTC TouchFLO&amp;trade; 3D &amp;amp; Touch-sensitive front panel buttons&lt;/li&gt;\r\n	&lt;li&gt;\r\n		GPS and A-GPS ready&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Bluetooth&amp;reg; 2.0 with Enhanced Data Rate and A2DP for wireless stereo headsets&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wi-Fi&amp;reg;: IEEE 802.11 b/g&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HTC ExtUSB&amp;trade; (11-pin mini-USB 2.0)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		5 megapixel color camera with auto focus&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VGA CMOS color camera&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in 3.5 mm audio jack, microphone, speaker, and FM radio&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Ring tone formats: AAC, AAC+, eAAC+, AMR-NB, AMR-WB, QCP, MP3, WMA, WAV&lt;/li&gt;\r\n	&lt;li&gt;\r\n		40 polyphonic and standard MIDI format 0 and 1 (SMF)/SP MIDI&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Rechargeable Lithium-ion or Lithium-ion polymer 1350 mAh battery&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Expansion Slot: microSD&amp;trade; memory card (SD 2.0 compatible)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AC Adapter Voltage range/frequency: 100 ~ 240V AC, 50/60 Hz DC output: 5V and 1A&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Special Features: FM Radio, G-Sensor&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', '	 HTC Touch HD', '', ''),
+(44, 1, 'MacBook Air', '&lt;div&gt;\r\n	MacBook Air is ultrathin, ultraportable, and ultra unlike anything else. But you don&amp;rsquo;t lose inches and pounds overnight. It&amp;rsquo;s the result of rethinking conventions. Of multiple wireless innovations. And of breakthrough design. With MacBook Air, mobile computing suddenly has a new standard.&lt;/div&gt;\r\n', '', 'MacBook Air', '', ''),
+(45, 1, 'MacBook Pro', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Latest Intel mobile architecture&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Powered by the most advanced mobile processors from Intel, the new Core 2 Duo MacBook Pro is over 50% faster than the original Core Duo MacBook Pro and now supports up to 4GB of RAM.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Leading-edge graphics&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			The NVIDIA GeForce 8600M GT delivers exceptional graphics processing power. For the ultimate creative canvas, you can even configure the 17-inch model with a 1920-by-1200 resolution display.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Designed for life on the road&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Innovations such as a magnetic power connection and an illuminated keyboard with ambient light sensor put the MacBook Pro in a class by itself.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Connect. Create. Communicate.&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Quickly set up a video conference with the built-in iSight camera. Control presentations and media from up to 30 feet away with the included Apple Remote. Connect to high-bandwidth peripherals with FireWire 800 and DVI.&lt;/p&gt;\r\n		&lt;p&gt;\r\n			&lt;b&gt;Next-generation wireless&lt;/b&gt;&lt;/p&gt;\r\n		&lt;p&gt;\r\n			Featuring 802.11n wireless technology, the MacBook Pro delivers up to five times the performance and up to twice the range of previous-generation technologies.&lt;/p&gt;\r\n	&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', 'MacBook Pro', '', ''),
+(29, 1, 'Palm Treo Pro', '&lt;p&gt;\r\n	Redefine your workday with the Palm Treo Pro smartphone. Perfectly balanced, you can respond to business and personal email, stay on top of appointments and contacts, and use Wi-Fi or GPS when you&amp;rsquo;re out and about. Then watch a video on YouTube, catch up with news and sports on the web, or listen to a few songs. Balance your work and play the way you like it, with the Palm Treo Pro.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Features&lt;/strong&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Windows Mobile&amp;reg; 6.1 Professional Edition&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Qualcomm&amp;reg; MSM7201 400MHz Processor&lt;/li&gt;\r\n	&lt;li&gt;\r\n		320x320 transflective colour TFT touchscreen&lt;/li&gt;\r\n	&lt;li&gt;\r\n		HSDPA/UMTS/EDGE/GPRS/GSM radio&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Tri-band UMTS &amp;mdash; 850MHz, 1900MHz, 2100MHz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Quad-band GSM &amp;mdash; 850/900/1800/1900&lt;/li&gt;\r\n	&lt;li&gt;\r\n		802.11b/g with WPA, WPA2, and 801.1x authentication&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in GPS&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Bluetooth Version: 2.0 + Enhanced Data Rate&lt;/li&gt;\r\n	&lt;li&gt;\r\n		256MB storage (100MB user available), 128MB RAM&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2.0 megapixel camera, up to 8x digital zoom and video capture&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Removable, rechargeable 1500mAh lithium-ion battery&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Up to 5.0 hours talk time and up to 250 hours standby&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MicroSDHC card expansion (up to 32GB supported)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MicroUSB 2.0 for synchronization and charging&lt;/li&gt;\r\n	&lt;li&gt;\r\n		3.5mm stereo headset jack&lt;/li&gt;\r\n	&lt;li&gt;\r\n		60mm (W) x 114mm (L) x 13.5mm (D) / 133g&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', 'Palm Treo Pro', '', ''),
+(36, 1, 'iPod Nano', '&lt;div&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Video in your pocket.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Its the small iPod with one very big idea: video. The worlds most popular music player now lets you enjoy movies, TV shows, and more on a two-inch display thats 65% brighter than before.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Cover Flow.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Browse through your music collection by flipping through album art. Select an album to turn it over and see the track list.&lt;strong&gt;&amp;nbsp;&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Enhanced interface.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Experience a whole new way to browse and view your music and video.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Sleek and colorful.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		With an anodized aluminum and polished stainless steel enclosure and a choice of five colors, iPod nano is dressed to impress.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;iTunes.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Available as a free download, iTunes makes it easy to browse and buy millions of songs, movies, TV shows, audiobooks, and games and download free podcasts all at the iTunes Store. And you can import your own music, manage your whole media library, and sync your iPod or iPhone with ease.&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', 'iPod Nano', '', ''),
+(46, 1, 'Sony VAIO', '&lt;div&gt;\r\n	Unprecedented power. The next generation of processing technology has arrived. Built into the newest VAIO notebooks lies Intel&amp;#39;s latest, most powerful innovation yet: Intel&amp;reg; Centrino&amp;reg; 2 processor technology. Boasting incredible speed, expanded wireless connectivity, enhanced multimedia support and greater energy efficiency, all the high-performance essentials are seamlessly combined into a single chip.&lt;/div&gt;\r\n', '', 'Sony VAIO', '', ''),
+(47, 1, 'HP LP3065', '&lt;p&gt;\r\n	Stop your co-workers in their tracks with the stunning new 30-inch diagonal HP LP3065 Flat Panel Monitor. This flagship monitor features best-in-class performance and presentation features on a huge wide-aspect screen while letting you work as comfortably as possible - you might even forget you&amp;#39;re at the office&lt;/p&gt;\r\n', '', 'HP LP3065', '', ''),
+(32, 1, 'iPod Touch', '&lt;p&gt;\r\n	&lt;strong&gt;Revolutionary multi-touch interface.&lt;/strong&gt;&lt;br /&gt;\r\n	iPod touch features the same multi-touch screen technology as iPhone. Pinch to zoom in on a photo. Scroll through your songs and videos with a flick. Flip through your library by album artwork with Cover Flow.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Gorgeous 3.5-inch widescreen display.&lt;/strong&gt;&lt;br /&gt;\r\n	Watch your movies, TV shows, and photos come alive with bright, vivid color on the 320-by-480-pixel display.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Music downloads straight from iTunes.&lt;/strong&gt;&lt;br /&gt;\r\n	Shop the iTunes Wi-Fi Music Store from anywhere with Wi-Fi.1 Browse or search to find the music youre looking for, preview it, and buy it with just a tap.&lt;/p&gt;\r\n&lt;p&gt;\r\n	&lt;strong&gt;Surf the web with Wi-Fi.&lt;/strong&gt;&lt;br /&gt;\r\n	Browse the web using Safari and watch YouTube videos on the first iPod with Wi-Fi built in&lt;br /&gt;\r\n	&amp;nbsp;&lt;/p&gt;\r\n', '', '	 iPod Touch', '', ''),
+(41, 1, 'iMac', '&lt;div&gt;\r\n	Just when you thought iMac had everything, now there&acute;s even more. More powerful Intel Core 2 Duo processors. And more memory standard. Combine this with Mac OS X Leopard and iLife &acute;08, and it&acute;s more all-in-one than ever. iMac packs amazing performance into a stunningly slim space.&lt;/div&gt;\r\n', '', 'iMac', '', ''),
+(33, 1, 'Samsung SyncMaster 941BW', '&lt;div&gt;\r\n	Imagine the advantages of going big without slowing down. The big 19&amp;quot; 941BW monitor combines wide aspect ratio with fast pixel response time, for bigger images, more room to work and crisp motion. In addition, the exclusive MagicBright 2, MagicColor and MagicTune technologies help deliver the ideal image in every situation, while sleek, narrow bezels and adjustable stands deliver style just the way you want it. With the Samsung 941BW widescreen analog/digital LCD monitor, it&amp;#39;s not hard to imagine.&lt;/div&gt;\r\n', '', 'Samsung SyncMaster 941BW', '', ''),
+(34, 1, 'iPod Shuffle', '&lt;div&gt;\r\n	&lt;strong&gt;Born to be worn.&lt;/strong&gt;\r\n	&lt;p&gt;\r\n		Clip on the worlds most wearable music player and take up to 240 songs with you anywhere. Choose from five colors including four new hues to make your musical fashion statement.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;strong&gt;Random meets rhythm.&lt;/strong&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		With iTunes autofill, iPod shuffle can deliver a new musical experience every time you sync. For more randomness, you can shuffle songs during playback with the slide of a switch.&lt;/p&gt;\r\n	&lt;strong&gt;Everything is easy.&lt;/strong&gt;\r\n	&lt;p&gt;\r\n		Charge and sync with the included USB dock. Operate the iPod shuffle controls with one hand. Enjoy up to 12 hours straight of skip-free music playback.&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', 'iPod Shuffle', '', ''),
+(43, 1, 'MacBook', '&lt;div&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Intel Core 2 Duo processor&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Powered by an Intel Core 2 Duo processor at speeds up to 2.16GHz, the new MacBook is the fastest ever.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;1GB memory, larger hard drives&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		The new MacBook now comes with 1GB of memory standard and larger hard drives for the entire line perfect for running more of your favorite applications and storing growing media collections.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Sleek, 1.08-inch-thin design&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		MacBook makes it easy to hit the road thanks to its tough polycarbonate case, built-in wireless technologies, and innovative MagSafe Power Adapter that releases automatically if someone accidentally trips on the cord.&lt;/p&gt;\r\n	&lt;p&gt;\r\n		&lt;b&gt;Built-in iSight camera&lt;/b&gt;&lt;/p&gt;\r\n	&lt;p&gt;\r\n		Right out of the box, you can have a video chat with friends or family,2 record a video at your desk, or take fun pictures with Photo Booth&lt;/p&gt;\r\n&lt;/div&gt;\r\n', '', 'MacBook', '', ''),
+(31, 1, 'Nikon D300', '&lt;div class=&quot;cpt_product_description &quot;&gt;\r\n	&lt;div&gt;\r\n		Engineered with pro-level features and performance, the 12.3-effective-megapixel D300 combines brand new technologies with advanced features inherited from Nikon&amp;#39;s newly announced D3 professional digital SLR camera to offer serious photographers remarkable performance combined with agility.&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		Similar to the D3, the D300 features Nikon&amp;#39;s exclusive EXPEED Image Processing System that is central to driving the speed and processing power needed for many of the camera&amp;#39;s new features. The D300 features a new 51-point autofocus system with Nikon&amp;#39;s 3D Focus Tracking feature and two new LiveView shooting modes that allow users to frame a photograph using the camera&amp;#39;s high-resolution LCD monitor. The D300 shares a similar Scene Recognition System as is found in the D3; it promises to greatly enhance the accuracy of autofocus, autoexposure, and auto white balance by recognizing the subject or scene being photographed and applying this information to the calculations for the three functions.&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		The D300 reacts with lightning speed, powering up in a mere 0.13 seconds and shooting with an imperceptible 45-millisecond shutter release lag time. The D300 is capable of shooting at a rapid six frames per second and can go as fast as eight frames per second when using the optional MB-D10 multi-power battery pack. In continuous bursts, the D300 can shoot up to 100 shots at full 12.3-megapixel resolution. (NORMAL-LARGE image setting, using a SanDisk Extreme IV 1GB CompactFlash card.)&lt;br /&gt;\r\n		&lt;br /&gt;\r\n		The D300 incorporates a range of innovative technologies and features that will significantly improve the accuracy, control, and performance photographers can get from their equipment. Its new Scene Recognition System advances the use of Nikon&amp;#39;s acclaimed 1,005-segment sensor to recognize colors and light patterns that help the camera determine the subject and the type of scene being photographed before a picture is taken. This information is used to improve the accuracy of autofocus, autoexposure, and auto white balance functions in the D300. For example, the camera can track moving subjects better and by identifying them, it can also automatically select focus points faster and with greater accuracy. It can also analyze highlights and more accurately determine exposure, as well as infer light sources to deliver more accurate white balance detection.&lt;/div&gt;\r\n&lt;/div&gt;\r\n&lt;!-- cpt_container_end --&gt;', '', 'Nikon D300', '', ''),
+(49, 1, 'Samsung Galaxy Tab 10.1', '&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1, is the world&amp;rsquo;s thinnest tablet, measuring 8.6 mm thickness, running with Android 3.0 Honeycomb OS on a 1GHz dual-core Tegra 2 processor, similar to its younger brother Samsung Galaxy Tab 8.9.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 gives pure Android 3.0 experience, adding its new TouchWiz UX or TouchWiz 4.0 &amp;ndash; includes a live panel, which lets you to customize with different content, such as your pictures, bookmarks, and social feeds, sporting a 10.1 inches WXGA capacitive touch screen with 1280 x 800 pixels of resolution, equipped with 3 megapixel rear camera with LED flash and a 2 megapixel front camera, HSPA+ connectivity up to 21Mbps, 720p HD video recording capability, 1080p HD playback, DLNA support, Bluetooth 2.1, USB 2.0, gyroscope, Wi-Fi 802.11 a/b/g/n, micro-SD slot, 3.5mm headphone jack, and SIM slot, including the Samsung Stick &amp;ndash; a Bluetooth microphone that can be carried in a pocket like a pen and sound dock with powered subwoofer.&lt;/p&gt;\r\n&lt;p&gt;\r\n	Samsung Galaxy Tab 10.1 will come in 16GB / 32GB / 64GB verities and pre-loaded with Social Hub, Reader&amp;rsquo;s Hub, Music Hub and Samsung Mini Apps Tray &amp;ndash; which gives you access to more commonly used apps to help ease multitasking and it is capable of Adobe Flash Player 10.2, powered by 6860mAh battery that gives you 10hours of video-playback time.&amp;nbsp;&amp;auml;&amp;ouml;&lt;/p&gt;\r\n', '', 'Samsung Galaxy Tab 10.1', '', ''),
+(42, 1, 'Apple Cinema 30&quot;', '&lt;p&gt;\r\n	&lt;font face=&quot;helvetica,geneva,arial&quot; size=&quot;2&quot;&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The 30-inch Apple Cinema HD Display delivers an amazing 2560 x 1600 pixel resolution. Designed specifically for the creative professional, this display provides more space for easier access to all the tools and palettes needed to edit, format and composite your work. Combine this display with a Mac Pro, MacBook Pro, or PowerMac G5 and there''s no limit to what you can achieve. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features an active-matrix liquid crystal display that produces flicker-free images that deliver twice the brightness, twice the sharpness and twice the contrast ratio of a typical CRT display. Unlike other flat panels, it''s designed with a pure digital interface to deliver distortion-free images that never need adjusting. With over 4 million digital pixels, the display is uniquely suited for scientific and technical applications such as visualizing molecular structures or analyzing geological data. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Offering accurate, brilliant color performance, the Cinema HD delivers up to 16.7 million colors across a wide gamut allowing you to see subtle nuances between colors from soft pastels to rich jewel tones. A wide viewing angle ensures uniform color from edge to edge. Apple''s ColorSync technology allows you to create custom profiles to maintain consistent color onscreen and in print. The result: You can confidently use this display in all your color-critical applications. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;Housed in a new aluminum design, the display has a very thin bezel that enhances visual accuracy. Each display features two FireWire 400 ports and two USB 2.0 ports, making attachment of desktop peripherals, such as iSight, iPod, digital and still cameras, hard drives, printers and scanners, even more accessible and convenient. Taking advantage of the much thinner and lighter footprint of an LCD, the new displays support the VESA (Video Electronics Standards Association) mounting interface standard. Customers with the optional Cinema Display VESA Mount Adapter kit gain the flexibility to mount their display in locations most appropriate for their work environment. &lt;br&gt;\r\n	&lt;br&gt;\r\n	&lt;/font&gt;&lt;font face=&quot;Helvetica&quot; size=&quot;2&quot;&gt;The Cinema HD features a single cable design with elegant breakout for the USB 2.0, FireWire 400 and a pure digital connection using the industry standard Digital Video Interface (DVI) interface. The DVI connection allows for a direct pure-digital connection.&lt;br&gt;\r\n	&lt;/font&gt;&lt;/font&gt;&lt;/p&gt;\r\n&lt;h3&gt;\r\n	Features:&lt;/h3&gt;\r\n&lt;p&gt;\r\n	Unrivaled display performance&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch (viewable) active-matrix liquid crystal display provides breathtaking image quality and vivid, richly saturated color.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 2560-by-1600 pixel resolution for display of high definition still and video imagery.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Wide-format design for simultaneous display of two full pages of text and graphics.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Industry standard DVI connector for direct attachment to Mac- and Windows-based desktops and notebooks&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Incredibly wide (170 degree) horizontal and vertical viewing angle for maximum visibility and color performance.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Lightning-fast pixel response for full-motion digital video playback.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for 16.7 million saturated colors, for use in all graphics-intensive applications.&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Simple setup and operation&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Single cable with elegant breakout for connection to DVI, USB and FireWire ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Built-in two-port USB 2.0 hub for easy connection of desktop peripheral devices.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports to support iSight and other desktop peripherals&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Sleek, elegant design&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Huge virtual workspace, very small footprint.&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Narrow Bezel design to minimize visual impact of using dual displays&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Unique hinge design for effortless adjustment&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Support for VESA mounting solutions (Apple Cinema Display VESA Mount Adapter sold separately)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;h3&gt;\r\n	Technical specifications&lt;/h3&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen size (diagonal viewable image size)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Apple Cinema HD Display: 30 inches (29.7-inch viewable)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen type&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Thin film transistor (TFT) active-matrix liquid crystal display (AMLCD)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Resolutions&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		2560 x 1600 pixels (optimum resolution)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		2048 x 1280&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1920 x 1200&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1280 x 800&lt;/li&gt;\r\n	&lt;li&gt;\r\n		1024 x 640&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Display colors (maximum)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16.7 million&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Viewing angle (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		170° horizontal; 170° vertical&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Brightness (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 400 cd/m2&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Contrast ratio (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		700:1&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Response time (typical)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		16 ms&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Pixel pitch&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		30-inch Cinema HD Display: 0.250 mm&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Screen treatment&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Antiglare hardcoat&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;User controls (hardware and software)&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Display Power,&lt;/li&gt;\r\n	&lt;li&gt;\r\n		System sleep, wake&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Brightness&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Monitor tilt&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Connectors and cables&lt;/b&gt;&lt;br&gt;\r\n	Cable&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		DVI (Digital Visual Interface)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		FireWire 400&lt;/li&gt;\r\n	&lt;li&gt;\r\n		USB 2.0&lt;/li&gt;\r\n	&lt;li&gt;\r\n		DC power (24 V)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	Connectors&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Two-port, self-powered USB 2.0 hub&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Two FireWire 400 ports&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Kensington security port&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;VESA mount adapter&lt;/b&gt;&lt;br&gt;\r\n	Requires optional Cinema Display VESA Mount Adapter (M9649G/A)&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Compatible with VESA FDMI (MIS-D, 100, C) compliant mounting solutions&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Electrical requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Input voltage: 100-240 VAC 50-60Hz&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum power when operating: 150W&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Energy saver mode: 3W or less&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Environmental requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Operating temperature: 50° to 95° F (10° to 35° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Storage temperature: -40° to 116° F (-40° to 47° C)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Operating humidity: 20% to 80% noncondensing&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Maximum operating altitude: 10,000 feet&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Agency approvals&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		FCC Part 15 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55022 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN55024&lt;/li&gt;\r\n	&lt;li&gt;\r\n		VCCI Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		AS/NZS 3548 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CNS 13438 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ICES-003 Class B&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ISO 13406 part 2&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MPR II&lt;/li&gt;\r\n	&lt;li&gt;\r\n		IEC 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		UL 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		CSA 60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		EN60950&lt;/li&gt;\r\n	&lt;li&gt;\r\n		ENERGY STAR&lt;/li&gt;\r\n	&lt;li&gt;\r\n		TCO ''03&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;Size and weight&lt;/b&gt;&lt;br&gt;\r\n	30-inch Apple Cinema HD Display&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Height: 21.3 inches (54.3 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Width: 27.2 inches (68.8 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Depth: 8.46 inches (21.5 cm)&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Weight: 27.5 pounds (12.5 kg)&lt;/li&gt;\r\n&lt;/ul&gt;\r\n&lt;p&gt;\r\n	&lt;b&gt;System Requirements&lt;/b&gt;&lt;/p&gt;\r\n&lt;ul&gt;\r\n	&lt;li&gt;\r\n		Mac Pro, all graphic options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		MacBook Pro&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI-X) with ATI Radeon 9650 or better or NVIDIA GeForce 6800 GT DDL or better&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Power Mac G5 (PCI Express), all graphics options&lt;/li&gt;\r\n	&lt;li&gt;\r\n		PowerBook G4 with dual-link DVI support&lt;/li&gt;\r\n	&lt;li&gt;\r\n		Windows PC and graphics card that supports DVI ports with dual-link digital bandwidth and VESA DDC standard for plug-and-play setup&lt;/li&gt;\r\n&lt;/ul&gt;\r\n', '', 'Apple Cinema 30', '', ''),
+(30, 1, 'Canon EOS 5D', '&lt;p&gt;\r\n	Canon''s press material for the EOS 5D states that it ''defines (a) new D-SLR category'', while we''re not typically too concerned with marketing talk this particular statement is clearly pretty accurate. The EOS 5D is unlike any previous digital SLR in that it combines a full-frame (35 mm sized) high resolution sensor (12.8 megapixels) with a relatively compact body (slightly larger than the EOS 20D, although in your hand it feels noticeably ''chunkier''). The EOS 5D is aimed to slot in between the EOS 20D and the EOS-1D professional digital SLR''s, an important difference when compared to the latter is that the EOS 5D doesn''t have any environmental seals. While Canon don''t specifically refer to the EOS 5D as a ''professional'' digital SLR it will have obvious appeal to professionals who want a high quality digital SLR in a body lighter than the EOS-1D. It will also no doubt appeal to current EOS 20D owners (although lets hope they''ve not bought too many EF-S lenses...) ??&lt;/p&gt;\r\n', '', 'sdf', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_discount`
+-- Table structure for table `product_discount`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_discount` (
+DROP TABLE IF EXISTS `product_discount`;
+CREATE TABLE `product_discount` (
   `product_discount_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
@@ -2344,13 +2493,13 @@ CREATE TABLE IF NOT EXISTS `oc_product_discount` (
   `date_end` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`product_discount_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=441 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_discount`
+-- Dumping data for table `product_discount`
 --
 
-INSERT INTO `oc_product_discount` (`product_discount_id`, `product_id`, `customer_group_id`, `quantity`, `priority`, `price`, `date_start`, `date_end`) VALUES
+INSERT INTO `product_discount` (`product_discount_id`, `product_id`, `customer_group_id`, `quantity`, `priority`, `price`, `date_start`, `date_end`) VALUES
 (440, 42, 1, 30, 1, '66.0000', '0000-00-00', '0000-00-00'),
 (439, 42, 1, 20, 1, '77.0000', '0000-00-00', '0000-00-00'),
 (438, 42, 1, 10, 1, '88.0000', '0000-00-00', '0000-00-00');
@@ -2358,35 +2507,37 @@ INSERT INTO `oc_product_discount` (`product_discount_id`, `product_id`, `custome
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_filter`
+-- Table structure for table `product_filter`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_filter` (
+DROP TABLE IF EXISTS `product_filter`;
+CREATE TABLE `product_filter` (
   `product_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`filter_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_image`
+-- Table structure for table `product_image`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_image` (
+DROP TABLE IF EXISTS `product_image`;
+CREATE TABLE `product_image` (
   `product_image_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_image_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2352 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_image`
+-- Dumping data for table `product_image`
 --
 
-INSERT INTO `oc_product_image` (`product_image_id`, `product_id`, `image`, `sort_order`) VALUES
+INSERT INTO `product_image` (`product_image_id`, `product_id`, `image`, `sort_order`) VALUES
 (2345, 30, 'catalog/demo/canon_eos_5d_2.jpg', 0),
 (2321, 47, 'catalog/demo/hp_3.jpg', 0),
 (2035, 28, 'catalog/demo/htc_touch_hd_2.jpg', 0),
@@ -2452,23 +2603,24 @@ INSERT INTO `oc_product_image` (`product_image_id`, `product_id`, `image`, `sort
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_option`
+-- Table structure for table `product_option`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_option` (
+DROP TABLE IF EXISTS `product_option`;
+CREATE TABLE `product_option` (
   `product_option_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `option_id` int(11) NOT NULL,
   `value` text NOT NULL,
   `required` tinyint(1) NOT NULL,
   PRIMARY KEY (`product_option_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=227 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_option`
+-- Dumping data for table `product_option`
 --
 
-INSERT INTO `oc_product_option` (`product_option_id`, `product_id`, `option_id`, `value`, `required`) VALUES
+INSERT INTO `product_option` (`product_option_id`, `product_id`, `option_id`, `value`, `required`) VALUES
 (224, 35, 11, '', 1),
 (225, 47, 12, '2011-04-22', 1),
 (223, 42, 2, '', 1),
@@ -2485,10 +2637,11 @@ INSERT INTO `oc_product_option` (`product_option_id`, `product_id`, `option_id`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_option_value`
+-- Table structure for table `product_option_value`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_option_value` (
+DROP TABLE IF EXISTS `product_option_value`;
+CREATE TABLE `product_option_value` (
   `product_option_value_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_option_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
@@ -2503,13 +2656,13 @@ CREATE TABLE IF NOT EXISTS `oc_product_option_value` (
   `weight` decimal(15,8) NOT NULL,
   `weight_prefix` varchar(1) NOT NULL,
   PRIMARY KEY (`product_option_value_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_option_value`
+-- Dumping data for table `product_option_value`
 --
 
-INSERT INTO `oc_product_option_value` (`product_option_value_id`, `product_option_id`, `product_id`, `option_id`, `option_value_id`, `quantity`, `subtract`, `price`, `price_prefix`, `points`, `points_prefix`, `weight`, `weight_prefix`) VALUES
+INSERT INTO `product_option_value` (`product_option_value_id`, `product_option_id`, `product_id`, `option_id`, `option_value_id`, `quantity`, `subtract`, `price`, `price_prefix`, `points`, `points_prefix`, `weight`, `weight_prefix`) VALUES
 (1, 217, 42, 5, 41, 100, 0, '1.0000', '+', 0, '+', '1.00000000', '+'),
 (6, 218, 42, 1, 31, 146, 1, '20.0000', '+', 2, '-', '20.00000000', '+'),
 (7, 218, 42, 1, 43, 300, 1, '30.0000', '+', 3, '+', '30.00000000', '+'),
@@ -2530,33 +2683,35 @@ INSERT INTO `oc_product_option_value` (`product_option_value_id`, `product_optio
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_recurring`
+-- Table structure for table `product_recurring`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_recurring` (
+DROP TABLE IF EXISTS `product_recurring`;
+CREATE TABLE `product_recurring` (
   `product_id` int(11) NOT NULL,
   `recurring_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_related`
+-- Table structure for table `product_related`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_related` (
+DROP TABLE IF EXISTS `product_related`;
+CREATE TABLE `product_related` (
   `product_id` int(11) NOT NULL,
   `related_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`related_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_related`
+-- Dumping data for table `product_related`
 --
 
-INSERT INTO `oc_product_related` (`product_id`, `related_id`) VALUES
+INSERT INTO `product_related` (`product_id`, `related_id`) VALUES
 (40, 42),
 (41, 42),
 (42, 40),
@@ -2565,22 +2720,23 @@ INSERT INTO `oc_product_related` (`product_id`, `related_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_reward`
+-- Table structure for table `product_reward`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_reward` (
+DROP TABLE IF EXISTS `product_reward`;
+CREATE TABLE `product_reward` (
   `product_reward_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL DEFAULT '0',
   `customer_group_id` int(11) NOT NULL DEFAULT '0',
   `points` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_reward_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=546 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_reward`
+-- Dumping data for table `product_reward`
 --
 
-INSERT INTO `oc_product_reward` (`product_reward_id`, `product_id`, `customer_group_id`, `points`) VALUES
+INSERT INTO `product_reward` (`product_reward_id`, `product_id`, `customer_group_id`, `points`) VALUES
 (515, 42, 1, 100),
 (519, 47, 1, 300),
 (379, 28, 1, 400),
@@ -2604,10 +2760,11 @@ INSERT INTO `oc_product_reward` (`product_reward_id`, `product_id`, `customer_gr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_special`
+-- Table structure for table `product_special`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_special` (
+DROP TABLE IF EXISTS `product_special`;
+CREATE TABLE `product_special` (
   `product_special_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
@@ -2617,13 +2774,13 @@ CREATE TABLE IF NOT EXISTS `oc_product_special` (
   `date_end` date NOT NULL DEFAULT '0000-00-00',
   PRIMARY KEY (`product_special_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=440 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_special`
+-- Dumping data for table `product_special`
 --
 
-INSERT INTO `oc_product_special` (`product_special_id`, `product_id`, `customer_group_id`, `priority`, `price`, `date_start`, `date_end`) VALUES
+INSERT INTO `product_special` (`product_special_id`, `product_id`, `customer_group_id`, `priority`, `price`, `date_start`, `date_end`) VALUES
 (419, 42, 1, 1, '90.0000', '0000-00-00', '0000-00-00'),
 (439, 30, 1, 2, '90.0000', '0000-00-00', '0000-00-00'),
 (438, 30, 1, 1, '80.0000', '0000-00-00', '0000-00-00');
@@ -2631,21 +2788,22 @@ INSERT INTO `oc_product_special` (`product_special_id`, `product_id`, `customer_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_to_category`
+-- Table structure for table `product_to_category`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_to_category` (
+DROP TABLE IF EXISTS `product_to_category`;
+CREATE TABLE `product_to_category` (
   `product_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`category_id`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_to_category`
+-- Dumping data for table `product_to_category`
 --
 
-INSERT INTO `oc_product_to_category` (`product_id`, `category_id`) VALUES
+INSERT INTO `product_to_category` (`product_id`, `category_id`) VALUES
 (28, 20),
 (28, 24),
 (29, 20),
@@ -2680,45 +2838,48 @@ INSERT INTO `oc_product_to_category` (`product_id`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_to_download`
+-- Table structure for table `product_to_download`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_to_download` (
+DROP TABLE IF EXISTS `product_to_download`;
+CREATE TABLE `product_to_download` (
   `product_id` int(11) NOT NULL,
   `download_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`download_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_to_layout`
+-- Table structure for table `product_to_layout`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_to_layout` (
+DROP TABLE IF EXISTS `product_to_layout`;
+CREATE TABLE `product_to_layout` (
   `product_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
   PRIMARY KEY (`product_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_product_to_store`
+-- Table structure for table `product_to_store`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_product_to_store` (
+DROP TABLE IF EXISTS `product_to_store`;
+CREATE TABLE `product_to_store` (
   `product_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`product_id`,`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_product_to_store`
+-- Dumping data for table `product_to_store`
 --
 
-INSERT INTO `oc_product_to_store` (`product_id`, `store_id`) VALUES
+INSERT INTO `product_to_store` (`product_id`, `store_id`) VALUES
 (28, 0),
 (29, 0),
 (30, 0),
@@ -2742,10 +2903,11 @@ INSERT INTO `oc_product_to_store` (`product_id`, `store_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_recurring`
+-- Table structure for table `recurring`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_recurring` (
+DROP TABLE IF EXISTS `recurring`;
+CREATE TABLE `recurring` (
   `recurring_id` int(11) NOT NULL AUTO_INCREMENT,
   `price` decimal(10,4) NOT NULL,
   `frequency` enum('day','week','semi_month','month','year') NOT NULL,
@@ -2759,28 +2921,30 @@ CREATE TABLE IF NOT EXISTS `oc_recurring` (
   `status` tinyint(4) NOT NULL,
   `sort_order` int(11) NOT NULL,
   PRIMARY KEY (`recurring_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_recurring_description`
+-- Table structure for table `recurring_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_recurring_description` (
+DROP TABLE IF EXISTS `recurring_description`;
+CREATE TABLE `recurring_description` (
   `recurring_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`recurring_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_return`
+-- Table structure for table `return`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_return` (
+DROP TABLE IF EXISTS `return`;
+CREATE TABLE `return` (
   `return_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
@@ -2801,26 +2965,27 @@ CREATE TABLE IF NOT EXISTS `oc_return` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`return_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_return_action`
+-- Table structure for table `return_action`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_return_action` (
+DROP TABLE IF EXISTS `return_action`;
+CREATE TABLE `return_action` (
   `return_action_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`return_action_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_return_action`
+-- Dumping data for table `return_action`
 --
 
-INSERT INTO `oc_return_action` (`return_action_id`, `language_id`, `name`) VALUES
+INSERT INTO `return_action` (`return_action_id`, `language_id`, `name`) VALUES
 (1, 1, 'Refunded'),
 (2, 1, 'Credit Issued'),
 (3, 1, 'Replacement Sent');
@@ -2828,10 +2993,11 @@ INSERT INTO `oc_return_action` (`return_action_id`, `language_id`, `name`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_return_history`
+-- Table structure for table `return_history`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_return_history` (
+DROP TABLE IF EXISTS `return_history`;
+CREATE TABLE `return_history` (
   `return_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `return_id` int(11) NOT NULL,
   `return_status_id` int(11) NOT NULL,
@@ -2839,26 +3005,27 @@ CREATE TABLE IF NOT EXISTS `oc_return_history` (
   `comment` text NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`return_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_return_reason`
+-- Table structure for table `return_reason`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_return_reason` (
+DROP TABLE IF EXISTS `return_reason`;
+CREATE TABLE `return_reason` (
   `return_reason_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(128) NOT NULL,
   PRIMARY KEY (`return_reason_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_return_reason`
+-- Dumping data for table `return_reason`
 --
 
-INSERT INTO `oc_return_reason` (`return_reason_id`, `language_id`, `name`) VALUES
+INSERT INTO `return_reason` (`return_reason_id`, `language_id`, `name`) VALUES
 (1, 1, 'Dead On Arrival'),
 (2, 1, 'Received Wrong Item'),
 (3, 1, 'Order Error'),
@@ -2868,21 +3035,22 @@ INSERT INTO `oc_return_reason` (`return_reason_id`, `language_id`, `name`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_return_status`
+-- Table structure for table `return_status`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_return_status` (
+DROP TABLE IF EXISTS `return_status`;
+CREATE TABLE `return_status` (
   `return_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`return_status_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_return_status`
+-- Dumping data for table `return_status`
 --
 
-INSERT INTO `oc_return_status` (`return_status_id`, `language_id`, `name`) VALUES
+INSERT INTO `return_status` (`return_status_id`, `language_id`, `name`) VALUES
 (1, 1, 'Pending'),
 (3, 1, 'Complete'),
 (2, 1, 'Awaiting Products');
@@ -2890,10 +3058,11 @@ INSERT INTO `oc_return_status` (`return_status_id`, `language_id`, `name`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_review`
+-- Table structure for table `review`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_review` (
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE `review` (
   `review_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
@@ -2905,29 +3074,30 @@ CREATE TABLE IF NOT EXISTS `oc_review` (
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`review_id`),
   KEY `product_id` (`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_setting`
+-- Table structure for table `setting`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_setting` (
+DROP TABLE IF EXISTS `setting`;
+CREATE TABLE `setting` (
   `setting_id` int(11) NOT NULL AUTO_INCREMENT,
   `store_id` int(11) NOT NULL DEFAULT '0',
-  `group` varchar(32) NOT NULL,
+  `code` varchar(32) NOT NULL,
   `key` varchar(64) NOT NULL,
   `value` text NOT NULL,
   `serialized` tinyint(1) NOT NULL,
   PRIMARY KEY (`setting_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=280 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_setting`
+-- Dumping data for table `setting`
 --
 
-INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `serialized`) VALUES
+INSERT INTO `setting` (`setting_id`, `store_id`, `code`, `key`, `value`, `serialized`) VALUES
 (1, 0, 'shipping', 'shipping_sort_order', '3', 0),
 (2, 0, 'sub_total', 'sub_total_sort_order', '1', 0),
 (3, 0, 'sub_total', 'sub_total_status', '1', 0),
@@ -2949,10 +3119,6 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (35, 0, 'flat', 'flat_status', '1', 0),
 (36, 0, 'flat', 'flat_geo_zone_id', '0', 0),
 (37, 0, 'flat', 'flat_tax_class_id', '9', 0),
-(169, 0, 'carousel', 'carousel_status', '1', 0),
-(170, 0, 'carousel', 'carousel_module', 'a:1:{i:0;a:5:{s:9:"banner_id";s:1:"8";s:5:"limit";s:2:"10";s:6:"scroll";s:1:"3";s:5:"width";s:3:"130";s:6:"height";s:3:"100";}}', 1),
-(156, 0, 'featured', 'featured_status', '1', 0),
-(155, 0, 'featured', 'featured_product', '43,40,42,30', 0),
 (41, 0, 'flat', 'flat_cost', '5.00', 0),
 (42, 0, 'credit', 'credit_sort_order', '7', 0),
 (43, 0, 'credit', 'credit_status', '1', 0),
@@ -2960,50 +3126,36 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (54, 0, 'reward', 'reward_status', '1', 0),
 (146, 0, 'category', 'category_status', '1', 0),
 (158, 0, 'account', 'account_status', '1', 0),
+(159, 0, 'affiliate', 'affiliate_status', '1', 0),
 (267, 0, 'config', 'config_robots', 'abot\r\ndbot\r\nebot\r\nhbot\r\nkbot\r\nlbot\r\nmbot\r\nnbot\r\nobot\r\npbot\r\nrbot\r\nsbot\r\ntbot\r\nvbot\r\nybot\r\nzbot\r\nbot.\r\nbot/\r\n_bot\r\n.bot\r\n/bot\r\n-bot\r\n:bot\r\n(bot\r\ncrawl\r\nslurp\r\nspider\r\nseek\r\naccoona\r\nacoon\r\nadressendeutschland\r\nah-ha.com\r\nahoy\r\naltavista\r\nananzi\r\nanthill\r\nappie\r\narachnophilia\r\narale\r\naraneo\r\naranha\r\narchitext\r\naretha\r\narks\r\nasterias\r\natlocal\r\natn\r\natomz\r\naugurfind\r\nbackrub\r\nbannana_bot\r\nbaypup\r\nbdfetch\r\nbig brother\r\nbiglotron\r\nbjaaland\r\nblackwidow\r\nblaiz\r\nblog\r\nblo.\r\nbloodhound\r\nboitho\r\nbooch\r\nbradley\r\nbutterfly\r\ncalif\r\ncassandra\r\nccubee\r\ncfetch\r\ncharlotte\r\nchurl\r\ncienciaficcion\r\ncmc\r\ncollective\r\ncomagent\r\ncombine\r\ncomputingsite\r\ncsci\r\ncurl\r\ncusco\r\ndaumoa\r\ndeepindex\r\ndelorie\r\ndepspid\r\ndeweb\r\ndie blinde kuh\r\ndigger\r\nditto\r\ndmoz\r\ndocomo\r\ndownload express\r\ndtaagent\r\ndwcp\r\nebiness\r\nebingbong\r\ne-collector\r\nejupiter\r\nemacs-w3 search engine\r\nesther\r\nevliya celebi\r\nezresult\r\nfalcon\r\nfelix ide\r\nferret\r\nfetchrover\r\nfido\r\nfindlinks\r\nfireball\r\nfish search\r\nfouineur\r\nfunnelweb\r\ngazz\r\ngcreep\r\ngenieknows\r\ngetterroboplus\r\ngeturl\r\nglx\r\ngoforit\r\ngolem\r\ngrabber\r\ngrapnel\r\ngralon\r\ngriffon\r\ngromit\r\ngrub\r\ngulliver\r\nhamahakki\r\nharvest\r\nhavindex\r\nhelix\r\nheritrix\r\nhku www octopus\r\nhomerweb\r\nhtdig\r\nhtml index\r\nhtml_analyzer\r\nhtmlgobble\r\nhubater\r\nhyper-decontextualizer\r\nia_archiver\r\nibm_planetwide\r\nichiro\r\niconsurf\r\niltrovatore\r\nimage.kapsi.net\r\nimagelock\r\nincywincy\r\nindexer\r\ninfobee\r\ninformant\r\ningrid\r\ninktomisearch.com\r\ninspector web\r\nintelliagent\r\ninternet shinchakubin\r\nip3000\r\niron33\r\nisraeli-search\r\nivia\r\njack\r\njakarta\r\njavabee\r\njetbot\r\njumpstation\r\nkatipo\r\nkdd-explorer\r\nkilroy\r\nknowledge\r\nkototoi\r\nkretrieve\r\nlabelgrabber\r\nlachesis\r\nlarbin\r\nlegs\r\nlibwww\r\nlinkalarm\r\nlink validator\r\nlinkscan\r\nlockon\r\nlwp\r\nlycos\r\nmagpie\r\nmantraagent\r\nmapoftheinternet\r\nmarvin/\r\nmattie\r\nmediafox\r\nmediapartners\r\nmercator\r\nmerzscope\r\nmicrosoft url control\r\nminirank\r\nmiva\r\nmj12\r\nmnogosearch\r\nmoget\r\nmonster\r\nmoose\r\nmotor\r\nmultitext\r\nmuncher\r\nmuscatferret\r\nmwd.search\r\nmyweb\r\nnajdi\r\nnameprotect\r\nnationaldirectory\r\nnazilla\r\nncsa beta\r\nnec-meshexplorer\r\nnederland.zoek\r\nnetcarta webmap engine\r\nnetmechanic\r\nnetresearchserver\r\nnetscoop\r\nnewscan-online\r\nnhse\r\nnokia6682/\r\nnomad\r\nnoyona\r\nnutch\r\nnzexplorer\r\nobjectssearch\r\noccam\r\nomni\r\nopen text\r\nopenfind\r\nopenintelligencedata\r\norb search\r\nosis-project\r\npack rat\r\npageboy\r\npagebull\r\npage_verifier\r\npanscient\r\nparasite\r\npartnersite\r\npatric\r\npear.\r\npegasus\r\nperegrinator\r\npgp key agent\r\nphantom\r\nphpdig\r\npicosearch\r\npiltdownman\r\npimptrain\r\npinpoint\r\npioneer\r\npiranha\r\nplumtreewebaccessor\r\npogodak\r\npoirot\r\npompos\r\npoppelsdorf\r\npoppi\r\npopular iconoclast\r\npsycheclone\r\npublisher\r\npython\r\nrambler\r\nraven search\r\nroach\r\nroad runner\r\nroadhouse\r\nrobbie\r\nrobofox\r\nrobozilla\r\nrules\r\nsalty\r\nsbider\r\nscooter\r\nscoutjet\r\nscrubby\r\nsearch.\r\nsearchprocess\r\nsemanticdiscovery\r\nsenrigan\r\nsg-scout\r\nshai''hulud\r\nshark\r\nshopwiki\r\nsidewinder\r\nsift\r\nsilk\r\nsimmany\r\nsite searcher\r\nsite valet\r\nsitetech-rover\r\nskymob.com\r\nsleek\r\nsmartwit\r\nsna-\r\nsnappy\r\nsnooper\r\nsohu\r\nspeedfind\r\nsphere\r\nsphider\r\nspinner\r\nspyder\r\nsteeler/\r\nsuke\r\nsuntek\r\nsupersnooper\r\nsurfnomore\r\nsven\r\nsygol\r\nszukacz\r\ntach black widow\r\ntarantula\r\ntempleton\r\n/teoma\r\nt-h-u-n-d-e-r-s-t-o-n-e\r\ntheophrastus\r\ntitan\r\ntitin\r\ntkwww\r\ntoutatis\r\nt-rex\r\ntutorgig\r\ntwiceler\r\ntwisted\r\nucsd\r\nudmsearch\r\nurl check\r\nupdated\r\nvagabondo\r\nvalkyrie\r\nverticrawl\r\nvictoria\r\nvision-search\r\nvolcano\r\nvoyager/\r\nvoyager-hc\r\nw3c_validator\r\nw3m2\r\nw3mir\r\nwalker\r\nwallpaper\r\nwanderer\r\nwauuu\r\nwavefire\r\nweb core\r\nweb hopper\r\nweb wombat\r\nwebbandit\r\nwebcatcher\r\nwebcopy\r\nwebfoot\r\nweblayers\r\nweblinker\r\nweblog monitor\r\nwebmirror\r\nwebmonkey\r\nwebquest\r\nwebreaper\r\nwebsitepulse\r\nwebsnarf\r\nwebstolperer\r\nwebvac\r\nwebwalk\r\nwebwatch\r\nwebwombat\r\nwebzinger\r\nwhizbang\r\nwhowhere\r\nwild ferret\r\nworldlight\r\nwwwc\r\nwwwster\r\nxenu\r\nxget\r\nxift\r\nxirq\r\nyandex\r\nyanga\r\nyeti\r\nyodao\r\nzao\r\nzippp\r\nzyborg', 0),
 (266, 0, 'config', 'config_shared', '0', 0),
 (265, 0, 'config', 'config_secure', '0', 0),
-(264, 0, 'config', 'config_fraud_status_id', '7', 0),
-(263, 0, 'config', 'config_fraud_score', '', 0),
-(262, 0, 'config', 'config_fraud_key', '', 0),
 (94, 0, 'voucher', 'voucher_sort_order', '8', 0),
 (95, 0, 'voucher', 'voucher_status', '1', 0),
 (261, 0, 'config', 'config_fraud_detection', '0', 0),
 (260, 0, 'config', 'config_mail_alert', '', 0),
 (103, 0, 'free_checkout', 'free_checkout_status', '1', 0),
 (104, 0, 'free_checkout', 'free_checkout_order_status_id', '1', 0),
-(259, 0, 'config', 'config_mail', 'a:7:{s:8:"protocol";s:4:"mail";s:9:"parameter";s:0:"";s:13:"smtp_hostname";s:0:"";s:13:"smtp_username";s:0:"";s:13:"smtp_password";s:0:"";s:9:"smtp_port";s:0:"";s:12:"smtp_timeout";s:0:"";}', 1),
-(157, 0, 'featured', 'featured_module', 'a:1:{i:0;a:3:{s:5:"limit";s:1:"4";s:5:"width";s:3:"200";s:6:"height";s:3:"200";}}', 1),
-(165, 0, 'slideshow', 'slideshow_status', '1', 0),
-(166, 0, 'slideshow', 'slideshow_module', 'a:2:{i:0;a:3:{s:9:"banner_id";s:1:"7";s:5:"width";s:4:"1140";s:6:"height";s:3:"380";}s:16:"pol3h8iif8j2lnmi";a:3:{s:9:"banner_id";s:1:"6";s:5:"width";s:3:"300";s:6:"height";s:3:"300";}}', 1),
-(109, 0, 'banner', 'banner_module', 'a:1:{i:0;a:8:{s:9:"banner_id";s:1:"6";s:5:"width";s:3:"182";s:6:"height";s:3:"182";s:11:"resize_type";s:7:"default";s:9:"layout_id";s:1:"3";s:8:"position";s:11:"column_left";s:6:"status";s:1:"1";s:10:"sort_order";s:1:"3";}}', 1),
 (258, 0, 'config', 'config_ftp_status', '0', 0),
 (257, 0, 'config', 'config_ftp_root', '', 0),
 (256, 0, 'config', 'config_ftp_password', '', 0),
 (255, 0, 'config', 'config_ftp_username', '', 0),
 (254, 0, 'config', 'config_ftp_port', '21', 0),
-(253, 0, 'config', 'config_ftp_hostname', 'opencart.opencartdemo.com', 0),
-(252, 0, 'config', 'config_image_location_height', '50', 0),
-(251, 0, 'config', 'config_image_location_width', '268', 0),
-(250, 0, 'config', 'config_image_cart_height', '47', 0),
-(249, 0, 'config', 'config_image_cart_width', '47', 0),
-(248, 0, 'config', 'config_image_wishlist_height', '47', 0),
+(253, 0, 'config', 'config_ftp_hostname', '', 0),
 (181, 0, 'config', 'config_meta_title', 'Your Store', 0),
 (182, 0, 'config', 'config_meta_description', 'My Store', 0),
 (183, 0, 'config', 'config_meta_keyword', '', 0),
-(184, 0, 'config', 'config_template', 'default', 0),
+(184, 0, 'config', 'config_theme', 'theme_default', 0),
 (185, 0, 'config', 'config_layout_id', '4', 0),
 (186, 0, 'config', 'config_country_id', '222', 0),
 (187, 0, 'config', 'config_zone_id', '3563', 0),
-(188, 0, 'config', 'config_language', 'en', 0),
-(189, 0, 'config', 'config_admin_language', 'en', 0),
+(188, 0, 'config', 'config_language', 'en-gb', 0),
+(189, 0, 'config', 'config_admin_language', 'en-gb', 0),
 (190, 0, 'config', 'config_currency', 'USD', 0),
 (191, 0, 'config', 'config_currency_auto', '1', 0),
 (192, 0, 'config', 'config_length_class_id', '1', 0),
 (193, 0, 'config', 'config_weight_class_id', '1', 0),
 (194, 0, 'config', 'config_product_count', '1', 0),
-(195, 0, 'config', 'config_product_limit', '15', 0),
-(196, 0, 'config', 'config_product_description_length', '100', 0),
 (197, 0, 'config', 'config_limit_admin', '20', 0),
 (198, 0, 'config', 'config_review_status', '1', 0),
 (199, 0, 'config', 'config_review_guest', '1', 0),
@@ -3015,7 +3167,7 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (205, 0, 'config', 'config_tax_customer', 'shipping', 0),
 (206, 0, 'config', 'config_customer_online', '0', 0),
 (207, 0, 'config', 'config_customer_group_id', '1', 0),
-(208, 0, 'config', 'config_customer_group_display', 'a:1:{i:0;s:1:"1";}', 1),
+(208, 0, 'config', 'config_customer_group_display', '["1"]', 1),
 (209, 0, 'config', 'config_customer_price', '0', 0),
 (210, 0, 'config', 'config_account_id', '3', 0),
 (211, 0, 'config', 'config_account_mail', '0', 0),
@@ -3025,8 +3177,8 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (215, 0, 'config', 'config_checkout_guest', '1', 0),
 (216, 0, 'config', 'config_checkout_id', '5', 0),
 (217, 0, 'config', 'config_order_status_id', '1', 0),
-(218, 0, 'config', 'config_processing_status', 'a:1:{i:0;s:1:"2";}', 1),
-(219, 0, 'config', 'config_complete_status', 'a:1:{i:0;s:1:"5";}', 1),
+(218, 0, 'config', 'config_processing_status', '["5","1","2","12","3"]', 1),
+(219, 0, 'config', 'config_complete_status', '["5","3"]', 1),
 (220, 0, 'config', 'config_order_mail', '0', 0),
 (221, 0, 'config', 'config_stock_display', '0', 0),
 (222, 0, 'config', 'config_stock_warning', '0', 0),
@@ -3040,21 +3192,6 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (230, 0, 'config', 'config_return_status_id', '2', 0),
 (231, 0, 'config', 'config_logo', 'catalog/logo.png', 0),
 (232, 0, 'config', 'config_icon', 'catalog/cart.png', 0),
-(233, 0, 'config', 'config_image_category_width', '80', 0),
-(234, 0, 'config', 'config_image_category_height', '80', 0),
-(235, 0, 'config', 'config_image_thumb_width', '228', 0),
-(236, 0, 'config', 'config_image_thumb_height', '228', 0),
-(237, 0, 'config', 'config_image_popup_width', '500', 0),
-(238, 0, 'config', 'config_image_popup_height', '500', 0),
-(239, 0, 'config', 'config_image_product_width', '228', 0),
-(240, 0, 'config', 'config_image_product_height', '228', 0),
-(241, 0, 'config', 'config_image_additional_width', '74', 0),
-(242, 0, 'config', 'config_image_additional_height', '74', 0),
-(243, 0, 'config', 'config_image_related_width', '80', 0),
-(244, 0, 'config', 'config_image_related_height', '80', 0),
-(245, 0, 'config', 'config_image_compare_width', '90', 0),
-(246, 0, 'config', 'config_image_compare_height', '90', 0),
-(247, 0, 'config', 'config_image_wishlist_width', '47', 0),
 (180, 0, 'config', 'config_comment', '', 0),
 (179, 0, 'config', 'config_open', '', 0),
 (178, 0, 'config', 'config_image', '', 0),
@@ -3067,8 +3204,8 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (171, 0, 'config', 'config_name', 'Your Store', 0),
 (268, 0, 'config', 'config_seo_url', '0', 0),
 (269, 0, 'config', 'config_file_max_size', '300000', 0),
-(270, 0, 'config', 'config_file_ext_allowed', 'txt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc\r\nrtf\r\nxls\r\nppt\r\nodt\r\nods', 0),
-(271, 0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/vnd.microsoft.icon\r\nimage/tiff\r\nimage/svg+xml\r\napplication/zip\r\napplication/x-rar-compressed\r\napplication/x-msdownload\r\napplication/vnd.ms-cab-compressed\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf\r\nimage/vnd.adobe.photoshop\r\napplication/postscript\r\napplication/msword\r\napplication/rtf\r\napplication/vnd.ms-excel\r\napplication/vnd.ms-powerpoint\r\napplication/vnd.oasis.opendocument.text\r\napplication/vnd.oasis.opendocument.spreadsheet', 0),
+(270, 0, 'config', 'config_file_ext_allowed', 'zip\r\ntxt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc', 0),
+(271, 0, 'config', 'config_file_mime_allowed', 'text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/tiff\r\nimage/svg+xml\r\napplication/zip\r\n&quot;application/zip&quot;\r\napplication/x-zip\r\n&quot;application/x-zip&quot;\r\napplication/x-zip-compressed\r\n&quot;application/x-zip-compressed&quot;\r\napplication/rar\r\n&quot;application/rar&quot;\r\napplication/x-rar\r\n&quot;application/x-rar&quot;\r\napplication/x-rar-compressed\r\n&quot;application/x-rar-compressed&quot;\r\napplication/octet-stream\r\n&quot;application/octet-stream&quot;\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf', 0),
 (272, 0, 'config', 'config_maintenance', '0', 0),
 (273, 0, 'config', 'config_password', '1', 0),
 (274, 0, 'config', 'config_encryption', '87431d38e7edce36d5153707d4cd2bf9', 0),
@@ -3076,26 +3213,61 @@ INSERT INTO `oc_setting` (`setting_id`, `store_id`, `group`, `key`, `value`, `se
 (276, 0, 'config', 'config_error_display', '1', 0),
 (277, 0, 'config', 'config_error_log', '1', 0),
 (278, 0, 'config', 'config_error_filename', 'error.log', 0),
-(279, 0, 'config', 'config_google_analytics', '', 0);
+(279, 0, 'config', 'config_google_analytics', '', 0),
+(280, 0, 'config', 'config_mail_protocol', 'mail', 0),
+(281, 0, 'config', 'config_mail_parameter', '', 0),
+(282, 0, 'config', 'config_mail_smtp_hostname', '', 0),
+(283, 0, 'config', 'config_mail_smtp_username', '', 0),
+(284, 0, 'config', 'config_mail_smtp_password', '', 0),
+(285, 0, 'config', 'config_mail_smtp_port', '25', 0),
+(286, 0, 'config', 'config_mail_smtp_timeout', '5', 0),
+(287, 0, 'config', 'config_captcha', 'basic_captcha', 0),
+(288, 0, 'config', 'config_captcha_page', '["review","return","contact"]', 1),
+(289, 0, 'config', 'config_login_attempts', '5', 0),
+(290, 0, 'theme_default', 'theme_default_product_limit', '15', 0),
+(291, 0, 'theme_default', 'theme_default_product_description_length', '100', 0),
+(292, 0, 'theme_default', 'theme_default_image_thumb_width', '228', 0),
+(293, 0, 'theme_default', 'theme_default_image_thumb_height', '228', 0),
+(294, 0, 'theme_default', 'theme_default_image_popup_width', '500', 0),
+(295, 0, 'theme_default', 'theme_default_image_popup_height', '500', 0),
+(296, 0, 'theme_default', 'theme_default_image_category_width', '80', 0),
+(297, 0, 'theme_default', 'theme_default_image_category_height', '80', 0),
+(298, 0, 'theme_default', 'theme_default_image_product_width', '228', 0),
+(299, 0, 'theme_default', 'theme_default_image_product_height', '228', 0),
+(300, 0, 'theme_default', 'theme_default_image_additional_width', '74', 0),
+(301, 0, 'theme_default', 'theme_default_image_additional_height', '74', 0),
+(302, 0, 'theme_default', 'theme_default_image_related_width', '200', 0),
+(303, 0, 'theme_default', 'theme_default_image_related_height', '200', 0),
+(304, 0, 'theme_default', 'theme_default_image_compare_width', '90', 0),
+(305, 0, 'theme_default', 'theme_default_image_compare_height', '90', 0),
+(306, 0, 'theme_default', 'theme_default_image_wishlist_width', '47', 0),
+(307, 0, 'theme_default', 'theme_default_image_wishlist_height', '47', 0),
+(308, 0, 'theme_default', 'theme_default_image_cart_height', '47', 0),
+(309, 0, 'theme_default', 'theme_default_image_cart_width', '47', 0),
+(310, 0, 'theme_default', 'theme_default_image_location_height', '50', 0),
+(311, 0, 'theme_default', 'theme_default_image_location_width', '268', 0),
+(312, 0, 'theme_default', 'theme_default_directory', 'default', 0),
+(313, 0, 'theme_default', 'theme_default_status', '1', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_stock_status`
+-- Table structure for table `stock_status`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_stock_status` (
+DROP TABLE IF EXISTS `stock_status`;
+CREATE TABLE `stock_status` (
   `stock_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`stock_status_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_stock_status`
+-- Dumping data for table `stock_status`
 --
 
-INSERT INTO `oc_stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
+INSERT INTO `stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
 (7, 1, 'In Stock'),
 (8, 1, 'Pre-Order'),
 (5, 1, 'Out Of Stock'),
@@ -3104,47 +3276,50 @@ INSERT INTO `oc_stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_store`
+-- Table structure for table `store`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_store` (
+DROP TABLE IF EXISTS `store`;
+CREATE TABLE `store` (
   `store_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `url` varchar(255) NOT NULL,
   `ssl` varchar(255) NOT NULL,
   PRIMARY KEY (`store_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_tax_class`
+-- Table structure for table `tax_class`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_tax_class` (
+DROP TABLE IF EXISTS `tax_class`;
+CREATE TABLE `tax_class` (
   `tax_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_class_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_tax_class`
+-- Dumping data for table `tax_class`
 --
 
-INSERT INTO `oc_tax_class` (`tax_class_id`, `title`, `description`, `date_added`, `date_modified`) VALUES
+INSERT INTO `tax_class` (`tax_class_id`, `title`, `description`, `date_added`, `date_modified`) VALUES
 (9, 'Taxable Goods', 'Taxed goods', '2009-01-06 23:21:53', '2011-09-23 14:07:50'),
 (10, 'Downloadable Products', 'Downloadable', '2011-09-21 22:19:39', '2011-09-22 10:27:36');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_tax_rate`
+-- Table structure for table `tax_rate`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_tax_rate` (
+DROP TABLE IF EXISTS `tax_rate`;
+CREATE TABLE `tax_rate` (
   `tax_rate_id` int(11) NOT NULL AUTO_INCREMENT,
   `geo_zone_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(32) NOT NULL,
@@ -3153,56 +3328,58 @@ CREATE TABLE IF NOT EXISTS `oc_tax_rate` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`tax_rate_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=88 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_tax_rate`
+-- Dumping data for table `tax_rate`
 --
 
-INSERT INTO `oc_tax_rate` (`tax_rate_id`, `geo_zone_id`, `name`, `rate`, `type`, `date_added`, `date_modified`) VALUES
+INSERT INTO `tax_rate` (`tax_rate_id`, `geo_zone_id`, `name`, `rate`, `type`, `date_added`, `date_modified`) VALUES
 (86, 3, 'VAT (20%)', '20.0000', 'P', '2011-03-09 21:17:10', '2011-09-22 22:24:29'),
 (87, 3, 'Eco Tax (-2.00)', '2.0000', 'F', '2011-09-21 21:49:23', '2011-09-23 00:40:19');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_tax_rate_to_customer_group`
+-- Table structure for table `tax_rate_to_customer_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_tax_rate_to_customer_group` (
+DROP TABLE IF EXISTS `tax_rate_to_customer_group`;
+CREATE TABLE `tax_rate_to_customer_group` (
   `tax_rate_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   PRIMARY KEY (`tax_rate_id`,`customer_group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_tax_rate_to_customer_group`
+-- Dumping data for table `tax_rate_to_customer_group`
 --
 
-INSERT INTO `oc_tax_rate_to_customer_group` (`tax_rate_id`, `customer_group_id`) VALUES
+INSERT INTO `tax_rate_to_customer_group` (`tax_rate_id`, `customer_group_id`) VALUES
 (86, 1),
 (87, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_tax_rule`
+-- Table structure for table `tax_rule`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_tax_rule` (
+DROP TABLE IF EXISTS `tax_rule`;
+CREATE TABLE `tax_rule` (
   `tax_rule_id` int(11) NOT NULL AUTO_INCREMENT,
   `tax_class_id` int(11) NOT NULL,
   `tax_rate_id` int(11) NOT NULL,
   `based` varchar(10) NOT NULL,
   `priority` int(5) NOT NULL DEFAULT '1',
   PRIMARY KEY (`tax_rule_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=129 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_tax_rule`
+-- Dumping data for table `tax_rule`
 --
 
-INSERT INTO `oc_tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`, `priority`) VALUES
+INSERT INTO `tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`, `priority`) VALUES
 (121, 10, 86, 'payment', 1),
 (120, 10, 87, 'store', 0),
 (128, 9, 86, 'shipping', 1),
@@ -3211,36 +3388,40 @@ INSERT INTO `oc_tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_upload`
+-- Table structure for table `upload`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_upload` (
+DROP TABLE IF EXISTS `upload`;
+CREATE TABLE `upload` (
   `upload_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `filename` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`upload_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_url_alias`
+-- Table structure for table `url_alias`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_url_alias` (
+DROP TABLE IF EXISTS `url_alias`;
+CREATE TABLE `url_alias` (
   `url_alias_id` int(11) NOT NULL AUTO_INCREMENT,
   `query` varchar(255) NOT NULL,
   `keyword` varchar(255) NOT NULL,
-  PRIMARY KEY (`url_alias_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=844 ;
+  PRIMARY KEY (`url_alias_id`),
+  KEY `query` (`query`),
+  KEY `keyword` (`keyword`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_url_alias`
+-- Dumping data for table `url_alias`
 --
 
-INSERT INTO `oc_url_alias` (`url_alias_id`, `query`, `keyword`) VALUES
+INSERT INTO `url_alias` (`url_alias_id`, `query`, `keyword`) VALUES
 (824, 'product_id=48', 'ipod-classic'),
 (836, 'category_id=20', 'desktops'),
 (834, 'category_id=26', 'pc'),
@@ -3312,10 +3493,11 @@ INSERT INTO `oc_url_alias` (`url_alias_id`, `query`, `keyword`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_user`
+-- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_user` (
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_group_id` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -3330,36 +3512,55 @@ CREATE TABLE IF NOT EXISTS `oc_user` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+--
+-- Dumping data for table `url_alias`
+--
+-- username `admin` password `111111`
+INSERT INTO `user` (`user_id`, `user_group_id`, `username`, `password`, `salt`,`firstname`,`lastname`,`email`,`ip`,`status`, `date_added`) VALUES
+(
+  1,
+  1,
+  'admin',
+  '7a176ffa4b8cd4771ca4540169a1b5cdef874de9',
+  'IlaIKFGTJ',
+  'John',
+  'Doe',
+  'noemail@email.com',
+  '127.0.0.1',
+  1,
+  '2016-03-05 20:36:53'
+  );
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_user_group`
+-- Table structure for table `user_group`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_user_group` (
+DROP TABLE IF EXISTS `user_group`;
+CREATE TABLE `user_group` (
   `user_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `permission` text NOT NULL,
   PRIMARY KEY (`user_group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_user_group`
+-- Dumping data for table `user_group`
 --
 
-INSERT INTO `oc_user_group` (`user_group_id`, `name`, `permission`) VALUES
-(1, 'Administrator', 'a:2:{s:6:"access";a:177:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:17:"catalog/recurring";i:10;s:14:"catalog/review";i:11;s:18:"common/column_left";i:12;s:18:"common/filemanager";i:13;s:11:"common/menu";i:14;s:14:"common/profile";i:15;s:12:"common/stats";i:16;s:18:"dashboard/activity";i:17;s:15:"dashboard/chart";i:18;s:18:"dashboard/customer";i:19;s:13:"dashboard/map";i:20;s:16:"dashboard/online";i:21;s:15:"dashboard/order";i:22;s:16:"dashboard/recent";i:23;s:14:"dashboard/sale";i:24;s:13:"design/banner";i:25;s:13:"design/layout";i:26;s:14:"extension/feed";i:27;s:19:"extension/installer";i:28;s:22:"extension/modification";i:29;s:16:"extension/module";i:30;s:17:"extension/openbay";i:31;s:17:"extension/payment";i:32;s:18:"extension/shipping";i:33;s:15:"extension/total";i:34;s:16:"feed/google_base";i:35;s:19:"feed/google_sitemap";i:36;s:15:"feed/openbaypro";i:37;s:20:"localisation/country";i:38;s:21:"localisation/currency";i:39;s:21:"localisation/geo_zone";i:40;s:21:"localisation/language";i:41;s:25:"localisation/length_class";i:42;s:21:"localisation/location";i:43;s:25:"localisation/order_status";i:44;s:26:"localisation/return_action";i:45;s:26:"localisation/return_reason";i:46;s:26:"localisation/return_status";i:47;s:25:"localisation/stock_status";i:48;s:22:"localisation/tax_class";i:49;s:21:"localisation/tax_rate";i:50;s:25:"localisation/weight_class";i:51;s:17:"localisation/zone";i:52;s:19:"marketing/affiliate";i:53;s:17:"marketing/contact";i:54;s:16:"marketing/coupon";i:55;s:19:"marketing/marketing";i:56;s:14:"module/account";i:57;s:16:"module/affiliate";i:58;s:20:"module/amazon_button";i:59;s:13:"module/banner";i:60;s:17:"module/bestseller";i:61;s:15:"module/carousel";i:62;s:15:"module/category";i:63;s:18:"module/ebaydisplay";i:64;s:15:"module/featured";i:65;s:13:"module/filter";i:66;s:22:"module/google_hangouts";i:67;s:11:"module/html";i:68;s:18:"module/information";i:69;s:13:"module/latest";i:70;s:16:"module/pp_button";i:71;s:15:"module/pp_login";i:72;s:16:"module/slideshow";i:73;s:14:"module/special";i:74;s:12:"module/store";i:75;s:14:"openbay/amazon";i:76;s:22:"openbay/amazon_listing";i:77;s:22:"openbay/amazon_product";i:78;s:16:"openbay/amazonus";i:79;s:24:"openbay/amazonus_listing";i:80;s:24:"openbay/amazonus_product";i:81;s:12:"openbay/ebay";i:82;s:20:"openbay/ebay_profile";i:83;s:21:"openbay/ebay_template";i:84;s:12:"openbay/etsy";i:85;s:20:"openbay/etsy_product";i:86;s:21:"openbay/etsy_shipping";i:87;s:17:"openbay/etsy_shop";i:88;s:23:"payment/amazon_checkout";i:89;s:24:"payment/authorizenet_aim";i:90;s:24:"payment/authorizenet_sim";i:91;s:21:"payment/bank_transfer";i:92;s:27:"payment/bluepay_hosted_form";i:93;s:24:"payment/bluepay_redirect";i:94;s:14:"payment/cheque";i:95;s:11:"payment/cod";i:96;s:17:"payment/firstdata";i:97;s:24:"payment/firstdata_remote";i:98;s:21:"payment/free_checkout";i:99;s:22:"payment/klarna_account";i:100;s:22:"payment/klarna_invoice";i:101;s:14:"payment/liqpay";i:102;s:20:"payment/moneybookers";i:103;s:14:"payment/nochex";i:104;s:15:"payment/paymate";i:105;s:16:"payment/paypoint";i:106;s:13:"payment/payza";i:107;s:26:"payment/perpetual_payments";i:108;s:18:"payment/pp_express";i:109;s:18:"payment/pp_payflow";i:110;s:25:"payment/pp_payflow_iframe";i:111;s:14:"payment/pp_pro";i:112;s:21:"payment/pp_pro_iframe";i:113;s:19:"payment/pp_standard";i:114;s:14:"payment/realex";i:115;s:21:"payment/realex_remote";i:116;s:22:"payment/sagepay_direct";i:117;s:22:"payment/sagepay_server";i:118;s:18:"payment/sagepay_us";i:119;s:19:"payment/twocheckout";i:120;s:28:"payment/web_payment_software";i:121;s:16:"payment/worldpay";i:122;s:16:"report/affiliate";i:123;s:25:"report/affiliate_activity";i:124;s:24:"report/customer_activity";i:125;s:22:"report/customer_credit";i:126;s:22:"report/customer_online";i:127;s:21:"report/customer_order";i:128;s:22:"report/customer_reward";i:129;s:16:"report/marketing";i:130;s:24:"report/product_purchased";i:131;s:21:"report/product_viewed";i:132;s:18:"report/sale_coupon";i:133;s:17:"report/sale_order";i:134;s:18:"report/sale_return";i:135;s:20:"report/sale_shipping";i:136;s:15:"report/sale_tax";i:137;s:17:"sale/custom_field";i:138;s:13:"sale/customer";i:139;s:20:"sale/customer_ban_ip";i:140;s:19:"sale/customer_group";i:141;s:10:"sale/order";i:142;s:14:"sale/recurring";i:143;s:11:"sale/return";i:144;s:12:"sale/voucher";i:145;s:18:"sale/voucher_theme";i:146;s:15:"setting/setting";i:147;s:13:"setting/store";i:148;s:16:"shipping/auspost";i:149;s:17:"shipping/citylink";i:150;s:14:"shipping/fedex";i:151;s:13:"shipping/flat";i:152;s:13:"shipping/free";i:153;s:13:"shipping/item";i:154;s:23:"shipping/parcelforce_48";i:155;s:15:"shipping/pickup";i:156;s:19:"shipping/royal_mail";i:157;s:12:"shipping/ups";i:158;s:13:"shipping/usps";i:159;s:15:"shipping/weight";i:160;s:11:"tool/backup";i:161;s:14:"tool/error_log";i:162;s:11:"tool/upload";i:163;s:12:"total/coupon";i:164;s:12:"total/credit";i:165;s:14:"total/handling";i:166;s:16:"total/klarna_fee";i:167;s:19:"total/low_order_fee";i:168;s:12:"total/reward";i:169;s:14:"total/shipping";i:170;s:15:"total/sub_total";i:171;s:9:"total/tax";i:172;s:11:"total/total";i:173;s:13:"total/voucher";i:174;s:8:"user/api";i:175;s:9:"user/user";i:176;s:20:"user/user_permission";}s:6:"modify";a:177:{i:0;s:17:"catalog/attribute";i:1;s:23:"catalog/attribute_group";i:2;s:16:"catalog/category";i:3;s:16:"catalog/download";i:4;s:14:"catalog/filter";i:5;s:19:"catalog/information";i:6;s:20:"catalog/manufacturer";i:7;s:14:"catalog/option";i:8;s:15:"catalog/product";i:9;s:17:"catalog/recurring";i:10;s:14:"catalog/review";i:11;s:18:"common/column_left";i:12;s:18:"common/filemanager";i:13;s:11:"common/menu";i:14;s:14:"common/profile";i:15;s:12:"common/stats";i:16;s:18:"dashboard/activity";i:17;s:15:"dashboard/chart";i:18;s:18:"dashboard/customer";i:19;s:13:"dashboard/map";i:20;s:16:"dashboard/online";i:21;s:15:"dashboard/order";i:22;s:16:"dashboard/recent";i:23;s:14:"dashboard/sale";i:24;s:13:"design/banner";i:25;s:13:"design/layout";i:26;s:14:"extension/feed";i:27;s:19:"extension/installer";i:28;s:22:"extension/modification";i:29;s:16:"extension/module";i:30;s:17:"extension/openbay";i:31;s:17:"extension/payment";i:32;s:18:"extension/shipping";i:33;s:15:"extension/total";i:34;s:16:"feed/google_base";i:35;s:19:"feed/google_sitemap";i:36;s:15:"feed/openbaypro";i:37;s:20:"localisation/country";i:38;s:21:"localisation/currency";i:39;s:21:"localisation/geo_zone";i:40;s:21:"localisation/language";i:41;s:25:"localisation/length_class";i:42;s:21:"localisation/location";i:43;s:25:"localisation/order_status";i:44;s:26:"localisation/return_action";i:45;s:26:"localisation/return_reason";i:46;s:26:"localisation/return_status";i:47;s:25:"localisation/stock_status";i:48;s:22:"localisation/tax_class";i:49;s:21:"localisation/tax_rate";i:50;s:25:"localisation/weight_class";i:51;s:17:"localisation/zone";i:52;s:19:"marketing/affiliate";i:53;s:17:"marketing/contact";i:54;s:16:"marketing/coupon";i:55;s:19:"marketing/marketing";i:56;s:14:"module/account";i:57;s:16:"module/affiliate";i:58;s:20:"module/amazon_button";i:59;s:13:"module/banner";i:60;s:17:"module/bestseller";i:61;s:15:"module/carousel";i:62;s:15:"module/category";i:63;s:18:"module/ebaydisplay";i:64;s:15:"module/featured";i:65;s:13:"module/filter";i:66;s:22:"module/google_hangouts";i:67;s:11:"module/html";i:68;s:18:"module/information";i:69;s:13:"module/latest";i:70;s:16:"module/pp_button";i:71;s:15:"module/pp_login";i:72;s:16:"module/slideshow";i:73;s:14:"module/special";i:74;s:12:"module/store";i:75;s:14:"openbay/amazon";i:76;s:22:"openbay/amazon_listing";i:77;s:22:"openbay/amazon_product";i:78;s:16:"openbay/amazonus";i:79;s:24:"openbay/amazonus_listing";i:80;s:24:"openbay/amazonus_product";i:81;s:12:"openbay/ebay";i:82;s:20:"openbay/ebay_profile";i:83;s:21:"openbay/ebay_template";i:84;s:12:"openbay/etsy";i:85;s:20:"openbay/etsy_product";i:86;s:21:"openbay/etsy_shipping";i:87;s:17:"openbay/etsy_shop";i:88;s:23:"payment/amazon_checkout";i:89;s:24:"payment/authorizenet_aim";i:90;s:24:"payment/authorizenet_sim";i:91;s:21:"payment/bank_transfer";i:92;s:27:"payment/bluepay_hosted_form";i:93;s:24:"payment/bluepay_redirect";i:94;s:14:"payment/cheque";i:95;s:11:"payment/cod";i:96;s:17:"payment/firstdata";i:97;s:24:"payment/firstdata_remote";i:98;s:21:"payment/free_checkout";i:99;s:22:"payment/klarna_account";i:100;s:22:"payment/klarna_invoice";i:101;s:14:"payment/liqpay";i:102;s:20:"payment/moneybookers";i:103;s:14:"payment/nochex";i:104;s:15:"payment/paymate";i:105;s:16:"payment/paypoint";i:106;s:13:"payment/payza";i:107;s:26:"payment/perpetual_payments";i:108;s:18:"payment/pp_express";i:109;s:18:"payment/pp_payflow";i:110;s:25:"payment/pp_payflow_iframe";i:111;s:14:"payment/pp_pro";i:112;s:21:"payment/pp_pro_iframe";i:113;s:19:"payment/pp_standard";i:114;s:14:"payment/realex";i:115;s:21:"payment/realex_remote";i:116;s:22:"payment/sagepay_direct";i:117;s:22:"payment/sagepay_server";i:118;s:18:"payment/sagepay_us";i:119;s:19:"payment/twocheckout";i:120;s:28:"payment/web_payment_software";i:121;s:16:"payment/worldpay";i:122;s:16:"report/affiliate";i:123;s:25:"report/affiliate_activity";i:124;s:24:"report/customer_activity";i:125;s:22:"report/customer_credit";i:126;s:22:"report/customer_online";i:127;s:21:"report/customer_order";i:128;s:22:"report/customer_reward";i:129;s:16:"report/marketing";i:130;s:24:"report/product_purchased";i:131;s:21:"report/product_viewed";i:132;s:18:"report/sale_coupon";i:133;s:17:"report/sale_order";i:134;s:18:"report/sale_return";i:135;s:20:"report/sale_shipping";i:136;s:15:"report/sale_tax";i:137;s:17:"sale/custom_field";i:138;s:13:"sale/customer";i:139;s:20:"sale/customer_ban_ip";i:140;s:19:"sale/customer_group";i:141;s:10:"sale/order";i:142;s:14:"sale/recurring";i:143;s:11:"sale/return";i:144;s:12:"sale/voucher";i:145;s:18:"sale/voucher_theme";i:146;s:15:"setting/setting";i:147;s:13:"setting/store";i:148;s:16:"shipping/auspost";i:149;s:17:"shipping/citylink";i:150;s:14:"shipping/fedex";i:151;s:13:"shipping/flat";i:152;s:13:"shipping/free";i:153;s:13:"shipping/item";i:154;s:23:"shipping/parcelforce_48";i:155;s:15:"shipping/pickup";i:156;s:19:"shipping/royal_mail";i:157;s:12:"shipping/ups";i:158;s:13:"shipping/usps";i:159;s:15:"shipping/weight";i:160;s:11:"tool/backup";i:161;s:14:"tool/error_log";i:162;s:11:"tool/upload";i:163;s:12:"total/coupon";i:164;s:12:"total/credit";i:165;s:14:"total/handling";i:166;s:16:"total/klarna_fee";i:167;s:19:"total/low_order_fee";i:168;s:12:"total/reward";i:169;s:14:"total/shipping";i:170;s:15:"total/sub_total";i:171;s:9:"total/tax";i:172;s:11:"total/total";i:173;s:13:"total/voucher";i:174;s:8:"user/api";i:175;s:9:"user/user";i:176;s:20:"user/user_permission";}}'),
+INSERT INTO `user_group` (`user_group_id`, `name`, `permission`) VALUES
+(1, 'Administrator', '{"access":["analytics\/google_analytics","captcha\/basic_captcha","captcha\/google_captcha","catalog\/attribute","catalog\/attribute_group","catalog\/category","catalog\/download","catalog\/filter","catalog\/information","catalog\/manufacturer","catalog\/option","catalog\/product","catalog\/recurring","catalog\/review","common\/column_left","common\/filemanager","common\/menu","common\/profile","common\/stats","customer\/custom_field","customer\/customer","customer\/customer_group","design\/banner","design\/language","design\/layout","design\/theme","extension\/analytics","extension\/captcha","extension\/feed","extension\/fraud","extension\/installer","extension\/modification","extension\/module","extension\/openbay","extension\/payment","extension\/shipping","extension\/theme","extension\/total","feed\/google_base","feed\/google_sitemap","feed\/openbaypro","fraud\/fraudlabspro","fraud\/ip","fraud\/maxmind","localisation\/country","localisation\/currency","localisation\/geo_zone","localisation\/language","localisation\/length_class","localisation\/location","localisation\/order_status","localisation\/return_action","localisation\/return_reason","localisation\/return_status","localisation\/stock_status","localisation\/tax_class","localisation\/tax_rate","localisation\/weight_class","localisation\/zone","marketing\/affiliate","marketing\/contact","marketing\/coupon","marketing\/marketing","module\/account","module\/affiliate","module\/amazon_login","module\/amazon_pay","module\/banner","module\/bestseller","module\/carousel","module\/category","module\/ebay_listing","module\/featured","module\/filter","module\/google_hangouts","module\/html","module\/information","module\/latest","module\/pp_button","module\/pp_login","module\/sagepay_direct_cards","module\/sagepay_server_cards","module\/slideshow","module\/special","module\/store","openbay\/amazon","openbay\/amazon_listing","openbay\/amazon_product","openbay\/amazonus","openbay\/amazonus_listing","openbay\/amazonus_product","openbay\/ebay","openbay\/ebay_profile","openbay\/ebay_template","openbay\/etsy","openbay\/etsy_product","openbay\/etsy_shipping","openbay\/etsy_shop","payment\/amazon_login_pay","payment\/authorizenet_aim","payment\/authorizenet_sim","payment\/bank_transfer","payment\/bluepay_hosted","payment\/bluepay_redirect","payment\/cheque","payment\/cod","payment\/eway","payment\/firstdata","payment\/firstdata_remote","payment\/free_checkout","payment\/g2apay","payment\/globalpay","payment\/globalpay_remote","payment\/klarna_account","payment\/klarna_invoice","payment\/liqpay","payment\/nochex","payment\/paymate","payment\/paypoint","payment\/payza","payment\/perpetual_payments","payment\/pp_express","payment\/pp_payflow","payment\/pp_payflow_iframe","payment\/pp_pro","payment\/pp_pro_iframe","payment\/pp_standard","payment\/realex","payment\/realex_remote","payment\/sagepay_direct","payment\/sagepay_server","payment\/sagepay_us","payment\/securetrading_pp","payment\/securetrading_ws","payment\/skrill","payment\/twocheckout","payment\/web_payment_software","payment\/worldpay","report\/affiliate","report\/affiliate_activity","report\/affiliate_login","report\/customer_activity","report\/customer_credit","report\/customer_login","report\/customer_online","report\/customer_order","report\/customer_reward","report\/marketing","report\/product_purchased","report\/product_viewed","report\/sale_coupon","report\/sale_order","report\/sale_return","report\/sale_shipping","report\/sale_tax","sale\/order","sale\/recurring","sale\/return","sale\/voucher","sale\/voucher_theme","setting\/setting","setting\/store","shipping\/auspost","shipping\/citylink","shipping\/fedex","shipping\/flat","shipping\/free","shipping\/item","shipping\/parcelforce_48","shipping\/pickup","shipping\/royal_mail","shipping\/ups","shipping\/usps","shipping\/weight","startup\/error","startup\/event","startup\/language","startup\/login","startup\/permission","startup\/router","startup\/sass","startup\/setting","theme\/theme_default","tool\/backup","tool\/error_log","tool\/upload","total\/coupon","total\/credit","total\/handling","total\/klarna_fee","total\/low_order_fee","total\/reward","total\/shipping","total\/sub_total","total\/tax","total\/total","total\/voucher","user\/api","user\/user","user\/user_permission"],"modify":["analytics\/google_analytics","captcha\/basic_captcha","captcha\/google_captcha","catalog\/attribute","catalog\/attribute_group","catalog\/category","catalog\/download","catalog\/filter","catalog\/information","catalog\/manufacturer","catalog\/option","catalog\/product","catalog\/recurring","catalog\/review","common\/column_left","common\/filemanager","common\/menu","common\/profile","common\/stats","customer\/custom_field","customer\/customer","customer\/customer_group","design\/banner","design\/language","design\/layout","design\/theme","extension\/analytics","extension\/captcha","extension\/feed","extension\/fraud","extension\/installer","extension\/modification","extension\/module","extension\/openbay","extension\/payment","extension\/shipping","extension\/theme","extension\/total","feed\/google_base","feed\/google_sitemap","feed\/openbaypro","fraud\/fraudlabspro","fraud\/ip","fraud\/maxmind","localisation\/country","localisation\/currency","localisation\/geo_zone","localisation\/language","localisation\/length_class","localisation\/location","localisation\/order_status","localisation\/return_action","localisation\/return_reason","localisation\/return_status","localisation\/stock_status","localisation\/tax_class","localisation\/tax_rate","localisation\/weight_class","localisation\/zone","marketing\/affiliate","marketing\/contact","marketing\/coupon","marketing\/marketing","module\/account","module\/affiliate","module\/amazon_login","module\/amazon_pay","module\/banner","module\/bestseller","module\/carousel","module\/category","module\/ebay_listing","module\/featured","module\/filter","module\/google_hangouts","module\/html","module\/information","module\/latest","module\/pp_button","module\/pp_login","module\/sagepay_direct_cards","module\/sagepay_server_cards","module\/slideshow","module\/special","module\/store","openbay\/amazon","openbay\/amazon_listing","openbay\/amazon_product","openbay\/amazonus","openbay\/amazonus_listing","openbay\/amazonus_product","openbay\/ebay","openbay\/ebay_profile","openbay\/ebay_template","openbay\/etsy","openbay\/etsy_product","openbay\/etsy_shipping","openbay\/etsy_shop","payment\/amazon_login_pay","payment\/authorizenet_aim","payment\/authorizenet_sim","payment\/bank_transfer","payment\/bluepay_hosted","payment\/bluepay_redirect","payment\/cheque","payment\/cod","payment\/eway","payment\/firstdata","payment\/firstdata_remote","payment\/free_checkout","payment\/g2apay","payment\/globalpay","payment\/globalpay_remote","payment\/klarna_account","payment\/klarna_invoice","payment\/liqpay","payment\/nochex","payment\/paymate","payment\/paypoint","payment\/payza","payment\/perpetual_payments","payment\/pp_express","payment\/pp_payflow","payment\/pp_payflow_iframe","payment\/pp_pro","payment\/pp_pro_iframe","payment\/pp_standard","payment\/realex","payment\/realex_remote","payment\/sagepay_direct","payment\/sagepay_server","payment\/sagepay_us","payment\/securetrading_pp","payment\/securetrading_ws","payment\/skrill","payment\/twocheckout","payment\/web_payment_software","payment\/worldpay","report\/affiliate","report\/affiliate_activity","report\/affiliate_login","report\/customer_activity","report\/customer_credit","report\/customer_login","report\/customer_online","report\/customer_order","report\/customer_reward","report\/marketing","report\/product_purchased","report\/product_viewed","report\/sale_coupon","report\/sale_order","report\/sale_return","report\/sale_shipping","report\/sale_tax","sale\/order","sale\/recurring","sale\/return","sale\/voucher","sale\/voucher_theme","setting\/setting","setting\/store","shipping\/auspost","shipping\/citylink","shipping\/fedex","shipping\/flat","shipping\/free","shipping\/item","shipping\/parcelforce_48","shipping\/pickup","shipping\/royal_mail","shipping\/ups","shipping\/usps","shipping\/weight","startup\/error","startup\/event","startup\/language","startup\/login","startup\/permission","startup\/router","startup\/sass","startup\/setting","theme\/theme_default","tool\/backup","tool\/error_log","tool\/upload","total\/coupon","total\/credit","total\/handling","total\/klarna_fee","total\/low_order_fee","total\/reward","total\/shipping","total\/sub_total","total\/tax","total\/total","total\/voucher","user\/api","user\/user","user\/user_permission"]}'),
 (10, 'Demonstration', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_voucher`
+-- Table structure for table `voucher`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_voucher` (
+DROP TABLE IF EXISTS `voucher`;
+CREATE TABLE `voucher` (
   `voucher_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
@@ -3373,40 +3574,42 @@ CREATE TABLE IF NOT EXISTS `oc_voucher` (
   `status` tinyint(1) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`voucher_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_voucher_history`
+-- Table structure for table `voucher_history`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_voucher_history` (
+DROP TABLE IF EXISTS `voucher_history`;
+CREATE TABLE `voucher_history` (
   `voucher_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `voucher_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `amount` decimal(15,4) NOT NULL,
   `date_added` datetime NOT NULL,
   PRIMARY KEY (`voucher_history_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_voucher_theme`
+-- Table structure for table `voucher_theme`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_voucher_theme` (
+DROP TABLE IF EXISTS `voucher_theme`;
+CREATE TABLE `voucher_theme` (
   `voucher_theme_id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`voucher_theme_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_voucher_theme`
+-- Dumping data for table `voucher_theme`
 --
 
-INSERT INTO `oc_voucher_theme` (`voucher_theme_id`, `image`) VALUES
+INSERT INTO `voucher_theme` (`voucher_theme_id`, `image`) VALUES
 (8, 'catalog/demo/canon_eos_5d_2.jpg'),
 (7, 'catalog/demo/gift-voucher-birthday.jpg'),
 (6, 'catalog/demo/apple_logo.jpg');
@@ -3414,21 +3617,22 @@ INSERT INTO `oc_voucher_theme` (`voucher_theme_id`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_voucher_theme_description`
+-- Table structure for table `voucher_theme_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_voucher_theme_description` (
+DROP TABLE IF EXISTS `voucher_theme_description`;
+CREATE TABLE `voucher_theme_description` (
   `voucher_theme_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`voucher_theme_id`,`language_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_voucher_theme_description`
+-- Dumping data for table `voucher_theme_description`
 --
 
-INSERT INTO `oc_voucher_theme_description` (`voucher_theme_id`, `language_id`, `name`) VALUES
+INSERT INTO `voucher_theme_description` (`voucher_theme_id`, `language_id`, `name`) VALUES
 (6, 1, 'Christmas'),
 (7, 1, 'Birthday'),
 (8, 1, 'General');
@@ -3436,20 +3640,21 @@ INSERT INTO `oc_voucher_theme_description` (`voucher_theme_id`, `language_id`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_weight_class`
+-- Table structure for table `weight_class`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_weight_class` (
+DROP TABLE IF EXISTS `weight_class`;
+CREATE TABLE `weight_class` (
   `weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL DEFAULT '0.00000000',
   PRIMARY KEY (`weight_class_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_weight_class`
+-- Dumping data for table `weight_class`
 --
 
-INSERT INTO `oc_weight_class` (`weight_class_id`, `value`) VALUES
+INSERT INTO `weight_class` (`weight_class_id`, `value`) VALUES
 (1, '1.00000000'),
 (2, '1000.00000000'),
 (5, '2.20460000'),
@@ -3458,22 +3663,23 @@ INSERT INTO `oc_weight_class` (`weight_class_id`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_weight_class_description`
+-- Table structure for table `weight_class_description`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_weight_class_description` (
-  `weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `weight_class_description`;
+CREATE TABLE `weight_class_description` (
+  `weight_class_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
   PRIMARY KEY (`weight_class_id`,`language_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_weight_class_description`
+-- Dumping data for table `weight_class_description`
 --
 
-INSERT INTO `oc_weight_class_description` (`weight_class_id`, `language_id`, `title`, `unit`) VALUES
+INSERT INTO `weight_class_description` (`weight_class_id`, `language_id`, `title`, `unit`) VALUES
 (1, 1, 'Kilogram', 'kg'),
 (2, 1, 'Gram', 'g'),
 (5, 1, 'Pound ', 'lb'),
@@ -3482,23 +3688,24 @@ INSERT INTO `oc_weight_class_description` (`weight_class_id`, `language_id`, `ti
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_zone`
+-- Table structure for table `zone`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_zone` (
+DROP TABLE IF EXISTS `zone`;
+CREATE TABLE `zone` (
   `zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `country_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `code` varchar(32) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`zone_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4222 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_zone`
+-- Dumping data for table `zone`
 --
 
-INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
+INSERT INTO `zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1, 1, 'Badakhshan', 'BDS', 1),
 (2, 1, 'Badghis', 'BDG', 1),
 (3, 1, 'Baghlan', 'BGL', 1),
@@ -3698,9 +3905,9 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (197, 13, 'Victoria', 'VIC', 1),
 (198, 13, 'Western Australia', 'WA', 1),
 (199, 14, 'Burgenland', 'BUR', 1),
-(200, 14, 'Kärnten', 'KAR', 1),
-(201, 14, 'Nieder&ouml;sterreich', 'NOS', 1),
-(202, 14, 'Ober&ouml;sterreich', 'OOS', 1),
+(200, 14, 'K?rnten', 'KAR', 1),
+(201, 14, 'Nieder?sterreich', 'NOS', 1),
+(202, 14, 'Ober?sterreich', 'OOS', 1),
 (203, 14, 'Salzburg', 'SAL', 1),
 (204, 14, 'Steiermark', 'STE', 1),
 (205, 14, 'Tirol', 'TIR', 1),
@@ -3845,7 +4052,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (344, 21, 'Antwerpen', 'VAN', 1),
 (345, 21, 'Brabant Wallon', 'WBR', 1),
 (346, 21, 'Hainaut', 'WHT', 1),
-(347, 21, 'Liège', 'WLG', 1),
+(347, 21, 'Li?ge', 'WLG', 1),
 (348, 21, 'Limburg', 'VLI', 1),
 (349, 21, 'Luxembourg', 'WLX', 1),
 (350, 21, 'Namur', 'WNA', 1),
@@ -3940,29 +4147,29 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (439, 28, 'Southern', 'SO', 1),
 (440, 30, 'Acre', 'AC', 1),
 (441, 30, 'Alagoas', 'AL', 1),
-(442, 30, 'Amapá', 'AP', 1),
+(442, 30, 'Amap?', 'AP', 1),
 (443, 30, 'Amazonas', 'AM', 1),
 (444, 30, 'Bahia', 'BA', 1),
-(445, 30, 'Ceará', 'CE', 1),
+(445, 30, 'Cear?', 'CE', 1),
 (446, 30, 'Distrito Federal', 'DF', 1),
-(447, 30, 'Espírito Santo', 'ES', 1),
-(448, 30, 'Goiás', 'GO', 1),
-(449, 30, 'Maranhão', 'MA', 1),
+(447, 30, 'Esp?rito Santo', 'ES', 1),
+(448, 30, 'Goi?s', 'GO', 1),
+(449, 30, 'Maranh?o', 'MA', 1),
 (450, 30, 'Mato Grosso', 'MT', 1),
 (451, 30, 'Mato Grosso do Sul', 'MS', 1),
 (452, 30, 'Minas Gerais', 'MG', 1),
-(453, 30, 'Pará', 'PA', 1),
-(454, 30, 'Paraíba', 'PB', 1),
-(455, 30, 'Paraná', 'PR', 1),
+(453, 30, 'Par?', 'PA', 1),
+(454, 30, 'Para?ba', 'PB', 1),
+(455, 30, 'Paran?', 'PR', 1),
 (456, 30, 'Pernambuco', 'PE', 1),
-(457, 30, 'Piauí', 'PI', 1),
+(457, 30, 'Piau?', 'PI', 1),
 (458, 30, 'Rio de Janeiro', 'RJ', 1),
 (459, 30, 'Rio Grande do Norte', 'RN', 1),
 (460, 30, 'Rio Grande do Sul', 'RS', 1),
-(461, 30, 'Rondônia', 'RO', 1),
+(461, 30, 'Rond?nia', 'RO', 1),
 (462, 30, 'Roraima', 'RR', 1),
 (463, 30, 'Santa Catarina', 'SC', 1),
-(464, 30, 'São Paulo', 'SP', 1),
+(464, 30, 'S?o Paulo', 'SP', 1),
 (465, 30, 'Sergipe', 'SE', 1),
 (466, 30, 'Tocantins', 'TO', 1),
 (467, 31, 'Peros Banhos', 'PB', 1),
@@ -4144,7 +4351,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (643, 41, 'Haut-Mbomou', 'HMB', 1),
 (644, 41, 'Kemo', 'KEM', 1),
 (645, 41, 'Lobaye', 'LOB', 1),
-(646, 41, 'Mambere-KadeÔ', 'MKD', 1),
+(646, 41, 'Mambere-Kade?', 'MKD', 1),
 (647, 41, 'Mbomou', 'MBO', 1),
 (648, 41, 'Nana-Mambere', 'NMM', 1),
 (649, 41, 'Ombella-M''Poko', 'OMP', 1),
@@ -4175,9 +4382,9 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (674, 43, 'Atacama', 'AT', 1),
 (675, 43, 'Bio-Bio', 'BI', 1),
 (676, 43, 'Coquimbo', 'CO', 1),
-(677, 43, 'Libertador General Bernardo O''Hi', 'LI', 1),
+(677, 43, 'Libertador General Bernardo O''Higgins', 'LI', 1),
 (678, 43, 'Los Lagos', 'LL', 1),
-(679, 43, 'Magallanes y de la Antartica Chi', 'MA', 1),
+(679, 43, 'Magallanes y de la Antartica Chilena', 'MA', 1),
 (680, 43, 'Maule', 'ML', 1),
 (681, 43, 'Region Metropolitana', 'RM', 1),
 (682, 43, 'Tarapaca', 'TA', 1),
@@ -4347,25 +4554,25 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (846, 52, 'Zuenoula', 'ZUE', 1),
 (847, 53, 'Bjelovarsko-bilogorska', 'BB', 1),
 (848, 53, 'Grad Zagreb', 'GZ', 1),
-(849, 53, 'Dubrovačko-neretvanska', 'DN', 1),
+(849, 53, 'Dubrova?ko-neretvanska', 'DN', 1),
 (850, 53, 'Istarska', 'IS', 1),
-(851, 53, 'Karlovačka', 'KA', 1),
-(852, 53, 'Koprivničko-križevačka', 'KK', 1),
+(851, 53, 'Karlova?ka', 'KA', 1),
+(852, 53, 'Koprivni?ko-kri?eva?ka', 'KK', 1),
 (853, 53, 'Krapinsko-zagorska', 'KZ', 1),
-(854, 53, 'Ličko-senjska', 'LS', 1),
-(855, 53, 'Međimurska', 'ME', 1),
-(856, 53, 'Osječko-baranjska', 'OB', 1),
-(857, 53, 'Požeško-slavonska', 'PS', 1),
+(854, 53, 'Li?ko-senjska', 'LS', 1),
+(855, 53, 'Me?imurska', 'ME', 1),
+(856, 53, 'Osje?ko-baranjska', 'OB', 1),
+(857, 53, 'Po?e?ko-slavonska', 'PS', 1),
 (858, 53, 'Primorsko-goranska', 'PG', 1),
-(859, 53, 'Šibensko-kninska', 'SK', 1),
-(860, 53, 'Sisačko-moslavačka', 'SM', 1),
+(859, 53, '?ibensko-kninska', 'SK', 1),
+(860, 53, 'Sisa?ko-moslava?ka', 'SM', 1),
 (861, 53, 'Brodsko-posavska', 'BP', 1),
 (862, 53, 'Splitsko-dalmatinska', 'SD', 1),
-(863, 53, 'Varaždinska', 'VA', 1),
-(864, 53, 'Virovitičko-podravska', 'VP', 1),
+(863, 53, 'Vara?dinska', 'VA', 1),
+(864, 53, 'Viroviti?ko-podravska', 'VP', 1),
 (865, 53, 'Vukovarsko-srijemska', 'VS', 1),
 (866, 53, 'Zadarska', 'ZA', 1),
-(867, 53, 'Zagrebačka', 'ZG', 1),
+(867, 53, 'Zagreba?ka', 'ZG', 1),
 (868, 54, 'Camaguey', 'CA', 1),
 (869, 54, 'Ciego de Avila', 'CD', 1),
 (870, 54, 'Cienfuegos', 'CI', 1),
@@ -4387,20 +4594,20 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (886, 55, 'Limassol', 'I', 1),
 (887, 55, 'Nicosia', 'N', 1),
 (888, 55, 'Paphos', 'P', 1),
-(889, 56, 'Ústecký', 'U', 1),
-(890, 56, 'Jihočeský', 'C', 1),
-(891, 56, 'Jihomoravský', 'B', 1),
-(892, 56, 'Karlovarský', 'K', 1),
-(893, 56, 'Královehradecký', 'H', 1),
-(894, 56, 'Liberecký', 'L', 1),
-(895, 56, 'Moravskoslezský', 'T', 1),
-(896, 56, 'Olomoucký', 'M', 1),
-(897, 56, 'Pardubický', 'E', 1),
-(898, 56, 'Plzeňský', 'P', 1),
+(889, 56, '?steck?', 'U', 1),
+(890, 56, 'Jiho?esk?', 'C', 1),
+(891, 56, 'Jihomoravsk?', 'B', 1),
+(892, 56, 'Karlovarsk?', 'K', 1),
+(893, 56, 'Kr?lovehradeck?', 'H', 1),
+(894, 56, 'Libereck?', 'L', 1),
+(895, 56, 'Moravskoslezsk?', 'T', 1),
+(896, 56, 'Olomouck?', 'M', 1),
+(897, 56, 'Pardubick?', 'E', 1),
+(898, 56, 'Plze?sk?', 'P', 1),
 (899, 56, 'Praha', 'A', 1),
-(900, 56, 'Středočeský', 'S', 1),
-(901, 56, 'Vysočina', 'J', 1),
-(902, 56, 'Zlínský', 'Z', 1),
+(900, 56, 'St?edo?esk?', 'S', 1),
+(901, 56, 'Vyso?ina', 'J', 1),
+(902, 56, 'Zl?nsk?', 'Z', 1),
 (903, 57, 'Arhus', 'AR', 1),
 (904, 57, 'Bornholm', 'BH', 1),
 (905, 57, 'Copenhagen', 'CO', 1),
@@ -4583,12 +4790,12 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1082, 71, 'Eastern Division', 'E', 1),
 (1083, 71, 'Western Division', 'W', 1),
 (1084, 71, 'Rotuma', 'R', 1),
-(1085, 72, 'Ahvenanmaan lääni', 'AL', 1),
-(1086, 72, 'Etelä-Suomen lääni', 'ES', 1),
-(1087, 72, 'Itä-Suomen lääni', 'IS', 1),
-(1088, 72, 'Länsi-Suomen lääni', 'LS', 1),
-(1089, 72, 'Lapin lääni', 'LA', 1),
-(1090, 72, 'Oulun lääni', 'OU', 1),
+(1085, 72, 'Ahvenanmaan l??ni', 'AL', 1),
+(1086, 72, 'Etel?-Suomen l??ni', 'ES', 1),
+(1087, 72, 'It?-Suomen l??ni', 'IS', 1),
+(1088, 72, 'L?nsi-Suomen l??ni', 'LS', 1),
+(1089, 72, 'Lapin l??ni', 'LA', 1),
+(1090, 72, 'Oulun l??ni', 'OU', 1),
 (1114, 74, 'Ain', '01', 1),
 (1115, 74, 'Aisne', '02', 1),
 (1116, 74, 'Allier', '03', 1),
@@ -4729,7 +4936,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1251, 80, 'Samegrelo-Zemo Svaneti', 'SZ', 1),
 (1252, 80, 'Samtskhe-Javakheti', 'SJ', 1),
 (1253, 80, 'Shida Kartli', 'SK', 1),
-(1254, 81, 'Baden-W&uuml;rttemberg', 'BAW', 1),
+(1254, 81, 'Baden-W?rttemberg', 'BAW', 1),
 (1255, 81, 'Bayern', 'BAY', 1),
 (1256, 81, 'Berlin', 'BER', 1),
 (1257, 81, 'Brandenburg', 'BRG', 1),
@@ -4744,7 +4951,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1266, 81, 'Sachsen', 'SAS', 1),
 (1267, 81, 'Sachsen-Anhalt', 'SAC', 1),
 (1268, 81, 'Schleswig-Holstein', 'SCN', 1),
-(1269, 81, 'Th&uuml;ringen', 'THE', 1),
+(1269, 81, 'Th?ringen', 'THE', 1),
 (1270, 82, 'Ashanti Region', 'AS', 1),
 (1271, 82, 'Brong-Ahafo Region', 'BA', 1),
 (1272, 82, 'Central Region', 'CE', 1),
@@ -4903,45 +5110,6 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1425, 96, 'Tsuen Wan New Territories', 'NTW', 1),
 (1426, 96, 'Tuen Mun New Territories', 'NTM', 1),
 (1427, 96, 'Yuen Long New Territories', 'NYL', 1),
-(1428, 97, 'Bacs-Kiskun', 'BK', 1),
-(1429, 97, 'Baranya', 'BA', 1),
-(1430, 97, 'Bekes', 'BE', 1),
-(1431, 97, 'Bekescsaba', 'BS', 1),
-(1432, 97, 'Borsod-Abauj-Zemplen', 'BZ', 1),
-(1433, 97, 'Budapest', 'BU', 1),
-(1434, 97, 'Csongrad', 'CS', 1),
-(1435, 97, 'Debrecen', 'DE', 1),
-(1436, 97, 'Dunaujvaros', 'DU', 1),
-(1437, 97, 'Eger', 'EG', 1),
-(1438, 97, 'Fejer', 'FE', 1),
-(1439, 97, 'Gyor', 'GY', 1),
-(1440, 97, 'Gyor-Moson-Sopron', 'GM', 1),
-(1441, 97, 'Hajdu-Bihar', 'HB', 1),
-(1442, 97, 'Heves', 'HE', 1),
-(1443, 97, 'Hodmezovasarhely', 'HO', 1),
-(1444, 97, 'Jasz-Nagykun-Szolnok', 'JN', 1),
-(1445, 97, 'Kaposvar', 'KA', 1),
-(1446, 97, 'Kecskemet', 'KE', 1),
-(1447, 97, 'Komarom-Esztergom', 'KO', 1),
-(1448, 97, 'Miskolc', 'MI', 1),
-(1449, 97, 'Nagykanizsa', 'NA', 1),
-(1450, 97, 'Nograd', 'NO', 1),
-(1451, 97, 'Nyiregyhaza', 'NY', 1),
-(1452, 97, 'Pecs', 'PE', 1),
-(1453, 97, 'Pest', 'PS', 1),
-(1454, 97, 'Somogy', 'SO', 1),
-(1455, 97, 'Sopron', 'SP', 1),
-(1456, 97, 'Szabolcs-Szatmar-Bereg', 'SS', 1),
-(1457, 97, 'Szeged', 'SZ', 1),
-(1458, 97, 'Szekesfehervar', 'SE', 1),
-(1459, 97, 'Szolnok', 'SL', 1),
-(1460, 97, 'Szombathely', 'SM', 1),
-(1461, 97, 'Tatabanya', 'TA', 1),
-(1462, 97, 'Tolna', 'TO', 1),
-(1463, 97, 'Vas', 'VA', 1),
-(1464, 97, 'Veszprem', 'VE', 1),
-(1465, 97, 'Zala', 'ZA', 1),
-(1466, 97, 'Zalaegerszeg', 'ZZ', 1),
 (1467, 98, 'Austurland', 'AL', 1),
 (1468, 98, 'Hofuoborgarsvaeoi', 'HF', 1),
 (1469, 98, 'Norourland eystra', 'NE', 1),
@@ -4974,7 +5142,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1496, 99, 'Mizoram', 'MI', 1),
 (1497, 99, 'Nagaland', 'NA', 1),
 (1498, 99, 'Orissa', 'OR', 1),
-(1499, 99, 'Pondicherry', 'PO', 1),
+(1499, 99, 'Puducherry', 'PO', 1),
 (1500, 99, 'Punjab', 'PU', 1),
 (1501, 99, 'Rajasthan', 'RA', 1),
 (1502, 99, 'Sikkim', 'SI', 1),
@@ -5032,7 +5200,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1554, 101, 'Kohkiluyeh and Buyer Ahmad', 'KBA', 1),
 (1555, 101, 'Bushehr', 'BSH', 1),
 (1556, 101, 'Fars', 'FAR', 1);
-INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
+INSERT INTO `zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (1557, 101, 'Hormozgan', 'HRM', 1),
 (1558, 101, 'Sistan and Baluchistan', 'SBL', 1),
 (1559, 101, 'Kerman', 'KRB', 1),
@@ -6180,7 +6348,6 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (2734, 176, 'Chita', 'CI', 1),
 (2735, 176, 'Dudinka', 'DU', 1),
 (2736, 176, 'Elista', 'EL', 1),
-(2737, 176, 'Gomo-Altaysk', 'GO', 1),
 (2738, 176, 'Gorno-Altaysk', 'GA', 1),
 (2739, 176, 'Groznyy', 'GR', 1),
 (2740, 176, 'Irkutsk', 'IR', 1),
@@ -6368,14 +6535,14 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (2922, 187, 'Northern', 'N', 1),
 (2923, 187, 'Southern', 'S', 1),
 (2924, 187, 'Western', 'W', 1),
-(2925, 189, 'Banskobystrický', 'BA', 1),
-(2926, 189, 'Bratislavský', 'BR', 1),
-(2927, 189, 'Košický', 'KO', 1),
+(2925, 189, 'Banskobystrick?', 'BA', 1),
+(2926, 189, 'Bratislavsk?', 'BR', 1),
+(2927, 189, 'Ko?ick?', 'KO', 1),
 (2928, 189, 'Nitriansky', 'NI', 1),
-(2929, 189, 'Prešovský', 'PR', 1),
-(2930, 189, 'Trenčiansky', 'TC', 1),
-(2931, 189, 'Trnavský', 'TV', 1),
-(2932, 189, 'Žilinský', 'ZI', 1),
+(2929, 189, 'Pre?ovsk?', 'PR', 1),
+(2930, 189, 'Tren?iansky', 'TC', 1),
+(2931, 189, 'Trnavsk?', 'TV', 1),
+(2932, 189, '?ilinsk?', 'ZI', 1),
 (2933, 191, 'Central', 'CE', 1),
 (2934, 191, 'Choiseul', 'CH', 1),
 (2935, 191, 'Guadalcanal', 'GC', 1),
@@ -6517,26 +6684,26 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3073, 202, 'Shishelweni', 'S', 1),
 (3074, 203, 'Blekinge', 'K', 1),
 (3075, 203, 'Dalarna', 'W', 1),
-(3076, 203, 'G&auml;vleborg', 'X', 1),
+(3076, 203, 'G?vleborg', 'X', 1),
 (3077, 203, 'Gotland', 'I', 1),
 (3078, 203, 'Halland', 'N', 1),
-(3079, 203, 'J&auml;mtland', 'Z', 1),
-(3080, 203, 'J&ouml;nk&ouml;ping', 'F', 1),
+(3079, 203, 'J?mtland', 'Z', 1),
+(3080, 203, 'J?nk?ping', 'F', 1),
 (3081, 203, 'Kalmar', 'H', 1),
 (3082, 203, 'Kronoberg', 'G', 1),
 (3083, 203, 'Norrbotten', 'BD', 1),
-(3084, 203, '&Ouml;rebro', 'T', 1),
-(3085, 203, '&Ouml;sterg&ouml;tland', 'E', 1),
+(3084, 203, '?rebro', 'T', 1),
+(3085, 203, '?sterg?tland', 'E', 1),
 (3086, 203, 'Sk&aring;ne', 'M', 1),
-(3087, 203, 'S&ouml;dermanland', 'D', 1),
+(3087, 203, 'S?dermanland', 'D', 1),
 (3088, 203, 'Stockholm', 'AB', 1),
 (3089, 203, 'Uppsala', 'C', 1),
-(3090, 203, 'V&auml;rmland', 'S', 1),
-(3091, 203, 'V&auml;sterbotten', 'AC', 1),
-(3092, 203, 'V&auml;sternorrland', 'Y', 1);
-INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
-(3093, 203, 'V&auml;stmanland', 'U', 1),
-(3094, 203, 'V&auml;stra G&ouml;taland', 'O', 1),
+(3090, 203, 'V?rmland', 'S', 1),
+(3091, 203, 'V?sterbotten', 'AC', 1),
+(3092, 203, 'V?sternorrland', 'Y', 1);
+INSERT INTO `zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
+(3093, 203, 'V?stmanland', 'U', 1),
+(3094, 203, 'V?stra G?taland', 'O', 1),
 (3095, 204, 'Aargau', 'AG', 1),
 (3096, 204, 'Appenzell Ausserrhoden', 'AR', 1),
 (3097, 204, 'Appenzell Innerrhoden', 'AI', 1),
@@ -6546,7 +6713,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3101, 204, 'Fribourg', 'FR', 1),
 (3102, 204, 'Gen&egrave;ve', 'GE', 1),
 (3103, 204, 'Glarus', 'GL', 1),
-(3104, 204, 'Graub&uuml;nden', 'GR', 1),
+(3104, 204, 'Graub?nden', 'GR', 1),
 (3105, 204, 'Jura', 'JU', 1),
 (3106, 204, 'Luzern', 'LU', 1),
 (3107, 204, 'Neuch&acirc;tel', 'NE', 1),
@@ -6562,7 +6729,7 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3117, 204, 'Valais', 'VS', 1),
 (3118, 204, 'Vaud', 'VD', 1),
 (3119, 204, 'Zug', 'ZG', 1),
-(3120, 204, 'Z&uuml;rich', 'ZH', 1),
+(3120, 204, 'Z?rich', 'ZH', 1),
 (3121, 205, 'Al Hasakah', 'HA', 1),
 (3122, 205, 'Al Ladhiqiyah', 'LA', 1),
 (3123, 205, 'Al Qunaytirah', 'QU', 1),
@@ -6758,82 +6925,82 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3313, 214, 'Tunis', 'TU', 1),
 (3314, 214, 'Zaghouan', 'ZA', 1),
 (3315, 215, 'Adana', 'ADA', 1),
-(3316, 215, 'Adıyaman', 'ADI', 1),
+(3316, 215, 'Ad?yaman', 'ADI', 1),
 (3317, 215, 'Afyonkarahisar', 'AFY', 1),
-(3318, 215, 'Ağrı', 'AGR', 1),
+(3318, 215, 'A?r?', 'AGR', 1),
 (3319, 215, 'Aksaray', 'AKS', 1),
 (3320, 215, 'Amasya', 'AMA', 1),
 (3321, 215, 'Ankara', 'ANK', 1),
 (3322, 215, 'Antalya', 'ANT', 1),
 (3323, 215, 'Ardahan', 'ARD', 1),
 (3324, 215, 'Artvin', 'ART', 1),
-(3325, 215, 'Aydın', 'AYI', 1),
-(3326, 215, 'Balıkesir', 'BAL', 1),
-(3327, 215, 'Bartın', 'BAR', 1),
+(3325, 215, 'Ayd?n', 'AYI', 1),
+(3326, 215, 'Bal?kesir', 'BAL', 1),
+(3327, 215, 'Bart?n', 'BAR', 1),
 (3328, 215, 'Batman', 'BAT', 1),
 (3329, 215, 'Bayburt', 'BAY', 1),
 (3330, 215, 'Bilecik', 'BIL', 1),
-(3331, 215, 'Bingöl', 'BIN', 1),
+(3331, 215, 'Bing?l', 'BIN', 1),
 (3332, 215, 'Bitlis', 'BIT', 1),
 (3333, 215, 'Bolu', 'BOL', 1),
 (3334, 215, 'Burdur', 'BRD', 1),
 (3335, 215, 'Bursa', 'BRS', 1),
-(3336, 215, 'Çanakkale', 'CKL', 1),
-(3337, 215, 'Çankırı', 'CKR', 1),
-(3338, 215, 'Çorum', 'COR', 1),
+(3336, 215, '?anakkale', 'CKL', 1),
+(3337, 215, '?ank?r?', 'CKR', 1),
+(3338, 215, '?orum', 'COR', 1),
 (3339, 215, 'Denizli', 'DEN', 1),
-(3340, 215, 'Diyarbakır', 'DIY', 1),
-(3341, 215, 'Düzce', 'DUZ', 1),
+(3340, 215, 'Diyarbak?r', 'DIY', 1),
+(3341, 215, 'D?zce', 'DUZ', 1),
 (3342, 215, 'Edirne', 'EDI', 1),
-(3343, 215, 'Elazığ', 'ELA', 1),
+(3343, 215, 'Elaz??', 'ELA', 1),
 (3344, 215, 'Erzincan', 'EZC', 1),
 (3345, 215, 'Erzurum', 'EZR', 1),
-(3346, 215, 'Eskişehir', 'ESK', 1),
+(3346, 215, 'Eski?ehir', 'ESK', 1),
 (3347, 215, 'Gaziantep', 'GAZ', 1),
 (3348, 215, 'Giresun', 'GIR', 1),
-(3349, 215, 'Gümüşhane', 'GMS', 1),
+(3349, 215, 'G?m??hane', 'GMS', 1),
 (3350, 215, 'Hakkari', 'HKR', 1),
 (3351, 215, 'Hatay', 'HTY', 1),
-(3352, 215, 'Iğdır', 'IGD', 1),
+(3352, 215, 'I?d?r', 'IGD', 1),
 (3353, 215, 'Isparta', 'ISP', 1),
-(3354, 215, 'İstanbul', 'IST', 1),
-(3355, 215, 'İzmir', 'IZM', 1),
-(3356, 215, 'Kahramanmaraş', 'KAH', 1),
-(3357, 215, 'Karabük', 'KRB', 1),
+(3354, 215, '?stanbul', 'IST', 1),
+(3355, 215, '?zmir', 'IZM', 1),
+(3356, 215, 'Kahramanmara?', 'KAH', 1),
+(3357, 215, 'Karab?k', 'KRB', 1),
 (3358, 215, 'Karaman', 'KRM', 1),
 (3359, 215, 'Kars', 'KRS', 1),
 (3360, 215, 'Kastamonu', 'KAS', 1),
 (3361, 215, 'Kayseri', 'KAY', 1),
 (3362, 215, 'Kilis', 'KLS', 1),
-(3363, 215, 'Kırıkkale', 'KRK', 1),
-(3364, 215, 'Kırklareli', 'KLR', 1),
-(3365, 215, 'Kırşehir', 'KRH', 1),
+(3363, 215, 'K?r?kkale', 'KRK', 1),
+(3364, 215, 'K?rklareli', 'KLR', 1),
+(3365, 215, 'K?r?ehir', 'KRH', 1),
 (3366, 215, 'Kocaeli', 'KOC', 1),
 (3367, 215, 'Konya', 'KON', 1),
-(3368, 215, 'Kütahya', 'KUT', 1),
+(3368, 215, 'K?tahya', 'KUT', 1),
 (3369, 215, 'Malatya', 'MAL', 1),
 (3370, 215, 'Manisa', 'MAN', 1),
 (3371, 215, 'Mardin', 'MAR', 1),
 (3372, 215, 'Mersin', 'MER', 1),
-(3373, 215, 'Muğla', 'MUG', 1),
-(3374, 215, 'Muş', 'MUS', 1),
-(3375, 215, 'Nevşehir', 'NEV', 1),
-(3376, 215, 'Niğde', 'NIG', 1),
+(3373, 215, 'Mu?la', 'MUG', 1),
+(3374, 215, 'Mu?', 'MUS', 1),
+(3375, 215, 'Nev?ehir', 'NEV', 1),
+(3376, 215, 'Ni?de', 'NIG', 1),
 (3377, 215, 'Ordu', 'ORD', 1),
 (3378, 215, 'Osmaniye', 'OSM', 1),
 (3379, 215, 'Rize', 'RIZ', 1),
 (3380, 215, 'Sakarya', 'SAK', 1),
 (3381, 215, 'Samsun', 'SAM', 1),
-(3382, 215, 'Şanlıurfa', 'SAN', 1),
+(3382, 215, '?anl?urfa', 'SAN', 1),
 (3383, 215, 'Siirt', 'SII', 1),
 (3384, 215, 'Sinop', 'SIN', 1),
-(3385, 215, 'Şırnak', 'SIR', 1),
+(3385, 215, '??rnak', 'SIR', 1),
 (3386, 215, 'Sivas', 'SIV', 1),
-(3387, 215, 'Tekirdağ', 'TEL', 1),
+(3387, 215, 'Tekirda?', 'TEL', 1),
 (3388, 215, 'Tokat', 'TOK', 1),
 (3389, 215, 'Trabzon', 'TRA', 1),
 (3390, 215, 'Tunceli', 'TUN', 1),
-(3391, 215, 'Uşak', 'USK', 1),
+(3391, 215, 'U?ak', 'USK', 1),
 (3392, 215, 'Van', 'VAN', 1),
 (3393, 215, 'Yalova', 'YAL', 1),
 (3394, 215, 'Yozgat', 'YOZ', 1),
@@ -6922,37 +7089,37 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3477, 219, 'Mbarara', 'MBR', 1),
 (3478, 219, 'Ntungamo', 'NTU', 1),
 (3479, 219, 'Rukungiri', 'RUK', 1),
-(3480, 220, 'Cherkasy', 'CK', 1),
-(3481, 220, 'Chernihiv', 'CH', 1),
-(3482, 220, 'Chernivtsi', 'CV', 1),
-(3483, 220, 'Crimea', 'CR', 1),
-(3484, 220, 'Dnipropetrovs''k', 'DN', 1),
-(3485, 220, 'Donets''k', 'DO', 1),
-(3486, 220, 'Ivano-Frankivs''k', 'IV', 1),
-(3487, 220, 'Kharkiv Kherson', 'KL', 1),
-(3488, 220, 'Khmel''nyts''kyy', 'KM', 1),
-(3489, 220, 'Kirovohrad', 'KR', 1),
-(3490, 220, 'Kiev', 'KV', 1),
-(3491, 220, 'Kyyiv', 'KY', 1),
-(3492, 220, 'Luhans''k', 'LU', 1),
-(3493, 220, 'L''viv', 'LV', 1),
-(3494, 220, 'Mykolayiv', 'MY', 1),
-(3495, 220, 'Odesa', 'OD', 1),
-(3496, 220, 'Poltava', 'PO', 1),
-(3497, 220, 'Rivne', 'RI', 1),
-(3498, 220, 'Sevastopol', 'SE', 1),
-(3499, 220, 'Sumy', 'SU', 1),
-(3500, 220, 'Ternopil''', 'TE', 1),
-(3501, 220, 'Vinnytsya', 'VI', 1),
-(3502, 220, 'Volyn''', 'VO', 1),
-(3503, 220, 'Zakarpattya', 'ZK', 1),
-(3504, 220, 'Zaporizhzhya', 'ZA', 1),
-(3505, 220, 'Zhytomyr', 'ZH', 1),
-(3506, 221, 'Abu Zaby', 'AZ', 1),
+(3480, 220, 'Cherkas''ka Oblast''', '71', 1),
+(3481, 220, 'Chernihivs''ka Oblast''', '74', 1),
+(3482, 220, 'Chernivets''ka Oblast''', '77', 1),
+(3483, 220, 'Crimea', '43', 1),
+(3484, 220, 'Dnipropetrovs''ka Oblast''', '12', 1),
+(3485, 220, 'Donets''ka Oblast''', '14', 1),
+(3486, 220, 'Ivano-Frankivs''ka Oblast''', '26', 1),
+(3487, 220, 'Khersons''ka Oblast''', '65', 1),
+(3488, 220, 'Khmel''nyts''ka Oblast''', '68', 1),
+(3489, 220, 'Kirovohrads''ka Oblast''', '35', 1),
+(3490, 220, 'Kyiv', '30', 1),
+(3491, 220, 'Kyivs''ka Oblast''', '32', 1),
+(3492, 220, 'Luhans''ka Oblast''', '09', 1),
+(3493, 220, 'L''vivs''ka Oblast''', '46', 1),
+(3494, 220, 'Mykolayivs''ka Oblast''', '48', 1),
+(3495, 220, 'Odes''ka Oblast''', '51', 1),
+(3496, 220, 'Poltavs''ka Oblast''', '53', 1),
+(3497, 220, 'Rivnens''ka Oblast''', '56', 1),
+(3498, 220, 'Sevastopol''', '40', 1),
+(3499, 220, 'Sums''ka Oblast''', '59', 1),
+(3500, 220, 'Ternopil''s''ka Oblast''', '61', 1),
+(3501, 220, 'Vinnyts''ka Oblast''', '05', 1),
+(3502, 220, 'Volyns''ka Oblast''', '07', 1),
+(3503, 220, 'Zakarpats''ka Oblast''', '21', 1),
+(3504, 220, 'Zaporiz''ka Oblast''', '23', 1),
+(3505, 220, 'Zhytomyrs''ka oblast''', '18', 1),
+(3506, 221, 'Abu Dhabi', 'ADH', 1),
 (3507, 221, '''Ajman', 'AJ', 1),
 (3508, 221, 'Al Fujayrah', 'FU', 1),
 (3509, 221, 'Ash Shariqah', 'SH', 1),
-(3510, 221, 'Dubayy', 'DU', 1),
+(3510, 221, 'Dubai', 'DU', 1),
 (3511, 221, 'R''as al Khaymah', 'RK', 1),
 (3512, 221, 'Umm al Qaywayn', 'UQ', 1),
 (3513, 222, 'Aberdeen', 'ABN', 1),
@@ -7377,16 +7544,16 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3955, 222, 'Cumbria', 'CMA', 1),
 (3956, 190, 'Pomurska', '1', 1),
 (3957, 190, 'Podravska', '2', 1),
-(3958, 190, 'Koroška', '3', 1),
+(3958, 190, 'Koro?ka', '3', 1),
 (3959, 190, 'Savinjska', '4', 1),
 (3960, 190, 'Zasavska', '5', 1),
 (3961, 190, 'Spodnjeposavska', '6', 1),
 (3962, 190, 'Jugovzhodna Slovenija', '7', 1),
 (3963, 190, 'Osrednjeslovenska', '8', 1),
 (3964, 190, 'Gorenjska', '9', 1),
-(3965, 190, 'Notranjsko-kraška', '10', 1),
-(3966, 190, 'Goriška', '11', 1),
-(3967, 190, 'Obalno-kraška', '12', 1),
+(3965, 190, 'Notranjsko-kra?ka', '10', 1),
+(3966, 190, 'Gori?ka', '11', 1),
+(3967, 190, 'Obalno-kra?ka', '12', 1),
 (3968, 33, 'Ruse', '', 1),
 (3969, 101, 'Alborz', 'ALB', 1),
 (3970, 21, 'Brussels-Capital Region', 'BRU', 1),
@@ -7399,44 +7566,44 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (3978, 242, 'Cetinje', '06', 1),
 (3979, 242, 'Danilovgrad', '07', 1),
 (3980, 242, 'Herceg-Novi', '08', 1),
-(3981, 242, 'Kolašin', '09', 1),
+(3981, 242, 'Kola?in', '09', 1),
 (3982, 242, 'Kotor', '10', 1),
 (3983, 242, 'Mojkovac', '11', 1),
-(3984, 242, 'Nikšić', '12', 1),
+(3984, 242, 'Nik?i?', '12', 1),
 (3985, 242, 'Plav', '13', 1),
 (3986, 242, 'Pljevlja', '14', 1),
-(3987, 242, 'Plužine', '15', 1),
+(3987, 242, 'Plu?ine', '15', 1),
 (3988, 242, 'Podgorica', '16', 1),
-(3989, 242, 'Rožaje', '17', 1),
-(3990, 242, 'Šavnik', '18', 1),
+(3989, 242, 'Ro?aje', '17', 1),
+(3990, 242, '?avnik', '18', 1),
 (3991, 242, 'Tivat', '19', 1),
 (3992, 242, 'Ulcinj', '20', 1),
-(3993, 242, 'Žabljak', '21', 1),
+(3993, 242, '?abljak', '21', 1),
 (3994, 243, 'Belgrade', '00', 1),
-(3995, 243, 'North Bačka', '01', 1),
+(3995, 243, 'North Ba?ka', '01', 1),
 (3996, 243, 'Central Banat', '02', 1),
 (3997, 243, 'North Banat', '03', 1),
 (3998, 243, 'South Banat', '04', 1),
-(3999, 243, 'West Bačka', '05', 1),
-(4000, 243, 'South Bačka', '06', 1),
+(3999, 243, 'West Ba?ka', '05', 1),
+(4000, 243, 'South Ba?ka', '06', 1),
 (4001, 243, 'Srem', '07', 1),
-(4002, 243, 'Mačva', '08', 1),
+(4002, 243, 'Ma?va', '08', 1),
 (4003, 243, 'Kolubara', '09', 1),
 (4004, 243, 'Podunavlje', '10', 1),
-(4005, 243, 'Braničevo', '11', 1),
-(4006, 243, 'Šumadija', '12', 1),
+(4005, 243, 'Brani?evo', '11', 1),
+(4006, 243, '?umadija', '12', 1),
 (4007, 243, 'Pomoravlje', '13', 1),
 (4008, 243, 'Bor', '14', 1),
-(4009, 243, 'Zaječar', '15', 1),
+(4009, 243, 'Zaje?ar', '15', 1),
 (4010, 243, 'Zlatibor', '16', 1),
 (4011, 243, 'Moravica', '17', 1),
-(4012, 243, 'Raška', '18', 1),
+(4012, 243, 'Ra?ka', '18', 1),
 (4013, 243, 'Rasina', '19', 1),
-(4014, 243, 'Nišava', '20', 1),
+(4014, 243, 'Ni?ava', '20', 1),
 (4015, 243, 'Toplica', '21', 1),
 (4016, 243, 'Pirot', '22', 1),
 (4017, 243, 'Jablanica', '23', 1),
-(4018, 243, 'Pčinja', '24', 1),
+(4018, 243, 'P?inja', '24', 1),
 (4020, 245, 'Bonaire', 'BO', 1),
 (4021, 245, 'Saba', 'SA', 1),
 (4022, 245, 'Sint Eustatius', 'SE', 1),
@@ -7450,42 +7617,42 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4030, 248, 'Warrap', 'WR', 1),
 (4031, 248, 'Western Bahr el-Ghazal', 'BW', 1),
 (4032, 248, 'Western Equatoria', 'EW', 1),
-(4036, 117, 'Ainaži, Salacgrīvas novads', '0661405', 1),
+(4036, 117, 'Aina?i, Salacgr?vas novads', '0661405', 1),
 (4037, 117, 'Aizkraukle, Aizkraukles novads', '0320201', 1),
 (4038, 117, 'Aizkraukles novads', '0320200', 1),
 (4039, 117, 'Aizpute, Aizputes novads', '0640605', 1),
 (4040, 117, 'Aizputes novads', '0640600', 1),
-(4041, 117, 'Aknīste, Aknīstes novads', '0560805', 1),
-(4042, 117, 'Aknīstes novads', '0560800', 1),
+(4041, 117, 'Akn?ste, Akn?stes novads', '0560805', 1),
+(4042, 117, 'Akn?stes novads', '0560800', 1),
 (4043, 117, 'Aloja, Alojas novads', '0661007', 1),
 (4044, 117, 'Alojas novads', '0661000', 1),
 (4045, 117, 'Alsungas novads', '0624200', 1),
-(4046, 117, 'Alūksne, Alūksnes novads', '0360201', 1),
-(4047, 117, 'Alūksnes novads', '0360200', 1),
+(4046, 117, 'Al?ksne, Al?ksnes novads', '0360201', 1),
+(4047, 117, 'Al?ksnes novads', '0360200', 1),
 (4048, 117, 'Amatas novads', '0424701', 1),
 (4049, 117, 'Ape, Apes novads', '0360805', 1),
 (4050, 117, 'Apes novads', '0360800', 1),
 (4051, 117, 'Auce, Auces novads', '0460805', 1),
 (4052, 117, 'Auces novads', '0460800', 1),
-(4053, 117, 'Ādažu novads', '0804400', 1),
-(4054, 117, 'Babītes novads', '0804900', 1),
+(4053, 117, '?da?u novads', '0804400', 1),
+(4054, 117, 'Bab?tes novads', '0804900', 1),
 (4055, 117, 'Baldone, Baldones novads', '0800605', 1),
 (4056, 117, 'Baldones novads', '0800600', 1),
-(4057, 117, 'Baloži, Ķekavas novads', '0800807', 1),
+(4057, 117, 'Balo?i, ?ekavas novads', '0800807', 1),
 (4058, 117, 'Baltinavas novads', '0384400', 1),
 (4059, 117, 'Balvi, Balvu novads', '0380201', 1),
 (4060, 117, 'Balvu novads', '0380200', 1),
 (4061, 117, 'Bauska, Bauskas novads', '0400201', 1),
 (4062, 117, 'Bauskas novads', '0400200', 1),
-(4063, 117, 'Beverīnas novads', '0964700', 1),
-(4064, 117, 'Brocēni, Brocēnu novads', '0840605', 1),
-(4065, 117, 'Brocēnu novads', '0840601', 1),
+(4063, 117, 'Bever?nas novads', '0964700', 1),
+(4064, 117, 'Broc?ni, Broc?nu novads', '0840605', 1),
+(4065, 117, 'Broc?nu novads', '0840601', 1),
 (4066, 117, 'Burtnieku novads', '0967101', 1),
 (4067, 117, 'Carnikavas novads', '0805200', 1),
 (4068, 117, 'Cesvaine, Cesvaines novads', '0700807', 1),
 (4069, 117, 'Cesvaines novads', '0700800', 1),
-(4070, 117, 'Cēsis, Cēsu novads', '0420201', 1),
-(4071, 117, 'Cēsu novads', '0420200', 1),
+(4070, 117, 'C?sis, C?su novads', '0420201', 1),
+(4071, 117, 'C?su novads', '0420200', 1),
 (4072, 117, 'Ciblas novads', '0684901', 1),
 (4073, 117, 'Dagda, Dagdas novads', '0601009', 1),
 (4074, 117, 'Dagdas novads', '0601000', 1),
@@ -7497,97 +7664,97 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4080, 117, 'Durbe, Durbes novads', '0640807', 1),
 (4081, 117, 'Durbes novads', '0640801', 1),
 (4082, 117, 'Engures novads', '0905100', 1),
-(4083, 117, 'Ērgļu novads', '0705500', 1),
+(4083, 117, '?rg?u novads', '0705500', 1),
 (4084, 117, 'Garkalnes novads', '0806000', 1),
-(4085, 117, 'Grobiņa, Grobiņas novads', '0641009', 1),
-(4086, 117, 'Grobiņas novads', '0641000', 1),
+(4085, 117, 'Grobi?a, Grobi?as novads', '0641009', 1),
+(4086, 117, 'Grobi?as novads', '0641000', 1),
 (4087, 117, 'Gulbene, Gulbenes novads', '0500201', 1),
 (4088, 117, 'Gulbenes novads', '0500200', 1),
 (4089, 117, 'Iecavas novads', '0406400', 1),
-(4090, 117, 'Ikšķile, Ikšķiles novads', '0740605', 1),
-(4091, 117, 'Ikšķiles novads', '0740600', 1),
-(4092, 117, 'Ilūkste, Ilūkstes novads', '0440807', 1),
-(4093, 117, 'Ilūkstes novads', '0440801', 1),
-(4094, 117, 'Inčukalna novads', '0801800', 1),
+(4090, 117, 'Ik??ile, Ik??iles novads', '0740605', 1),
+(4091, 117, 'Ik??iles novads', '0740600', 1),
+(4092, 117, 'Il?kste, Il?kstes novads', '0440807', 1),
+(4093, 117, 'Il?kstes novads', '0440801', 1),
+(4094, 117, 'In?ukalna novads', '0801800', 1),
 (4095, 117, 'Jaunjelgava, Jaunjelgavas novads', '0321007', 1),
 (4096, 117, 'Jaunjelgavas novads', '0321000', 1),
 (4097, 117, 'Jaunpiebalgas novads', '0425700', 1),
 (4098, 117, 'Jaunpils novads', '0905700', 1),
 (4099, 117, 'Jelgava', '0090000', 1),
 (4100, 117, 'Jelgavas novads', '0540200', 1),
-(4101, 117, 'Jēkabpils', '0110000', 1),
-(4102, 117, 'Jēkabpils novads', '0560200', 1),
-(4103, 117, 'Jūrmala', '0130000', 1),
+(4101, 117, 'J?kabpils', '0110000', 1),
+(4102, 117, 'J?kabpils novads', '0560200', 1),
+(4103, 117, 'J?rmala', '0130000', 1),
 (4104, 117, 'Kalnciems, Jelgavas novads', '0540211', 1),
 (4105, 117, 'Kandava, Kandavas novads', '0901211', 1),
 (4106, 117, 'Kandavas novads', '0901201', 1),
-(4107, 117, 'Kārsava, Kārsavas novads', '0681009', 1),
-(4108, 117, 'Kārsavas novads', '0681000', 1),
-(4109, 117, 'Kocēnu novads ,bij. Valmieras)', '0960200', 1),
+(4107, 117, 'K?rsava, K?rsavas novads', '0681009', 1),
+(4108, 117, 'K?rsavas novads', '0681000', 1),
+(4109, 117, 'Koc?nu novads ,bij. Valmieras)', '0960200', 1),
 (4110, 117, 'Kokneses novads', '0326100', 1),
-(4111, 117, 'Krāslava, Krāslavas novads', '0600201', 1),
-(4112, 117, 'Krāslavas novads', '0600202', 1),
+(4111, 117, 'Kr?slava, Kr?slavas novads', '0600201', 1),
+(4112, 117, 'Kr?slavas novads', '0600202', 1),
 (4113, 117, 'Krimuldas novads', '0806900', 1),
 (4114, 117, 'Krustpils novads', '0566900', 1),
-(4115, 117, 'Kuldīga, Kuldīgas novads', '0620201', 1),
-(4116, 117, 'Kuldīgas novads', '0620200', 1),
-(4117, 117, 'Ķeguma novads', '0741001', 1),
-(4118, 117, 'Ķegums, Ķeguma novads', '0741009', 1),
-(4119, 117, 'Ķekavas novads', '0800800', 1),
-(4120, 117, 'Lielvārde, Lielvārdes novads', '0741413', 1),
-(4121, 117, 'Lielvārdes novads', '0741401', 1),
-(4122, 117, 'Liepāja', '0170000', 1),
-(4123, 117, 'Limbaži, Limbažu novads', '0660201', 1),
-(4124, 117, 'Limbažu novads', '0660200', 1),
-(4125, 117, 'Līgatne, Līgatnes novads', '0421211', 1),
-(4126, 117, 'Līgatnes novads', '0421200', 1),
-(4127, 117, 'Līvāni, Līvānu novads', '0761211', 1),
-(4128, 117, 'Līvānu novads', '0761201', 1),
-(4129, 117, 'Lubāna, Lubānas novads', '0701413', 1),
-(4130, 117, 'Lubānas novads', '0701400', 1),
+(4115, 117, 'Kuld?ga, Kuld?gas novads', '0620201', 1),
+(4116, 117, 'Kuld?gas novads', '0620200', 1),
+(4117, 117, '?eguma novads', '0741001', 1),
+(4118, 117, '?egums, ?eguma novads', '0741009', 1),
+(4119, 117, '?ekavas novads', '0800800', 1),
+(4120, 117, 'Lielv?rde, Lielv?rdes novads', '0741413', 1),
+(4121, 117, 'Lielv?rdes novads', '0741401', 1),
+(4122, 117, 'Liep?ja', '0170000', 1),
+(4123, 117, 'Limba?i, Limba?u novads', '0660201', 1),
+(4124, 117, 'Limba?u novads', '0660200', 1),
+(4125, 117, 'L?gatne, L?gatnes novads', '0421211', 1),
+(4126, 117, 'L?gatnes novads', '0421200', 1),
+(4127, 117, 'L?v?ni, L?v?nu novads', '0761211', 1),
+(4128, 117, 'L?v?nu novads', '0761201', 1),
+(4129, 117, 'Lub?na, Lub?nas novads', '0701413', 1),
+(4130, 117, 'Lub?nas novads', '0701400', 1),
 (4131, 117, 'Ludza, Ludzas novads', '0680201', 1),
 (4132, 117, 'Ludzas novads', '0680200', 1),
 (4133, 117, 'Madona, Madonas novads', '0700201', 1),
 (4134, 117, 'Madonas novads', '0700200', 1),
 (4135, 117, 'Mazsalaca, Mazsalacas novads', '0961011', 1),
 (4136, 117, 'Mazsalacas novads', '0961000', 1),
-(4137, 117, 'Mālpils novads', '0807400', 1),
-(4138, 117, 'Mārupes novads', '0807600', 1),
-(4139, 117, 'Mērsraga novads', '0887600', 1),
-(4140, 117, 'Naukšēnu novads', '0967300', 1),
+(4137, 117, 'M?lpils novads', '0807400', 1),
+(4138, 117, 'M?rupes novads', '0807600', 1),
+(4139, 117, 'M?rsraga novads', '0887600', 1),
+(4140, 117, 'Nauk??nu novads', '0967300', 1),
 (4141, 117, 'Neretas novads', '0327100', 1),
-(4142, 117, 'Nīcas novads', '0647900', 1),
+(4142, 117, 'N?cas novads', '0647900', 1),
 (4143, 117, 'Ogre, Ogres novads', '0740201', 1),
 (4144, 117, 'Ogres novads', '0740202', 1),
 (4145, 117, 'Olaine, Olaines novads', '0801009', 1),
 (4146, 117, 'Olaines novads', '0801000', 1),
 (4147, 117, 'Ozolnieku novads', '0546701', 1),
-(4148, 117, 'Pārgaujas novads', '0427500', 1),
-(4149, 117, 'Pāvilosta, Pāvilostas novads', '0641413', 1),
-(4150, 117, 'Pāvilostas novads', '0641401', 1),
+(4148, 117, 'P?rgaujas novads', '0427500', 1),
+(4149, 117, 'P?vilosta, P?vilostas novads', '0641413', 1),
+(4150, 117, 'P?vilostas novads', '0641401', 1),
 (4151, 117, 'Piltene, Ventspils novads', '0980213', 1),
-(4152, 117, 'Pļaviņas, Pļaviņu novads', '0321413', 1),
-(4153, 117, 'Pļaviņu novads', '0321400', 1),
-(4154, 117, 'Preiļi, Preiļu novads', '0760201', 1),
-(4155, 117, 'Preiļu novads', '0760202', 1),
+(4152, 117, 'P?avi?as, P?avi?u novads', '0321413', 1),
+(4153, 117, 'P?avi?u novads', '0321400', 1),
+(4154, 117, 'Prei?i, Prei?u novads', '0760201', 1),
+(4155, 117, 'Prei?u novads', '0760202', 1),
 (4156, 117, 'Priekule, Priekules novads', '0641615', 1),
 (4157, 117, 'Priekules novads', '0641600', 1),
-(4158, 117, 'Priekuļu novads', '0427300', 1),
+(4158, 117, 'Prieku?u novads', '0427300', 1),
 (4159, 117, 'Raunas novads', '0427700', 1),
-(4160, 117, 'Rēzekne', '0210000', 1),
-(4161, 117, 'Rēzeknes novads', '0780200', 1),
-(4162, 117, 'Riebiņu novads', '0766300', 1),
-(4163, 117, 'Rīga', '0010000', 1),
+(4160, 117, 'R?zekne', '0210000', 1),
+(4161, 117, 'R?zeknes novads', '0780200', 1),
+(4162, 117, 'Riebi?u novads', '0766300', 1),
+(4163, 117, 'R?ga', '0010000', 1),
 (4164, 117, 'Rojas novads', '0888300', 1),
-(4165, 117, 'Ropažu novads', '0808400', 1),
+(4165, 117, 'Ropa?u novads', '0808400', 1),
 (4166, 117, 'Rucavas novads', '0648500', 1),
-(4167, 117, 'Rugāju novads', '0387500', 1),
-(4168, 117, 'Rundāles novads', '0407700', 1),
-(4169, 117, 'Rūjiena, Rūjienas novads', '0961615', 1),
-(4170, 117, 'Rūjienas novads', '0961600', 1),
+(4167, 117, 'Rug?ju novads', '0387500', 1),
+(4168, 117, 'Rund?les novads', '0407700', 1),
+(4169, 117, 'R?jiena, R?jienas novads', '0961615', 1),
+(4170, 117, 'R?jienas novads', '0961600', 1),
 (4171, 117, 'Sabile, Talsu novads', '0880213', 1),
-(4172, 117, 'Salacgrīva, Salacgrīvas novads', '0661415', 1),
-(4173, 117, 'Salacgrīvas novads', '0661400', 1),
+(4172, 117, 'Salacgr?va, Salacgr?vas novads', '0661415', 1),
+(4173, 117, 'Salacgr?vas novads', '0661400', 1),
 (4174, 117, 'Salas novads', '0568700', 1),
 (4175, 117, 'Salaspils novads', '0801200', 1),
 (4176, 117, 'Salaspils, Salaspils novads', '0801211', 1),
@@ -7595,55 +7762,66 @@ INSERT INTO `oc_zone` (`zone_id`, `country_id`, `name`, `code`, `status`) VALUES
 (4178, 117, 'Saldus, Saldus novads', '0840201', 1),
 (4179, 117, 'Saulkrasti, Saulkrastu novads', '0801413', 1),
 (4180, 117, 'Saulkrastu novads', '0801400', 1),
-(4181, 117, 'Seda, Strenču novads', '0941813', 1),
-(4182, 117, 'Sējas novads', '0809200', 1),
+(4181, 117, 'Seda, Stren?u novads', '0941813', 1),
+(4182, 117, 'S?jas novads', '0809200', 1),
 (4183, 117, 'Sigulda, Siguldas novads', '0801615', 1),
 (4184, 117, 'Siguldas novads', '0801601', 1),
-(4185, 117, 'Skrīveru novads', '0328200', 1),
+(4185, 117, 'Skr?veru novads', '0328200', 1),
 (4186, 117, 'Skrunda, Skrundas novads', '0621209', 1),
 (4187, 117, 'Skrundas novads', '0621200', 1),
 (4188, 117, 'Smiltene, Smiltenes novads', '0941615', 1),
 (4189, 117, 'Smiltenes novads', '0941600', 1),
 (4190, 117, 'Staicele, Alojas novads', '0661017', 1),
 (4191, 117, 'Stende, Talsu novads', '0880215', 1),
-(4192, 117, 'Stopiņu novads', '0809600', 1),
-(4193, 117, 'Strenči, Strenču novads', '0941817', 1),
-(4194, 117, 'Strenču novads', '0941800', 1),
-(4195, 117, 'Subate, Ilūkstes novads', '0440815', 1),
+(4192, 117, 'Stopi?u novads', '0809600', 1),
+(4193, 117, 'Stren?i, Stren?u novads', '0941817', 1),
+(4194, 117, 'Stren?u novads', '0941800', 1),
+(4195, 117, 'Subate, Il?kstes novads', '0440815', 1),
 (4196, 117, 'Talsi, Talsu novads', '0880201', 1),
 (4197, 117, 'Talsu novads', '0880200', 1),
-(4198, 117, 'Tērvetes novads', '0468900', 1),
+(4198, 117, 'T?rvetes novads', '0468900', 1),
 (4199, 117, 'Tukuma novads', '0900200', 1),
 (4200, 117, 'Tukums, Tukuma novads', '0900201', 1),
-(4201, 117, 'Vaiņodes novads', '0649300', 1),
-(4202, 117, 'Valdemārpils, Talsu novads', '0880217', 1),
+(4201, 117, 'Vai?odes novads', '0649300', 1),
+(4202, 117, 'Valdem?rpils, Talsu novads', '0880217', 1),
 (4203, 117, 'Valka, Valkas novads', '0940201', 1),
 (4204, 117, 'Valkas novads', '0940200', 1),
 (4205, 117, 'Valmiera', '0250000', 1),
-(4206, 117, 'Vangaži, Inčukalna novads', '0801817', 1),
-(4207, 117, 'Varakļāni, Varakļānu novads', '0701817', 1),
-(4208, 117, 'Varakļānu novads', '0701800', 1),
-(4209, 117, 'Vārkavas novads', '0769101', 1),
+(4206, 117, 'Vanga?i, In?ukalna novads', '0801817', 1),
+(4207, 117, 'Varak??ni, Varak??nu novads', '0701817', 1),
+(4208, 117, 'Varak??nu novads', '0701800', 1),
+(4209, 117, 'V?rkavas novads', '0769101', 1),
 (4210, 117, 'Vecpiebalgas novads', '0429300', 1),
 (4211, 117, 'Vecumnieku novads', '0409500', 1),
 (4212, 117, 'Ventspils', '0270000', 1),
 (4213, 117, 'Ventspils novads', '0980200', 1),
-(4214, 117, 'Viesīte, Viesītes novads', '0561815', 1),
-(4215, 117, 'Viesītes novads', '0561800', 1),
-(4216, 117, 'Viļaka, Viļakas novads', '0381615', 1),
-(4217, 117, 'Viļakas novads', '0381600', 1),
-(4218, 117, 'Viļāni, Viļānu novads', '0781817', 1),
-(4219, 117, 'Viļānu novads', '0781800', 1),
+(4214, 117, 'Vies?te, Vies?tes novads', '0561815', 1),
+(4215, 117, 'Vies?tes novads', '0561800', 1),
+(4216, 117, 'Vi?aka, Vi?akas novads', '0381615', 1),
+(4217, 117, 'Vi?akas novads', '0381600', 1),
+(4218, 117, 'Vi??ni, Vi??nu novads', '0781817', 1),
+(4219, 117, 'Vi??nu novads', '0781800', 1),
 (4220, 117, 'Zilupe, Zilupes novads', '0681817', 1),
-(4221, 117, 'Zilupes novads', '0681801', 1);
+(4221, 117, 'Zilupes novads', '0681801', 1),
+(4222, 43, 'Arica y Parinacota', 'AP', 1),
+(4223, 43, 'Los Rios', 'LR', 1),
+(4224, 220, 'Kharkivs''ka Oblast''', '63', 1),
+(4225, 118, 'Beirut', 'LB-BR', 1),
+(4226, 118, 'Bekaa', 'LB-BE', 1),
+(4227, 118, 'Mount Lebanon', 'LB-ML', 1),
+(4228, 118, 'Nabatieh', 'LB-NB', 1),
+(4229, 118, 'North', 'LB-NR', 1),
+(4230, 118, 'South', 'LB-ST', 1),
+(4231, 99, 'Telangana', 'TS', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `oc_zone_to_geo_zone`
+-- Table structure for table `zone_to_geo_zone`
 --
 
-CREATE TABLE IF NOT EXISTS `oc_zone_to_geo_zone` (
+DROP TABLE IF EXISTS `zone_to_geo_zone`;
+CREATE TABLE `zone_to_geo_zone` (
   `zone_to_geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `country_id` int(11) NOT NULL,
   `zone_id` int(11) NOT NULL DEFAULT '0',
@@ -7651,13 +7829,13 @@ CREATE TABLE IF NOT EXISTS `oc_zone_to_geo_zone` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   PRIMARY KEY (`zone_to_geo_zone_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=110 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `oc_zone_to_geo_zone`
+-- Dumping data for table `zone_to_geo_zone`
 --
 
-INSERT INTO `oc_zone_to_geo_zone` (`zone_to_geo_zone_id`, `country_id`, `zone_id`, `geo_zone_id`, `date_added`, `date_modified`) VALUES
+INSERT INTO `zone_to_geo_zone` (`zone_to_geo_zone_id`, `country_id`, `zone_id`, `geo_zone_id`, `date_added`, `date_modified`) VALUES
 (1, 222, 0, 4, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, 222, 3513, 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (3, 222, 3514, 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),

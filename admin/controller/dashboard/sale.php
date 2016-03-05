@@ -17,7 +17,7 @@ class ControllerDashboardSale extends Controller {
 
 		$difference = $today - $yesterday;
 
-		if ($difference && $today) {
+		if ($difference && (int)$today) {
 			$data['percentage'] = round(($difference / $today) * 100);
 		} else {
 			$data['percentage'] = 0;
@@ -34,11 +34,11 @@ class ControllerDashboardSale extends Controller {
 		} elseif ($sale_total > 1000) {
 			$data['total'] = round($sale_total / 1000, 1) . 'K';
 		} else {
-			$data['total'] = $sale_total;
+			$data['total'] = round($sale_total);
 		}
 
-		$data['sale'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'], 'SSL');
+		$data['sale'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'], true);
 
-		return $this->load->view('dashboard/sale.tpl', $data);
+		return $this->load->view('dashboard/sale', $data);
 	}
 }

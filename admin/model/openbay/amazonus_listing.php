@@ -12,22 +12,24 @@ class ModelOpenbayAmazonusListing extends Model {
 
 		$products = array();
 
-		foreach ($results['Products'] as $result) {
-			if ($result['price']['amount'] && $result['price']['currency']) {
-				$price = $result['price']['amount'] . ' ' . $result['price']['currency'];
-			} else {
-				$price = '-';
+		if (!empty($results)) {
+			foreach ($results['Products'] as $result) {
+				if ($result['price']['amount'] && $result['price']['currency']) {
+					$price = $result['price']['amount'] . ' ' . $result['price']['currency'];
+				} else {
+					$price = '-';
+				}
+
+				$link = 'http://www.amazon.com/gp/product/' . $result['asin'] . '/';
+
+				$products[] = array(
+					'name' => $result['name'],
+					'asin' => $result['asin'],
+					'image' => $result['image'],
+					'price' => $price,
+					'link' => $link,
+				);
 			}
-
-			$link = 'http://www.amazon.com/gp/product/' . $result['asin'] . '/';
-
-			$products[] = array(
-				'name' => $result['name'],
-				'asin' => $result['asin'],
-				'image' => $result['image'],
-				'price' => $price,
-				'link' => $link,
-			);
 		}
 
 		return $products;
@@ -141,7 +143,7 @@ class ModelOpenbayAmazonusListing extends Model {
 					'asin' => $asin,
 					'sku' => $product['sku'],
 					'quantity' => $product['quantity'],
-					'price' => number_format($price, 2, ' . ', ''),
+					'price' => number_format($price, 2, '.', ''),
 					'sale' => array(),
 					'condition' => (isset($data['condition']) ? $data['condition'] : ''),
 					'condition_note' => (isset($data['condition_note']) ? $data['condition_note'] : ''),

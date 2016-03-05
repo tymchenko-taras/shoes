@@ -3,7 +3,7 @@
   <div class="page-header">
     <div class="container-fluid">
       <div class="pull-right">
-        <button type="submit" form="form-ppexpress" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <button type="submit" form="form-pp-express" data-toggle="tooltip" title="<?php echo $button_save; ?>" class="btn btn-primary"><i class="fa fa-save"></i></button>
         <a href="<?php echo $cancel; ?>" data-toggle="tooltip" title="<?php echo $button_cancel; ?>" class="btn btn-default"><i class="fa fa-reply"></i></a> <a href="<?php echo $search; ?>" data-toggle="tooltip" title="<?php echo $button_search; ?>" class="btn btn-info"><i class="fa fa-search"></i></a></div>
       <h1><?php echo $heading_title; ?></h1>
       <ul class="breadcrumb">
@@ -14,31 +14,37 @@
     </div>
   </div>
   <div class="container-fluid">
-    <?php if (isset($error['error_warning'])) { ?>
-    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error['error_warning']; ?>
+    <?php if ($error_warning) { ?>
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error_warning; ?>
       <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
     <?php } ?>
+    <div class="alert alert-info"> <a data-paypal-button="true" target="PPFrame" href="<?php echo $signup; ?>" ><i class="fa fa-info-circle"></i> <?php echo $text_signup; ?></a>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    <div class="alert alert-info"> <a data-paypal-button="true" target="PPFrame" href="<?php echo $sandbox; ?>" ><i class="fa fa-info-circle"></i> <?php echo $text_sandbox; ?></a>
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_edit; ?></h3>
       </div>
       <div class="panel-body">
-        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-ppexpress" class="form-horizontal">
+        <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-pp-express" class="form-horizontal">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab-api-details" data-toggle="tab"><?php echo $tab_api_details; ?></a></li>
+            <li class="active"><a href="#tab-api" data-toggle="tab"><?php echo $tab_api; ?></a></li>
             <li><a href="#tab-general" data-toggle="tab"><?php echo $tab_general; ?></a></li>
-            <li><a href="#tab-status" data-toggle="tab"><?php echo $tab_order_status; ?></a></li>
-            <li><a href="#tab-customise" data-toggle="tab"><?php echo $tab_customise; ?></a></li>
+            <li><a href="#tab-order-status" data-toggle="tab"><?php echo $tab_order_status; ?></a></li>
+            <li><a href="#tab-checkout" data-toggle="tab"><?php echo $tab_checkout; ?></a></li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane active" id="tab-api-details">
+            <div class="tab-pane active" id="tab-api">
               <div class="form-group required">
                 <label class="col-sm-2 control-label" for="entry-username"><?php echo $entry_username; ?></label>
                 <div class="col-sm-10">
                   <input type="text" name="pp_express_username" value="<?php echo $pp_express_username; ?>" placeholder="<?php echo $entry_username; ?>" id="entry-username" class="form-control" />
-                  <?php if (isset($error['username'])) { ?>
-                  <div class="text-danger"><?php echo $error['username']; ?></div>
+                  <?php if ($error_username) { ?>
+                  <div class="text-danger"><?php echo $error_username; ?></div>
                   <?php } ?>
                 </div>
               </div>
@@ -46,8 +52,8 @@
                 <label class="col-sm-2 control-label" for="entry-password"><?php echo $entry_password; ?></label>
                 <div class="col-sm-10">
                   <input type="text" name="pp_express_password" value="<?php echo $pp_express_password; ?>" placeholder="<?php echo $entry_password; ?>" id="entry-password" class="form-control" />
-                  <?php if (isset($error['password'])) { ?>
-                  <div class="text-danger"><?php echo $error['password']; ?></div>
+                  <?php if ($error_password) { ?>
+                  <div class="text-danger"><?php echo $error_password; ?></div>
                   <?php } ?>
                 </div>
               </div>
@@ -55,25 +61,52 @@
                 <label class="col-sm-2 control-label" for="entry-signature"><?php echo $entry_signature; ?></label>
                 <div class="col-sm-10">
                   <input type="text" name="pp_express_signature" value="<?php echo $pp_express_signature; ?>" placeholder="<?php echo $entry_signature; ?>" id="entry-signature" class="form-control" />
-                  <?php if (isset($error['signature'])) { ?>
-                  <div class="text-danger"><?php echo $error['signature']; ?></div>
+                  <?php if ($error_signature) { ?>
+                  <div class="text-danger"><?php echo $error_signature; ?></div>
                   <?php } ?>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $help_ipn; ?>"><?php echo $text_ipn; ?></span></label>
+                <label class="col-sm-2 control-label" for="entry-sandbox-username"><?php echo $entry_sandbox_username; ?></label>
                 <div class="col-sm-10">
-                  <div class="input-group"> <span class="input-group-addon"><i class="fa fa-link"></i></span>
-                    <input type="text" value="<?php echo $text_ipn_url; ?>" class="form-control" />
+                  <input type="text" name="pp_express_sandbox_username" value="<?php echo $pp_express_sandbox_username; ?>" placeholder="<?php echo $entry_sandbox_username; ?>" id="entry-sandbox-username" class="form-control" />
+                  <?php if ($error_sandbox_username) { ?>
+                  <div class="text-danger"><?php echo $error_sandbox_username; ?></div>
+                  <?php } ?>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="entry-sandbox-password"><?php echo $entry_sandbox_password; ?></label>
+                <div class="col-sm-10">
+                  <input type="text" name="pp_express_sandbox_password" value="<?php echo $pp_express_sandbox_password; ?>" placeholder="<?php echo $entry_sandbox_password; ?>" id="entry-sandbox-password" class="form-control" />
+                  <?php if ($error_sandbox_password) { ?>
+                  <div class="text-danger"><?php echo $error_sandbox_password; ?></div>
+                  <?php } ?>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="entry-sandbox-signature"><?php echo $entry_sandbox_signature; ?></label>
+                <div class="col-sm-10">
+                  <input type="text" name="pp_express_sandbox_signature" value="<?php echo $pp_express_sandbox_signature; ?>" placeholder="<?php echo $entry_sandbox_signature; ?>" id="entry-sandbox-signature" class="form-control" />
+                  <?php if ($error_sandbox_signature) { ?>
+                  <div class="text-danger"><?php echo $error_sandbox_signature; ?></div>
+                  <?php } ?>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $help_ipn; ?>"><?php echo $entry_ipn; ?></span></label>
+                <div class="col-sm-10">
+                  <div class="input-group"><span class="input-group-addon"><i class="fa fa-link"></i></span>
+                    <input type="text" value="<?php echo $ipn_url; ?>" class="form-control" />
                   </div>
                 </div>
               </div>
             </div>
             <div class="tab-pane" id="tab-general">
               <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-live-demo"><?php echo $entry_test; ?></label>
+                <label class="col-sm-2 control-label" for="input-test"><?php echo $entry_test; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_test" id="input-live-demo" class="form-control">
+                  <select name="pp_express_test" id="input-test" class="form-control">
                     <?php if ($pp_express_test) { ?>
                     <option value="1" selected="selected"><?php echo $text_yes; ?></option>
                     <option value="0"><?php echo $text_no; ?></option>
@@ -102,21 +135,21 @@
                 <label class="col-sm-2 control-label" for="input-currency"><span data-toggle="tooltip" title="<?php echo $help_currency; ?>"><?php echo $entry_currency; ?></span></label>
                 <div class="col-sm-10">
                   <select name="pp_express_currency" id="input-currency" class="form-control">
-                    <?php foreach ($currency_codes as $code) { ?>
-                    <?php if ($code == $pp_express_currency) { ?>
-                    <option value="<?php echo $code; ?>" selected="selected"><?php echo $code; ?></option>
+                    <?php foreach ($currencies as $currency) { ?>
+                    <?php if ($currency == $pp_express_currency) { ?>
+                    <option value="<?php echo $currency; ?>" selected="selected"><?php echo $currency; ?></option>
                     <?php } else { ?>
-                    <option value="<?php echo $code; ?>"><?php echo $code; ?></option>
+                    <option value="<?php echo $currency; ?>"><?php echo $currency; ?></option>
                     <?php } ?>
                     <?php } ?>
                   </select>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-recurring-cancel"><?php echo $entry_recurring_cancellation; ?></label>
+                <label class="col-sm-2 control-label" for="input-recurring-cancel"><?php echo $entry_recurring_cancel; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_recurring_cancel_status" id="input-recurring-cancel" class="form-control">
-                    <?php if ($pp_express_recurring_cancel_status) { ?>
+                  <select name="pp_express_recurring_cancel" id="input-recurring-cancel" class="form-control">
+                    <?php if ($pp_express_recurring_cancel) { ?>
                     <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
                     <option value="0"><?php echo $text_disabled; ?></option>
                     <?php } else { ?>
@@ -127,11 +160,19 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-method"><?php echo $entry_method; ?></label>
+                <label class="col-sm-2 control-label" for="input-transaction"><?php echo $entry_transaction; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_method" id="input-method" class="form-control">
-                    <option value="Sale" <?php  echo (($pp_express_method == '' || $pp_express_method == 'Sale') ? 'selected="selected"' : ''); ?>><?php echo $text_sale; ?></option>
-                    <option value="Authorization" <?php echo ($pp_express_method == 'Authorization' ? 'selected="selected"' : ''); ?>><?php echo $text_authorization; ?></option>
+                  <select name="pp_express_transaction" id="input-transaction" class="form-control">
+                    <?php if ($pp_express_transaction == 'sale') { ?>
+                    <option value="Sale" selected="selected"><?php echo $text_sale; ?></option>
+                    <?php } else { ?>
+                    <option value="Sale"><?php echo $text_sale; ?></option>
+                    <?php } ?>
+                    <?php if ($pp_express_transaction == 'Authorization') { ?>
+                    <option value="Authorization" selected="selected"><?php echo $text_authorization; ?></option>
+                    <?php } else { ?>
+                    <option value="Authorization"><?php echo $text_authorization; ?></option>
+                    <?php } ?>
                   </select>
                 </div>
               </div>
@@ -139,12 +180,6 @@
                 <label class="col-sm-2 control-label" for="input-total"><span data-toggle="tooltip" title="<?php echo $help_total; ?>"><?php echo $entry_total; ?></span></label>
                 <div class="col-sm-10">
                   <input type="text" name="pp_express_total" value="<?php echo $pp_express_total; ?>" placeholder="<?php echo $entry_total; ?>" id="input-total" class="form-control" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-sort-order"><?php echo $entry_sort_order; ?></label>
-                <div class="col-sm-10">
-                  <input type="text" name="pp_express_sort_order" value="<?php echo $pp_express_sort_order; ?>" placeholder="<?php echo $entry_sort_order; ?>" id="input-sort-order" class="form-control" />
                 </div>
               </div>
               <div class="form-group">
@@ -176,12 +211,18 @@
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="tab-pane" id="tab-status">
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_canceled_reversal_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-sort-order"><?php echo $entry_sort_order; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_canceled_reversal_status_id" class="form-control">
+                  <input type="text" name="pp_express_sort_order" value="<?php echo $pp_express_sort_order; ?>" placeholder="<?php echo $entry_sort_order; ?>" id="input-sort-order" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-order-status">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-canceled-reversal-status"><?php echo $entry_canceled_reversal_status; ?></label>
+                <div class="col-sm-10">
+                  <select name="pp_express_canceled_reversal_status_id" id="input-canceled-reversal-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_canceled_reversal_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -193,9 +234,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_completed_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-completed-status"><?php echo $entry_completed_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_completed_status_id" class="form-control">
+                  <select name="pp_express_completed_status_id" id="input-completed-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_completed_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -207,9 +248,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_denied_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-denied-status"><?php echo $entry_denied_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_denied_status_id" class="form-control">
+                  <select name="pp_express_denied_status_id" id="input-denied-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_denied_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -221,9 +262,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_expired_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-expired-status"><?php echo $entry_expired_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_expired_status_id" class="form-control">
+                  <select name="pp_express_expired_status_id" id="input-expired-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_expired_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -235,9 +276,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_failed_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-failed-status"><?php echo $entry_failed_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_failed_status_id" class="form-control">
+                  <select name="pp_express_failed_status_id" id="input-failed-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_failed_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -249,9 +290,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_pending_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-pending-status"><?php echo $entry_pending_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_pending_status_id" class="form-control">
+                  <select name="pp_express_pending_status_id" id="input-pending-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_pending_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -263,9 +304,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_processed_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-processed-status"><?php echo $entry_processed_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_processed_status_id" class="form-control">
+                  <select name="pp_express_processed_status_id" id="input-processed-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_processed_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -277,9 +318,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_refunded_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-refunded-status"><?php echo $entry_refunded_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_refunded_status_id" class="form-control">
+                  <select name="pp_express_refunded_status_id" id="input-refunded-status"class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_refunded_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -291,9 +332,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_reversed_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-reversed-status"><?php echo $entry_reversed_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_reversed_status_id" class="form-control">
+                  <select name="pp_express_reversed_status_id" id="input-reversed-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_reversed_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -305,9 +346,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo $entry_voided_status; ?></label>
+                <label class="col-sm-2 control-label" for="input-voided-status"><?php echo $entry_voided_status; ?></label>
                 <div class="col-sm-10">
-                  <select name="pp_express_voided_status_id" class="form-control">
+                  <select name="pp_express_voided_status_id" id="input-voided-status" class="form-control">
                     <?php foreach ($order_statuses as $order_status) { ?>
                     <?php if ($order_status['order_status_id'] == $pp_express_voided_status_id) { ?>
                     <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
@@ -319,7 +360,7 @@
                 </div>
               </div>
             </div>
-            <div class="tab-pane" id="tab-customise">
+            <div class="tab-pane" id="tab-checkout">
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-notes"><?php echo $entry_allow_notes; ?></label>
                 <div class="col-sm-10">
@@ -335,15 +376,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-page-color"><span data-toggle="tooltip" title="<?php echo $help_colour; ?>"><?php echo $entry_page_colour; ?></span></label>
+                <label class="col-sm-2 control-label" for="input-color"><span data-toggle="tooltip" title="<?php echo $help_colour; ?>"><?php echo $entry_colour; ?></span></label>
                 <div class="col-sm-10">
-                  <input type="text" name="pp_express_page_colour" value="<?php echo $pp_express_page_colour; ?>" placeholder="<?php echo $entry_page_colour; ?>" id="input-page-color" class="form-control" />
+                  <input type="text" name="pp_express_colour" value="<?php echo $pp_express_colour; ?>" placeholder="<?php echo $entry_colour; ?>" id="input-color" class="form-control" />
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-image"><span data-toggle="tooltip" title="<?php echo $help_logo; ?>"><?php echo $entry_logo; ?></span></label>
                 <div class="col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="<?php echo $thumb; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" /></a>
-                  <input type="hidden" name="pp_express_logo" value="<?php echo $pp_express_logo; ?>" id="input-image" />
+                  <input type="hidden" name="pp_express_logo" value="<?php echo $pp_express_logo; ?>" id="input-logo" />
                 </div>
               </div>
             </div>
@@ -353,4 +394,18 @@
     </div>
   </div>
 </div>
+<script type="text/javascript"><!--
+(function (d, s, id) {
+      var js, ref = d.getElementsByTagName(s)[0];
+     
+	  if (!d.getElementById(id)) {
+        js = d.createElement(s);
+        js.id = id;
+        js.async = true;
+        js.src = "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js";
+        
+		ref.parentNode.insertBefore(js, ref);
+      }
+    }(document, "script", "paypal-js"));
+--></script> 
 <?php echo $footer; ?> 

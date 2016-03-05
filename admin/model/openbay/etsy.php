@@ -1,6 +1,10 @@
 <?php
 class ModelOpenbayEtsy extends Model{
 	public function install() {
+		$this->load->model('extension/event');
+
+		$this->model_extension_event->addEvent('openbaypro_etsy', 'catalog/model/checkout/order/addOrderHistory/after', 'openbay/etsy/eventAddOrderHistory');
+
 		$settings                 = array();
 		$settings["etsy_token"]   = '';
 		$settings["etsy_secret"]  = '';
@@ -45,19 +49,22 @@ class ModelOpenbayEtsy extends Model{
 				  `order_id` int(11) NOT NULL,
 				  PRIMARY KEY (`order_id`)
 				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
-
-		// register the event triggers
-		$this->model_tool_event->addEvent('openbaypro_etsy', 'post.order.add', 'openbay/etsy/eventAddOrder');
 	}
 
 	public function uninstall() {
-		// remove the event triggers
-		$this->model_tool_event->deleteEvent('openbaypro_etsy');
+		$this->load->model('extension/event');
+		$this->model_extension_event->deleteEvent('openbaypro_etsy');
+	}
+
+	public function patch() {
+		if ($this->config->get('etsy_status') == 1) {
+
+		}
 	}
 
 	public function verifyAccount() {
 		if ($this->openbay->etsy->validate() == true) {
-			return $this->openbay->etsy->call('account/info', 'GET');
+			return $this->openbay->etsy->call('v1/etsy/account/info/', 'GET');
 		} else {
 			return false;
 		}

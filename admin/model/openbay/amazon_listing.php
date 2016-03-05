@@ -12,40 +12,42 @@ class ModelOpenbayAmazonListing extends Model {
 
 		$products = array();
 
-		foreach ($results['Products'] as $result) {
-			if ($result['price']['amount'] && $result['price']['currency']) {
-				$price = $result['price']['amount'] . ' ' . $result['price']['currency'];
-			} else {
-				$price = '-';
+		if (!empty($results)) {
+			foreach ($results['Products'] as $result) {
+				if ($result['price']['amount'] && $result['price']['currency']) {
+					$price = $result['price']['amount'] . ' ' . $result['price']['currency'];
+				} else {
+					$price = '-';
+				}
+
+				$link = '';
+
+				switch ($marketplace) {
+					case 'uk':
+						$link = 'https://www.amazon.co.uk/dp/' . $result['asin'] . '/';
+						break;
+					case 'de':
+						$link = 'https://www.amazon.de/dp/' . $result['asin'] . '/';
+						break;
+					case 'fr':
+						$link = 'https://www.amazon.fr/dp/' . $result['asin'] . '/';
+						break;
+					case 'it':
+						$link = 'https://www.amazon.it/dp/' . $result['asin'] . '/';
+						break;
+					case 'es':
+						$link = 'https://www.amazon.es/dp/' . $result['asin'] . '/';
+						break;
+				}
+
+				$products[] = array(
+					'name' => $result['name'],
+					'asin' => $result['asin'],
+					'image' => $result['image'],
+					'price' => $price,
+					'link' => $link,
+				);
 			}
-
-			$link = '';
-
-			switch ($marketplace) {
-				case 'uk':
-					$link = 'https://www.amazon.co.uk/dp/' . $result['asin'] . '/';
-					break;
-				case 'de':
-					$link = 'https://www.amazon.de/dp/' . $result['asin'] . '/';
-					break;
-				case 'fr':
-					$link = 'https://www.amazon.fr/dp/' . $result['asin'] . '/';
-					break;
-				case 'it':
-					$link = 'https://www.amazon.it/dp/' . $result['asin'] . '/';
-					break;
-				case 'es':
-					$link = 'https://www.amazon.es/dp/' . $result['asin'] . '/';
-					break;
-			}
-
-			$products[] = array(
-				'name' => $result['name'],
-				'asin' => $result['asin'],
-				'image' => $result['image'],
-				'price' => $price,
-				'link' => $link,
-			);
 		}
 
 		return $products;
@@ -190,7 +192,7 @@ class ModelOpenbayAmazonListing extends Model {
 					'asin' => $asin,
 					'sku' => $product['sku'],
 					'quantity' => $product['quantity'],
-					'price' => number_format($price, 2, ' . ', ''),
+					'price' => number_format($price, 2, '.', ''),
 					'sale' => array(),
 					'condition' => (isset($data['condition']) ? $data['condition'] : ''),
 					'condition_note' => (isset($data['condition_note']) ? $data['condition_note'] : ''),
