@@ -29,7 +29,7 @@
             <label class="col-sm-2 control-label"><?php echo $entry_name; ?></label>
             <div class="col-sm-10">
               <?php foreach ($languages as $language) { ?>
-              <div class="input-group"> <span class="input-group-addon"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /></span>
+              <div class="input-group"> <span class="input-group-addon"><img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" title="<?php echo $language['name']; ?>" /></span>
                 <input type="text" name="download_description[<?php echo $language['language_id']; ?>][name]" value="<?php echo isset($download_description[$language['language_id']]) ? $download_description[$language['language_id']]['name'] : ''; ?>" placeholder="<?php echo $entry_name; ?>" class="form-control" />
               </div>
               <?php if (isset($error_name[$language['language_id']])) { ?>
@@ -72,38 +72,46 @@ $('#button-upload').on('click', function() {
 
 	$('#form-upload input[name=\'file\']').trigger('click');
 	
-	$('#form-upload input[name=\'file\']').on('change', function() {
-		$.ajax({
-			url: 'index.php?route=catalog/download/upload&token=<?php echo $token; ?>',
-			type: 'post',		
-			dataType: 'json',
-			data: new FormData($(this).parent()[0]),
-			cache: false,
-			contentType: false,
-			processData: false,		
-			beforeSend: function() {
-				$('#button-upload').button('loading');
-			},
-			complete: function() {
-				$('#button-upload').button('reset');
-			},	
-			success: function(json) {
-				if (json['error']) {
-					alert(json['error']);
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+	
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);		
+			
+			$.ajax({
+				url: 'index.php?route=catalog/download/upload&token=<?php echo $token; ?>',
+				type: 'post',		
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,		
+				beforeSend: function() {
+					$('#button-upload').button('loading');
+				},
+				complete: function() {
+					$('#button-upload').button('reset');
+				},	
+				success: function(json) {
+					if (json['error']) {
+						alert(json['error']);
+					}
+								
+					if (json['success']) {
+						alert(json['success']);
+						
+						$('input[name=\'filename\']').attr('value', json['filename']);
+						$('input[name=\'mask\']').attr('value', json['mask']);
+					}
+				},			
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 				}
-							
-				if (json['success']) {
-					alert(json['success']);
-					
-					$('input[name=\'filename\']').attr('value', json['filename']);
-					$('input[name=\'mask\']').attr('value', json['mask']);
-				}
-			},			
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
-	});
+			});
+		}
+	}, 500);
 });
 //--></script></div> 
 <?php echo $footer; ?>

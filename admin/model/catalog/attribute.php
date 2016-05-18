@@ -1,8 +1,6 @@
 <?php
 class ModelCatalogAttribute extends Model {
 	public function addAttribute($data) {
-		$this->event->trigger('pre.admin.add.attribute', $data);
-
 		$this->db->query("INSERT INTO " . DB_PREFIX . "attribute SET attribute_group_id = '" . (int)$data['attribute_group_id'] . "', sort_order = '" . (int)$data['sort_order'] . "'");
 
 		$attribute_id = $this->db->getLastId();
@@ -11,14 +9,10 @@ class ModelCatalogAttribute extends Model {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "attribute_description SET attribute_id = '" . (int)$attribute_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
 		}
 
-		$this->event->trigger('post.admin.add.attribute', $attribute_id);
-
 		return $attribute_id;
 	}
 
 	public function editAttribute($attribute_id, $data) {
-		$this->event->trigger('pre.admin.edit.attribute', $data);
-
 		$this->db->query("UPDATE " . DB_PREFIX . "attribute SET attribute_group_id = '" . (int)$data['attribute_group_id'] . "', sort_order = '" . (int)$data['sort_order'] . "' WHERE attribute_id = '" . (int)$attribute_id . "'");
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
@@ -26,17 +20,11 @@ class ModelCatalogAttribute extends Model {
 		foreach ($data['attribute_description'] as $language_id => $value) {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "attribute_description SET attribute_id = '" . (int)$attribute_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
 		}
-
-		$this->event->trigger('post.admin.edit.attribute', $attribute_id);
 	}
 
 	public function deleteAttribute($attribute_id) {
-		$this->event->trigger('pre.admin.delete.attribute', $attribute_id);
-
 		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
-
-		$this->event->trigger('post.admin.delete.attribute', $attribute_id);
 	}
 
 	public function getAttribute($attribute_id) {

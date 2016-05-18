@@ -5,12 +5,9 @@ class ControllerModuleCarousel extends Controller {
 
 		$this->load->model('design/banner');
 		$this->load->model('tool/image');
-		
-		$this->document->addStyle('catalog/view/javascript/jquery/flexslider/flexslider.css');
-		$this->document->addScript('catalog/view/javascript/jquery/flexslider/jquery.flexslider-min.js');
 
-		$data['limit'] = $setting['limit'];
-		$data['scroll'] = $setting['scroll'];
+		$this->document->addStyle('catalog/view/javascript/jquery/owl-carousel/owl.carousel.css');
+		$this->document->addScript('catalog/view/javascript/jquery/owl-carousel/owl.carousel.min.js');
 
 		$data['banners'] = array();
 
@@ -28,10 +25,6 @@ class ControllerModuleCarousel extends Controller {
 
 		$data['module'] = $module++;
 
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/carousel.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/module/carousel.tpl', $data);
-		} else {
-			return $this->load->view('default/template/module/carousel.tpl', $data);
-		}
+		return $this->load->view('module/carousel', $data);
 	}
 }

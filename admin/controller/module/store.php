@@ -14,11 +14,11 @@ class ControllerModuleStore extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], true));
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
-		
+
 		$data['text_edit'] = $this->language->get('text_edit');
 		$data['text_yes'] = $this->language->get('text_yes');
 		$data['text_no'] = $this->language->get('text_no');
@@ -41,40 +41,40 @@ class ControllerModuleStore extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_module'),
-			'href' => $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('extension/module', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('module/store', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('module/store', 'token=' . $this->session->data['token'], true)
 		);
 
-		$data['action'] = $this->url->link('module/store', 'token=' . $this->session->data['token'], 'SSL');
+		$data['action'] = $this->url->link('module/store', 'token=' . $this->session->data['token'], true);
 
-		$data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL');
+		$data['cancel'] = $this->url->link('extension/module', 'token=' . $this->session->data['token'], true);
 
 		if (isset($this->request->post['store_admin'])) {
 			$data['store_admin'] = $this->request->post['store_admin'];
 		} else {
 			$data['store_admin'] = $this->config->get('store_admin');
 		}
-		
+
 		if (isset($this->request->post['store_status'])) {
 			$data['store_status'] = $this->request->post['store_status'];
 		} else {
 			$data['store_status'] = $this->config->get('store_status');
 		}
-		
+
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('module/store.tpl', $data));
+		$this->response->setOutput($this->load->view('module/store', $data));
 	}
 
 	protected function validate() {

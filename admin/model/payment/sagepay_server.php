@@ -5,12 +5,13 @@ class ModelPaymentSagepayServer extends Model {
 			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sagepay_server_order` (
 			  `sagepay_server_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
+			  `customer_id` INT(11) NOT NULL,
 			  `VPSTxId` VARCHAR(50),
 			  `VendorTxCode` VARCHAR(50) NOT NULL,
 			  `SecurityKey` CHAR(50) NOT NULL,
 			  `TxAuthNo` INT(50),
 			  `date_added` DATETIME NOT NULL,
-			  `modified` DATETIME NOT NULL,
+			  `date_modified` DATETIME NOT NULL,
 			  `release_status` INT(1) DEFAULT NULL,
 			  `void_status` INT(1) DEFAULT NULL,
 			  `settle_type` INT(1) DEFAULT NULL,
@@ -40,7 +41,7 @@ class ModelPaymentSagepayServer extends Model {
 			  `SecurityKey` CHAR(50) NOT NULL,
 			  `TxAuthNo` INT(50),
 			  `date_added` DATETIME NOT NULL,
-			  `modified` DATETIME NOT NULL,
+			  `date_modified` DATETIME NOT NULL,
 			  `next_payment` DATETIME NOT NULL,
 			  `trial_end` datetime DEFAULT NULL,
 			  `subscription_end` datetime DEFAULT NULL,
@@ -170,7 +171,7 @@ class ModelPaymentSagepayServer extends Model {
 			$refund_data['Vendor'] = $this->config->get('sagepay_server_vendor');
 			$refund_data['VendorTxCode'] = $sagepay_server_order['sagepay_server_order_id'] . rand();
 			$refund_data['Amount'] = $amount;
-			$refund_data['Currency'] = $this->currency->getCode();
+			$refund_data['Currency'] = $sagepay_server_order['currency_code'];
 			$refund_data['Description'] = substr($this->config->get('config_name'), 0, 100);
 			$refund_data['RelatedVPSTxId'] = $sagepay_server_order['VPSTxId'];
 			$refund_data['RelatedVendorTxCode'] = $sagepay_server_order['VendorTxCode'];
@@ -256,10 +257,10 @@ class ModelPaymentSagepayServer extends Model {
 		return $data;
 	}
 
-	public function logger($message) {
-		if ($this->config->get('sagepay_server_debug') == 1) {
+	public function logger($title, $data) {
+		if ($this->config->get('sagepay_server_debug')) {
 			$log = new Log('sagepay_server.log');
-			$log->write($message);
+			$log->write($title . ': ' . print_r($data, 1));
 		}
 	}
 }

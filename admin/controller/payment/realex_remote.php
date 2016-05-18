@@ -14,11 +14,11 @@ class ControllerPaymentRealexRemote extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], true));
 		}
 
 		$data['heading_title'] = $this->language->get('heading_title');
-		
+
 		$data['text_edit'] = $this->language->get('text_edit');
 		$data['text_enabled'] = $this->language->get('text_enabled');
 		$data['text_disabled'] = $this->language->get('text_disabled');
@@ -72,21 +72,13 @@ class ControllerPaymentRealexRemote extends Controller {
 		$data['help_card_data_status'] = $this->language->get('help_card_data_status');
 		$data['help_notification'] = $this->language->get('help_notification');
 
+		$data['tab_api'] = $this->language->get('tab_api');
 		$data['tab_account'] = $this->language->get('tab_account');
-		$data['tab_sub_account'] = $this->language->get('tab_sub_account');
 		$data['tab_order_status'] = $this->language->get('tab_order_status');
 		$data['tab_payment'] = $this->language->get('tab_payment');
 
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
-
-		$this->load->model('localisation/order_status');
-
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-
-		$this->load->model('localisation/geo_zone');
-
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -110,21 +102,21 @@ class ControllerPaymentRealexRemote extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_payment'),
-			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('payment/realex_remote', 'token=' . $this->session->data['token'], 'SSL')
+			'href' => $this->url->link('payment/realex_remote', 'token=' . $this->session->data['token'], true)
 		);
 
-		$data['action'] = $this->url->link('payment/realex_remote', 'token=' . $this->session->data['token'], 'SSL');
-		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+		$data['action'] = $this->url->link('payment/realex_remote', 'token=' . $this->session->data['token'], true);
+		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], true);
 
 		if (isset($this->request->post['realex_remote_merchant_id'])) {
 			$data['realex_remote_merchant_id'] = $this->request->post['realex_remote_merchant_id'];
@@ -149,6 +141,10 @@ class ControllerPaymentRealexRemote extends Controller {
 		} else {
 			$data['realex_remote_geo_zone_id'] = $this->config->get('realex_remote_geo_zone_id');
 		}
+
+		$this->load->model('localisation/geo_zone');
+
+		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
 		if (isset($this->request->post['realex_remote_total'])) {
 			$data['realex_remote_total'] = $this->request->post['realex_remote_total'];
@@ -246,11 +242,15 @@ class ControllerPaymentRealexRemote extends Controller {
 			$data['realex_remote_order_status_decline_bank_id'] = $this->config->get('realex_remote_order_status_decline_bank_id');
 		}
 
+		$this->load->model('localisation/order_status');
+
+		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('payment/realex_remote.tpl', $data));
+		$this->response->setOutput($this->load->view('payment/realex_remote', $data));
 	}
 
 	public function install() {
@@ -258,7 +258,7 @@ class ControllerPaymentRealexRemote extends Controller {
 		$this->model_payment_realex_remote->install();
 	}
 
-	public function orderAction() {
+	public function order() {
 		if ($this->config->get('realex_remote_status')) {
 			$this->load->model('payment/realex_remote');
 
@@ -299,7 +299,7 @@ class ControllerPaymentRealexRemote extends Controller {
 				$data['order_id'] = $this->request->get['order_id'];
 				$data['token'] = $this->request->get['token'];
 
-				return $this->load->view('payment/realex_remote_order.tpl', $data);
+				return $this->load->view('payment/realex_remote_order', $data);
 			}
 		}
 	}
@@ -448,10 +448,6 @@ class ControllerPaymentRealexRemote extends Controller {
 			$this->error['error_secret'] = $this->language->get('error_secret');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return !$this->error;
 	}
 }

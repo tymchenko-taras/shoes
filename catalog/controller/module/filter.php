@@ -1,6 +1,6 @@
 <?php
 class ControllerModuleFilter extends Controller {
-	public function index($setting) {
+	public function index() {
 		if (isset($this->request->get['path'])) {
 			$parts = explode('_', (string)$this->request->get['path']);
 		} else {
@@ -71,11 +71,7 @@ class ControllerModuleFilter extends Controller {
 					);
 				}
 
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/filter.tpl')) {
-					return $this->load->view($this->config->get('config_template') . '/template/module/filter.tpl', $data);
-				} else {
-					return $this->load->view('default/template/module/filter.tpl', $data);
-				}
+				return $this->load->view('module/filter', $data);
 			}
 		}
 	}

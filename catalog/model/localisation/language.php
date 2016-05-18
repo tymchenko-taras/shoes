@@ -12,7 +12,7 @@ class ModelLocalisationLanguage extends Model {
 		if (!$language_data) {
 			$language_data = array();
 
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "language ORDER BY sort_order, name");
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' ORDER BY sort_order, name");
 
 			foreach ($query->rows as $result) {
 				$language_data[$result['code']] = array(
@@ -22,7 +22,6 @@ class ModelLocalisationLanguage extends Model {
 					'locale'      => $result['locale'],
 					'image'       => $result['image'],
 					'directory'   => $result['directory'],
-					'filename'    => $result['filename'],
 					'sort_order'  => $result['sort_order'],
 					'status'      => $result['status']
 				);

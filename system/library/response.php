@@ -17,12 +17,12 @@ class Response {
 		$this->level = $level;
 	}
 
-	public function setOutput($output) {
-		$this->output = $output;
-	}
-
 	public function getOutput() {
 		return $this->output;
+	}
+	
+	public function setOutput($output) {
+		$this->output = $output;
 	}
 
 	private function compress($data, $level = 0) {
@@ -34,7 +34,7 @@ class Response {
 			$encoding = 'x-gzip';
 		}
 
-		if (!isset($encoding)) {
+		if (!isset($encoding) || ($level < -1 || $level > 9)) {
 			return $data;
 		}
 
